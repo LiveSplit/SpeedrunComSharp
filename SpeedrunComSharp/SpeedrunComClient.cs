@@ -74,13 +74,11 @@ namespace SpeedrunComSharp
 
             if (Cache.ContainsKey(uri))
             {
-                System.Diagnostics.Debug.WriteLine($"Cached API Call - { uri }");
                 result = Cache[uri];
                 Cache.Remove(uri);
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine($"Non-Cache API Call - { uri }");
                 result = JSON.FromUri(uri, UserAgent);
             }
 
