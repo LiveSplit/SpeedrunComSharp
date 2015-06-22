@@ -70,6 +70,7 @@
     <Compile Include="PlayersType.cs" />
     <Compile Include="ProfileClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Record.cs" />
     <Compile Include="RecordsClient.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="RegionsClient.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="RunSystem.cs" />
     <Compile Include="RunTimes.cs" />
     <Compile Include="SpeedrunComClient.cs" />
+    <Compile Include="TimingMethod.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserNameStyle.cs" />
     <Compile Include="UserRole.cs" />
