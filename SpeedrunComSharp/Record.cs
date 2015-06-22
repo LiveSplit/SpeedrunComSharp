@@ -26,6 +26,7 @@ namespace SpeedrunComSharp
         private Lazy<Run> run;
 
         public Run Run { get { return run.Value; } }
+        public IEnumerable<User> Players { get; private set; }
 
         #endregion
 
@@ -104,6 +105,7 @@ namespace SpeedrunComSharp
             //Parse Links
 
             record.run = new Lazy<Run>(() => client.Runs.GetRun(record.RunID));
+            record.Players = record.PlayerNames.Select(x => client.Users.GetUsers(name: x).FirstOrDefault()).Cache();
 
             return record;
         }

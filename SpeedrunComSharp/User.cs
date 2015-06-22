@@ -22,6 +22,7 @@ namespace SpeedrunComSharp
 
         public IEnumerable<Run> Runs { get; private set; }
         public IEnumerable<Game> ModeratedGames { get; private set; }
+        public ReadOnlyCollection<Record> Records { get; private set; }
 
         public Uri TwitchProfile { get; private set; }
         public Uri HitboxProfile { get; private set; }
@@ -80,6 +81,7 @@ namespace SpeedrunComSharp
 
             user.Runs = client.Runs.GetRuns(userId: user.ID);
             user.ModeratedGames = client.Games.GetGames(moderatorId: user.ID);
+            user.Records = client.Records.GetRecords(userName: user.Name);
 
             var twitchLink = links.FirstOrDefault(x => x.rel == "twitch");
             if (twitchLink != null)

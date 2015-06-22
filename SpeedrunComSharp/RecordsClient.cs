@@ -75,7 +75,7 @@ namespace SpeedrunComSharp
                     IDictionary<string, dynamic> categoryRecords;
                     if (amount.HasValue)
                     {
-                        categoryRecords = category.Value as IDictionary<string, dynamic>;
+                        categoryRecords = category.Value.Properties as IDictionary<string, dynamic>;
                     }
                     else
                     {
