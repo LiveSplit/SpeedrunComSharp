@@ -48,14 +48,14 @@ namespace SpeedrunComSharp
                 parameters.Add(string.Format("max={0}", elementsPerPage.Value));
 
             var uri = GetGamesUri(parameters.ToParameters());
-            return SpeedrunComClient.DoPaginatedRequest(uri, 
+            return baseClient.DoPaginatedRequest(uri, 
                 x => Game.Parse(baseClient, x) as Game);
         }
 
         public IEnumerable<GameHeader> GetGameHeaders(int elementsPerPage = 1000)
         {
             var uri = GetGamesUri(string.Format("?_bulk=yes&max={0}", elementsPerPage));
-            return SpeedrunComClient.DoPaginatedRequest(uri,
+            return baseClient.DoPaginatedRequest(uri,
                 x => GameHeader.Parse(baseClient, x) as GameHeader);
         }
 
@@ -67,7 +67,7 @@ namespace SpeedrunComSharp
                 HttpUtility.UrlPathEncode(gameId), 
                 parameters.ToParameters()));
 
-            var result = JSON.FromUri(uri);
+            var result = baseClient.DoRequest(uri);
 
             return Game.Parse(baseClient, result.data);
         }
@@ -85,7 +85,7 @@ namespace SpeedrunComSharp
                 HttpUtility.UrlPathEncode(gameId), 
                 parameters.ToParameters()));
 
-            return SpeedrunComClient.DoDataCollectionRequest(uri,
+            return baseClient.DoDataCollectionRequest(uri,
                 x => Category.Parse(baseClient, x) as Category);
         }
 
@@ -98,14 +98,14 @@ namespace SpeedrunComSharp
                 HttpUtility.UrlPathEncode(gameId),
                 parameters.ToParameters()));
 
-            return SpeedrunComClient.DoDataCollectionRequest(uri,
+            return baseClient.DoDataCollectionRequest(uri,
                  x => Level.Parse(baseClient, x) as Level);
         }
 
         public ReadOnlyCollection<Variable> GetVariables(string gameId)
         {
             var uri = GetGamesUri(string.Format("/{0}/variables", HttpUtility.UrlPathEncode(gameId)));
-            return SpeedrunComClient.DoDataCollectionRequest(uri,
+            return baseClient.DoDataCollectionRequest(uri,
                 x => Variable.Parse(baseClient, x) as Variable);
         }
 
@@ -118,7 +118,7 @@ namespace SpeedrunComSharp
                 HttpUtility.UrlPathEncode(gameId),
                 parameters.ToParameters()));
 
-            return SpeedrunComClient.DoDataCollectionRequest(uri, 
+            return baseClient.DoDataCollectionRequest(uri, 
                 x => Game.Parse(baseClient, x) as Game);
         }
     }

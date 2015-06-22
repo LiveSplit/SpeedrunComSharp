@@ -64,7 +64,7 @@ namespace SpeedrunComSharp
             }
 
             var uri = GetRunsUri(parameters.ToParameters());
-            return SpeedrunComClient.DoPaginatedRequest<Run>(uri,
+            return baseClient.DoPaginatedRequest<Run>(uri,
                 x => Run.Parse(baseClient, x) as Run);
         }
 
@@ -77,7 +77,7 @@ namespace SpeedrunComSharp
                 HttpUtility.UrlPathEncode(runId),
                 parameters.ToParameters()));
 
-            var result = JSON.FromUri(uri);
+            var result = baseClient.DoRequest(uri);
 
             return Run.Parse(baseClient, result.data);
         }

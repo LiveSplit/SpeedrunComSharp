@@ -20,12 +20,11 @@ namespace SpeedrunComSharp
 
         private Lazy<Game> game;
         private Lazy<ReadOnlyCollection<Variable>> variables;
-        private Lazy<ReadOnlyCollection<Run>> runs;
 
         public string GameID { get; private set; }
         public Game Game { get { return game.Value; } }
         public ReadOnlyCollection<Variable> Variables { get { return variables.Value; } }
-        public ReadOnlyCollection<Run> Runs { get { return runs.Value; } }
+        public IEnumerable<Run> Runs { get; private set; }
 
         #endregion
 
@@ -74,7 +73,7 @@ namespace SpeedrunComSharp
                 category.variables = new Lazy<ReadOnlyCollection<Variable>>(() => client.Categories.GetVariables(category.ID));
             }
 
-            category.runs = new Lazy<ReadOnlyCollection<Run>>(() => client.Runs.GetRuns(categoryId: category.ID).ToList().AsReadOnly());
+            category.Runs = client.Runs.GetRuns(categoryId: category.ID);
 
             return category;
         }

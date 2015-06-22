@@ -46,14 +46,13 @@ namespace SpeedrunComSharp
 
         #region Links
 
-        private Lazy<ReadOnlyCollection<Run>> runs;
         private Lazy<ReadOnlyCollection<Level>> levels;
         private Lazy<ReadOnlyCollection<Category>> categories;
         private Lazy<ReadOnlyCollection<Variable>> variables;
         private Lazy<Game> parent;
         private Lazy<ReadOnlyCollection<Game>> children;
 
-        public ReadOnlyCollection<Run> Runs { get { return runs.Value; } }
+        public IEnumerable<Run> Runs { get; private set; }
         public ReadOnlyCollection<Level> Levels { get { return levels.Value; } }
         public ReadOnlyCollection<Category> Categories { get { return categories.Value; } }
         public ReadOnlyCollection<Variable> Variables { get { return variables.Value; } }
@@ -110,7 +109,7 @@ namespace SpeedrunComSharp
             }
             else
             {
-                game.PlatformIDs = SpeedrunComClient.ParseCollection<string>(gameElement.platforms);
+                game.PlatformIDs = client.ParseCollection<string>(gameElement.platforms);
                 game.platforms = new Lazy<ReadOnlyCollection<Platform>>(
                     () => game.PlatformIDs.Select(x => client.Platforms.GetPlatform(x)).ToList().AsReadOnly());
             }
@@ -123,14 +122,14 @@ namespace SpeedrunComSharp
             }
             else
             {
-                game.RegionIDs = SpeedrunComClient.ParseCollection<string>(gameElement.regions);
+                game.RegionIDs = client.ParseCollection<string>(gameElement.regions);
                 game.regions = new Lazy<ReadOnlyCollection<Region>>(
                     () => game.RegionIDs.Select(x => client.Regions.GetRegion(x)).ToList().AsReadOnly());
             }
 
             //Parse Links
 
-            game.runs = new Lazy<ReadOnlyCollection<Run>>(() => client.Runs.GetRuns(gameId: game.ID).ToList().AsReadOnly());
+            game.Runs = client.Runs.GetRuns(gameId: game.ID);
 
             if (properties.ContainsKey("levels"))
             {

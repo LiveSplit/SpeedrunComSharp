@@ -30,7 +30,7 @@ namespace SpeedrunComSharp
                 HttpUtility.UrlPathEncode(levelId), 
                 parameters.ToParameters()));
 
-            var result = JSON.FromUri(uri);
+            var result = baseClient.DoRequest(uri);
 
             return Level.Parse(baseClient, result.data);
         }
@@ -48,14 +48,14 @@ namespace SpeedrunComSharp
                 HttpUtility.UrlPathEncode(levelId), 
                 parameters.ToParameters()));
 
-            return SpeedrunComClient.DoDataCollectionRequest<Category>(uri,
+            return baseClient.DoDataCollectionRequest<Category>(uri,
                 x => Category.Parse(baseClient, x));
         }
 
         public ReadOnlyCollection<Variable> GetVariables(string levelId)
         {
             var uri = GetLevelsUri(string.Format("/{0}/variables", HttpUtility.UrlPathEncode(levelId)));
-            return SpeedrunComClient.DoDataCollectionRequest<Variable>(uri,
+            return baseClient.DoDataCollectionRequest<Variable>(uri,
                 x => Variable.Parse(baseClient, x));
         }
     }

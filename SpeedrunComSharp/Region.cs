@@ -13,11 +13,8 @@ namespace SpeedrunComSharp
 
         #region Links
 
-        private Lazy<ReadOnlyCollection<Game>> games;
-        private Lazy<ReadOnlyCollection<Run>> runs;
-
-        public ReadOnlyCollection<Game> Games { get { return games.Value; } }
-        public ReadOnlyCollection<Run> Runs { get { return runs.Value; } }
+        public IEnumerable<Game> Games { get; private set; }
+        public IEnumerable<Run> Runs { get; private set; }
 
         #endregion
 
@@ -34,8 +31,8 @@ namespace SpeedrunComSharp
 
             //Parse Links
 
-            region.games = new Lazy<ReadOnlyCollection<Game>>(() => client.Games.GetGames(regionId: region.ID).ToList().AsReadOnly());
-            region.runs = new Lazy<ReadOnlyCollection<Run>>(() => client.Runs.GetRuns(regionId: region.ID).ToList().AsReadOnly());
+            region.Games = client.Games.GetGames(regionId: region.ID);
+            region.Runs = client.Runs.GetRuns(regionId: region.ID);
 
             return region;
         }

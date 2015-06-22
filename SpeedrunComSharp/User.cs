@@ -20,11 +20,8 @@ namespace SpeedrunComSharp
 
         #region Links
 
-        private Lazy<ReadOnlyCollection<Run>> runs;
-        private Lazy<ReadOnlyCollection<Game>> moderatedGames;
-
-        public ReadOnlyCollection<Run> Runs { get { return runs.Value; } }
-        public ReadOnlyCollection<Game> ModeratedGames { get { return moderatedGames.Value; } }
+        public IEnumerable<Run> Runs { get; private set; }
+        public IEnumerable<Game> ModeratedGames { get; private set; }
 
         public Uri TwitchProfile { get; private set; }
         public Uri HitboxProfile { get; private set; }
@@ -81,8 +78,8 @@ namespace SpeedrunComSharp
 
             //Parse Links
 
-            user.runs = new Lazy<ReadOnlyCollection<Run>>(() => client.Runs.GetRuns(userId: user.ID).ToList().AsReadOnly());
-            user.moderatedGames = new Lazy<ReadOnlyCollection<Game>>(() => client.Games.GetGames(moderatorId: user.ID).ToList().AsReadOnly());
+            user.Runs = client.Runs.GetRuns(userId: user.ID);
+            user.ModeratedGames = client.Games.GetGames(moderatorId: user.ID);
 
             var twitchLink = links.FirstOrDefault(x => x.rel == "twitch");
             if (twitchLink != null)

@@ -28,14 +28,14 @@ namespace SpeedrunComSharp
 
             var uri = GetPlatformsUri(path);
 
-            return SpeedrunComClient.DoPaginatedRequest<Platform>(uri,
+            return baseClient.DoPaginatedRequest<Platform>(uri,
                 x => Platform.Parse(baseClient, x) as Platform);
         }
 
         public Platform GetPlatform(string platformId)
         {
             var uri = GetPlatformsUri(string.Format("/{0}", HttpUtility.UrlPathEncode(platformId)));
-            var result = JSON.FromUri(uri);
+            var result = baseClient.DoRequest(uri);
 
             return Platform.Parse(baseClient, result.data);
         }

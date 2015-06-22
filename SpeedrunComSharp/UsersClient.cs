@@ -43,7 +43,7 @@ namespace SpeedrunComSharp
                     HttpUtility.UrlPathEncode(speedrunslive)));
 
             var uri = GetUsersUri(parameters.ToParameters());
-            return SpeedrunComClient.DoPaginatedRequest(uri,
+            return baseClient.DoPaginatedRequest(uri,
                 x => User.Parse(baseClient, x) as User);
         }
 
@@ -52,7 +52,7 @@ namespace SpeedrunComSharp
             var uri = GetUsersUri(string.Format("/{0}",
                 HttpUtility.UrlPathEncode(userId)));
 
-            var result = JSON.FromUri(uri);
+            var result = baseClient.DoRequest(uri);
 
             return User.Parse(baseClient, result.data);
         }

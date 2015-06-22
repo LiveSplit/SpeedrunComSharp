@@ -59,7 +59,7 @@ namespace SpeedrunComSharp
             }
 
             var uri = GetRecordsUri(parameters.ToParameters());
-            var result = JSON.FromUri(uri);
+            var result = baseClient.DoRequest(uri);
 
             var records = new List<Record>();
 

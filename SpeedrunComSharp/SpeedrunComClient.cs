@@ -11,6 +11,10 @@ namespace SpeedrunComSharp
         public static readonly Uri BaseUri = new Uri("http://www.speedrun.com/");
         public static readonly Uri APIUri = new Uri(BaseUri, "api/v1/");
 
+        public string UserAgent { get; private set; }
+        private Dictionary<Uri, dynamic> Cache { get; set; }
+        public int MaxCacheElements { get; private set; }
+
         public CategoriesClient Categories { get; private set; }
         public GamesClient Games { get; private set; }
         public GuestsClient Guests { get; private set; }
@@ -24,7 +28,14 @@ namespace SpeedrunComSharp
         public VariablesClient Variables { get; private set; }
 
         public SpeedrunComClient()
+            : this(userAgent: "SpeedRunComSharp/1.0")
+        { }
+
+        public SpeedrunComClient(string userAgent, int maxCacheElements = 50)
         {
+            UserAgent = userAgent;
+            MaxCacheElements = maxCacheElements;
+            Cache = new Dictionary<Uri, dynamic>();
             Categories = new CategoriesClient(this);
             Games = new GamesClient(this);
             Guests = new GuestsClient(this);
@@ -48,7 +59,7 @@ namespace SpeedrunComSharp
             return new Uri(APIUri, subUri);
         }
 
-        internal static ReadOnlyCollection<T> ParseCollection<T>(dynamic collection)
+        internal ReadOnlyCollection<T> ParseCollection<T>(dynamic collection)
         {
             var enumerable = collection as IEnumerable<dynamic>;
             if (enumerable == null)
@@ -57,9 +68,33 @@ namespace SpeedrunComSharp
             return enumerable.OfType<T>().ToList().AsReadOnly();
         }
 
-        public static ReadOnlyCollection<T> DoDataCollectionRequest<T>(Uri uri, Func<dynamic, T> parser)
+        internal dynamic DoRequest(Uri uri)
         {
-            var result = JSON.FromUri(uri);
+            dynamic result;
+
+            if (Cache.ContainsKey(uri))
+            {
+                System.Diagnostics.Debug.WriteLine($"Cached API Call - { uri }");
+                result = Cache[uri];
+                Cache.Remove(uri);
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"Non-Cache API Call - { uri }");
+                result = JSON.FromUri(uri, UserAgent);
+            }
+
+            if (Cache.Count == MaxCacheElements)
+                Cache.Remove(Cache.Keys.First());
+
+            Cache.Add(uri, result);
+
+            return result;
+        }
+
+        internal ReadOnlyCollection<T> DoDataCollectionRequest<T>(Uri uri, Func<dynamic, T> parser)
+        {
+            var result = DoRequest(uri);
             var elements = result.data as IEnumerable<dynamic>;
             if (elements == null)
                 return new ReadOnlyCollection<T>(new T[0]);
@@ -67,11 +102,11 @@ namespace SpeedrunComSharp
             return elements.Select(parser).ToList().AsReadOnly();
         }
 
-        public static IEnumerable<T> DoPaginatedRequest<T>(Uri uri, Func<dynamic, T> parser)
+        private IEnumerable<T> doPaginatedRequest<T>(Uri uri, Func<dynamic, T> parser)
         {
             do
             {
-                var result = JSON.FromUri(uri);
+                var result = DoRequest(uri);
 
                 if (result.pagination.size == 0)
                 {
@@ -99,6 +134,11 @@ namespace SpeedrunComSharp
 
                 uri = new Uri(paginationLink.uri as string);
             } while (true);
+        }
+
+        internal IEnumerable<T> DoPaginatedRequest<T>(Uri uri, Func<dynamic, T> parser)
+        {
+            return doPaginatedRequest(uri, parser).Cache();
         }
     }
 }

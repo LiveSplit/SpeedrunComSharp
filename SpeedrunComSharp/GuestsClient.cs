@@ -23,7 +23,7 @@ namespace SpeedrunComSharp
         public Guest GetGuest(string guestName)
         {
             var uri = GetGuestsUri(string.Format("/{0}", HttpUtility.UrlPathEncode(guestName)));
-            var result = JSON.FromUri(uri);
+            var result = baseClient.DoRequest(uri);
 
             return Guest.Parse(baseClient, result.data);
         }

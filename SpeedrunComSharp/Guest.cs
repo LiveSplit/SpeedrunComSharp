@@ -12,9 +12,7 @@ namespace SpeedrunComSharp
 
         #region Links
 
-        private Lazy<ReadOnlyCollection<Run>> runs;
-
-        public ReadOnlyCollection<Run> Runs { get { return runs.Value; } }
+        public IEnumerable<Run> Runs { get; private set; }
 
         #endregion
 
@@ -25,7 +23,7 @@ namespace SpeedrunComSharp
             var guest = new Guest();
 
             guest.Name = guestElement.name;
-            guest.runs = new Lazy<ReadOnlyCollection<Run>>(() => client.Runs.GetRuns(guestName: guest.Name).ToList().AsReadOnly());
+            guest.Runs = client.Runs.GetRuns(guestName: guest.Name);
 
             return guest;
         }

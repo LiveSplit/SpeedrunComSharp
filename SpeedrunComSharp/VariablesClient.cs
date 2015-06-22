@@ -25,7 +25,7 @@ namespace SpeedrunComSharp
             var uri = GetVariablesUri(string.Format("/{0}",
                 HttpUtility.UrlPathEncode(variableId)));
 
-            var result = JSON.FromUri(uri);
+            var result = baseClient.DoRequest(uri);
 
             return Variable.Parse(baseClient, result.data);
         }

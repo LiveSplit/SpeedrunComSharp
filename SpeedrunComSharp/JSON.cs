@@ -49,9 +49,10 @@ namespace SpeedrunComSharp
             return serializer.Deserialize<object>(value);
         }
 
-        public static dynamic FromUri(Uri uri)
+        public static dynamic FromUri(Uri uri, string userAgent)
         {
-            var request = WebRequest.Create(uri);
+            var request = (HttpWebRequest)WebRequest.Create(uri);
+            request.UserAgent = userAgent;
             var response = request.GetResponse();
             return FromResponse(response);
         }

@@ -28,14 +28,14 @@ namespace SpeedrunComSharp
 
             var uri = GetRegionsUri(path);
 
-            return SpeedrunComClient.DoPaginatedRequest<Region>(uri,
+            return baseClient.DoPaginatedRequest<Region>(uri,
                 x => Region.Parse(baseClient, x) as Region);
         }
 
         public Region GetRegion(string regionId)
         {
             var uri = GetRegionsUri(string.Format("/{0}", HttpUtility.UrlPathEncode(regionId)));
-            var result = JSON.FromUri(uri);
+            var result = baseClient.DoRequest(uri);
 
             return Region.Parse(baseClient, result.data);
         }
