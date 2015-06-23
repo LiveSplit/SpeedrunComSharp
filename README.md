@@ -28,3 +28,35 @@ The Client is separated into the following Sub-Clients, just like the Speedrun.c
 The only difference is the Records Sub-Client that allows you to use their legacy Records API that's available at http://www.speedrun.com/api_records.php.
 
 The Sub-Clients implement all the API Calls for retrieving the Objects from the API. Once you obtained objects from those Clients, you can either use the References within the Objects to retrieve additional objects or you can use their IDs to retrieve them through the Clients. The Clients are somewhat more flexible though, as they can embed additional objects to decrease Network Usage.
+
+## Example Usage
+
+```C#
+//Creating the Client
+var client = new SpeedrunComClient();
+
+//Searching for a game called "Wind Waker"
+var game = client.Games.GetGames(name: "Wind Waker").First();
+
+//Printing all the categories of the game
+foreach (var category in Game.Categories)
+{
+  Console.WriteLine(category.Name);
+}
+
+//Searching for the category "Any%"
+var anyPercent = game.Categories.First(category => category.Name == "Any%");
+
+//Getting the leaderboard for the category
+var leaderboard = anyPercent.Leaderboard;
+
+//Finding the World Record of the category
+var worldRecord = leaderboard.First();
+
+//Getting the World Record Run
+var worldRecordRun = worldRecord.Run;
+
+//Printing the World Record's information
+Console.WriteLine("The World Record is {0} by {1}", worldRecordRun.Times.Primary, worldRecordRun.Player.Name);
+
+```
