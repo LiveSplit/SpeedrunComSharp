@@ -167,7 +167,7 @@ namespace SpeedrunComSharp
 
         public override string ToString()
         {
-            return new[] { GameID, Times.ToString() }.Aggregate((a, b) => a + " " + b);
+            return string.Format("{0} - {1} in {2}", Game.Name, Category.Name, Times.Primary);
         }
     }
 }

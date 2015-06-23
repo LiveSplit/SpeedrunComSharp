@@ -10,6 +10,14 @@ namespace SpeedrunComSharp
         public VariableScopeType Type { get; private set; }
         public string LevelID { get; private set; }
 
+        #region Links
+
+        private Lazy<Level> level;
+        
+        public Level Level { get { return level.Value; } }
+
+        #endregion
+
         private VariableScope() { }
 
         private static VariableScopeType parseType(string type)
@@ -38,6 +46,11 @@ namespace SpeedrunComSharp
             if (scope.Type == VariableScopeType.SingleLevel)
             {
                 scope.LevelID = scopeElement.level as string;
+                scope.level = new Lazy<Level>(() => client.Levels.GetLevel(scope.LevelID));
+            }
+            else
+            {
+                scope.level = new Lazy<Level>(() => null);
             }
 
             return scope;
@@ -46,7 +59,7 @@ namespace SpeedrunComSharp
         public override string ToString()
         {
             if (Type == VariableScopeType.SingleLevel)
-                return "Single Level: " + (LevelID ?? "");
+                return "Single Level: " + (Level.Name ?? "");
             else
                 return Type.ToString();
         }

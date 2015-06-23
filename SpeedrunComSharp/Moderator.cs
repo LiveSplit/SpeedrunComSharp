@@ -11,6 +11,15 @@ namespace SpeedrunComSharp
         public string UserID { get; private set; }
         public ModeratorType Type { get; private set; }
 
+        #region Links
+
+        private Lazy<User> user;
+        
+        public User User { get { return user.Value; } }
+        public string Name { get { return User.Name; } }
+
+        #endregion
+
         private Moderator() { }
 
         public static Moderator Parse(SpeedrunComClient client, KeyValuePair<string, dynamic> moderatorElement)
@@ -22,12 +31,14 @@ namespace SpeedrunComSharp
                 ? ModeratorType.Moderator 
                 : ModeratorType.SuperModerator;
 
+            moderator.user = new Lazy<User>(() => client.Users.GetUser(moderator.UserID));
+
             return moderator;
         }
 
         public override string ToString()
         {
-            return UserID;
+            return Name;
         }
     }
 }

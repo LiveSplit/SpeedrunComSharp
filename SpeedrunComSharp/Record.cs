@@ -13,6 +13,7 @@ namespace SpeedrunComSharp
         public string CategoryName { get; private set; }
         public string RunID { get; private set; }
         public int? Place { get; private set; }
+        public string PlayerName { get { return PlayerNames.FirstOrDefault(); } }
         public ReadOnlyCollection<string> PlayerNames { get; private set; }
         public TimeSpan? RealTime { get; private set; }
         public TimeSpan? RealTimeWithoutLoads { get; private set; }
@@ -24,9 +25,14 @@ namespace SpeedrunComSharp
         #region Links
 
         private Lazy<Run> run;
+        private Lazy<Game> game;
+        private Lazy<Category> category;
 
         public Run Run { get { return run.Value; } }
+        public User Player { get { return Players.FirstOrDefault(); } }
         public IEnumerable<User> Players { get; private set; }
+        public Game Game { get { return game.Value; } }
+        public Category Category { get { return category.Value; } }
 
         #endregion
 
@@ -106,6 +112,8 @@ namespace SpeedrunComSharp
 
             record.run = new Lazy<Run>(() => client.Runs.GetRun(record.RunID));
             record.Players = record.PlayerNames.Select(x => client.Users.GetUsers(name: x).FirstOrDefault()).Cache();
+            record.game = new Lazy<Game>(() => client.Games.GetGames(name: record.GameName).FirstOrDefault());
+            record.category = new Lazy<Category>(() => record.Game.Categories.FirstOrDefault(x => x.Name == record.CategoryName));
 
             return record;
         }

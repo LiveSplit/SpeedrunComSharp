@@ -11,6 +11,14 @@ namespace SpeedrunComSharp
         public string ExaminerUserID { get; private set; }
         public string Reason { get; private set; }
 
+        #region Links
+
+        private Lazy<User> examiner;
+
+        public User Examiner { get { return examiner.Value; } }
+
+        #endregion
+
         private RunStatus() { }
 
         private static RunStatusType ParseType(string type)
@@ -38,6 +46,11 @@ namespace SpeedrunComSharp
                 || status.Type == RunStatusType.Verified)
             {
                 status.ExaminerUserID = statusElement.examiner as string;
+                status.examiner = new Lazy<User>(() => client.Users.GetUser(status.ExaminerUserID));
+            }
+            else
+            {
+                status.examiner = new Lazy<User>(() => null);
             }
 
             if (status.Type == RunStatusType.Rejected)

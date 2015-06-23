@@ -51,6 +51,7 @@ namespace SpeedrunComSharp
         private Lazy<ReadOnlyCollection<Variable>> variables;
         private Lazy<Game> parent;
         private Lazy<ReadOnlyCollection<Game>> children;
+        private Lazy<IDictionary<string, ReadOnlyCollection<Record>>> leaderboards;
 
         public IEnumerable<Run> Runs { get; private set; }
         public ReadOnlyCollection<Level> Levels { get { return levels.Value; } }
@@ -59,6 +60,7 @@ namespace SpeedrunComSharp
         public string ParentGameID { get; private set; }
         public Game Parent { get { return parent.Value; } }
         public ReadOnlyCollection<Game> Children { get { return children.Value; } }
+        public IDictionary<string, ReadOnlyCollection<Record>> Leaderboards { get { return leaderboards.Value; } }
 
         #endregion
 
@@ -178,6 +180,13 @@ namespace SpeedrunComSharp
             }
 
             game.children = new Lazy<ReadOnlyCollection<Game>>(() => client.Games.GetChildren(game.ID));
+
+            game.leaderboards = new Lazy<IDictionary<string, ReadOnlyCollection<Record>>>(() => 
+                client
+                .Records
+                .GetRecords(gameName: game.Name, amount: 99999)
+                .GroupBy(x => x.CategoryName)
+                .ToDictionary(x => x.Key, x => x.ToList().AsReadOnly()));
                  
             return game;
         }
