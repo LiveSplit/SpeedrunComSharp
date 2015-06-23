@@ -17,6 +17,7 @@ namespace SpeedrunComSharp
         public Uri Video { get; private set; }
         public string Comment { get; private set; }
         public RunStatus Status { get; private set; }
+        public Player Player { get { return Players.FirstOrDefault(); } }
         public ReadOnlyCollection<Player> Players { get; private set; }
         public DateTime? Date { get; private set; }
         public DateTime? DateSubmitted { get; private set; }
