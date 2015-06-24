@@ -96,5 +96,10 @@ namespace SpeedrunComSharp
 
             return records.AsReadOnly();
         }
+
+        public Record GetWorldRecord(string gameName, string categoryName)
+        {
+            return GetRecords(gameName: gameName).FirstOrDefault(record => record.CategoryName == categoryName);
+        }
     }
 }

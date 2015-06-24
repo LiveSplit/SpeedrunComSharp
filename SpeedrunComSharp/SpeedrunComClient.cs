@@ -82,10 +82,10 @@ namespace SpeedrunComSharp
                 result = JSON.FromUri(uri, UserAgent);
             }
 
-            if (Cache.Count == MaxCacheElements)
-                Cache.Remove(Cache.Keys.First());
-
             Cache.Add(uri, result);
+
+            while (Cache.Count > MaxCacheElements)
+                Cache.Remove(Cache.Keys.First());
 
             return result;
         }

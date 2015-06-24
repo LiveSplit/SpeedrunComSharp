@@ -21,6 +21,9 @@ namespace SpeedrunComSharp
         public DateTime? Date { get; private set; }
         public Uri Video { get; private set; }
         public Uri SplitsIOUri { get; private set; }
+        public Uri WebLink { get; private set; }
+
+        public bool SplitsAvailable { get { return SplitsIOUri != null; } }
 
         #region Links
 
@@ -93,7 +96,7 @@ namespace SpeedrunComSharp
                         double.Parse(recordElement.date,
                         CultureInfo.InvariantCulture));
 
-            string videoUri = recordElement.video as string;
+            var videoUri = recordElement.video as string;
 
             if (!string.IsNullOrEmpty(videoUri))
             {
@@ -103,6 +106,8 @@ namespace SpeedrunComSharp
                 if (Uri.IsWellFormedUriString(videoUri, UriKind.Absolute))
                     record.Video = new Uri(videoUri);
             }
+
+            record.WebLink = new Uri(recordElement.links.web as string);
 
             string splitsIO = recordElement.splitsio as string;
             if (!string.IsNullOrEmpty(splitsIO))

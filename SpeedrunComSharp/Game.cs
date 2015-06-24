@@ -56,6 +56,8 @@ namespace SpeedrunComSharp
         public IEnumerable<Run> Runs { get; private set; }
         public ReadOnlyCollection<Level> Levels { get { return levels.Value; } }
         public ReadOnlyCollection<Category> Categories { get { return categories.Value; } }
+        public IEnumerable<Category> FullGameCategories { get { return Categories.Where(category => category.Type == CategoryType.PerGame); } }
+        public IEnumerable<Category> LevelCategories { get { return Categories.Where(category => category.Type == CategoryType.PerLevel); } }
         public ReadOnlyCollection<Variable> Variables { get { return variables.Value; } }
         public string ParentGameID { get; private set; }
         public Game Parent { get { return parent.Value; } }
