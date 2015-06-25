@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets.cs" />
     <Compile Include="CachedEnumerable.cs" />
     <Compile Include="CategoriesClient.cs" />
     <Compile Include="Category.cs" />

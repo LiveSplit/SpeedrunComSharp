@@ -2,7 +2,7 @@
 
 SpeedrunComSharp is a .NET wrapper Library for the [Speedrun.com
 API](https://github.com/speedruncom/api). The current implementation of
-SpeedrunComSharp implements all of the features available at [`8fb0fd...`](https://github.com/speedruncom/api/tree/8fb0fd0b7d88b48494ff7905cf389a61b4cb8326)
+SpeedrunComSharp implements all of the features available at [`999c48...`](https://github.com/speedruncom/api/tree/999c48272c4152b0598652c475b10945168f0284)
 
 ## How to use
 
@@ -39,7 +39,7 @@ var client = new SpeedrunComClient();
 var game = client.Games.GetGames(name: "Wind Waker").First();
 
 //Printing all the categories of the game
-foreach (var category in Game.Categories)
+foreach (var category in game.Categories)
 {
   Console.WriteLine(category.Name);
 }

@@ -18,6 +18,7 @@ namespace SpeedrunComSharp
         public int? YearOfRelease { get; private set; }
         public Ruleset Ruleset { get; private set; }
         public DateTime? CreationDate { get; private set; }
+        public Assets Assets { get; private set; }
 
         #region Embeds
 
@@ -81,6 +82,8 @@ namespace SpeedrunComSharp
             var created = gameElement.created as string;
             if (!string.IsNullOrEmpty(created))
                 game.CreationDate = DateTime.Parse(created, CultureInfo.InvariantCulture);
+
+            game.Assets = Assets.Parse(client, gameElement.assets);
 
             //Parse Embeds
 

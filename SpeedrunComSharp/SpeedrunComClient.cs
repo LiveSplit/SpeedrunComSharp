@@ -59,6 +59,15 @@ namespace SpeedrunComSharp
             return new Uri(APIUri, subUri);
         }
 
+        internal ReadOnlyCollection<T> ParseCollection<T>(dynamic collection, Func<dynamic, T> parser)
+        {
+            var enumerable = collection as IEnumerable<dynamic>;
+            if (enumerable == null)
+                return new List<T>(new T[0]).AsReadOnly();
+
+            return enumerable.Select(parser).ToList().AsReadOnly();
+        }
+
         internal ReadOnlyCollection<T> ParseCollection<T>(dynamic collection)
         {
             var enumerable = collection as IEnumerable<dynamic>;
