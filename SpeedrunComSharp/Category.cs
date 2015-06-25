@@ -79,7 +79,7 @@ namespace SpeedrunComSharp
             category.leaderboard = new Lazy<ReadOnlyCollection<Record>>(() => 
                 client
                 .Records
-                .GetRecords(gameName: category.Game.Name, amount: 99999)
+                .GetRecords(gameName: category.Game.Name, amount: RecordsClient.AllRecords)
                 .Where(x => x.CategoryName == category.Name)
                 .ToList()
                 .AsReadOnly());

@@ -189,7 +189,7 @@ namespace SpeedrunComSharp
             game.leaderboards = new Lazy<IDictionary<string, ReadOnlyCollection<Record>>>(() => 
                 client
                 .Records
-                .GetRecords(gameName: game.Name, amount: 99999)
+                .GetRecords(gameName: game.Name, amount: RecordsClient.AllRecords)
                 .GroupBy(x => x.CategoryName)
                 .ToDictionary(x => x.Key, x => x.ToList().AsReadOnly()));
                  

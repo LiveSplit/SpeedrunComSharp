@@ -10,6 +10,8 @@ namespace SpeedrunComSharp
 {
     public class RecordsClient
     {
+        public const int AllRecords = 99999;
+        
         private SpeedrunComClient baseClient;
 
         public RecordsClient(SpeedrunComClient baseClient)
