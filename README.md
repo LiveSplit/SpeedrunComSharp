@@ -63,6 +63,6 @@ Console.WriteLine("The World Record is {0} by {1}", worldRecordRun.Times.Primary
 
 ## Optimizations
 
-The Clients are somewhat more flexible as the Properties in the invidual Objects for traversing the API, because they can embed additional objects to decrease Network Usage. If you want to optimize your API usage, make sure to use the Clients where possible.
+The Clients are somewhat more flexible as the Properties in the individual Objects for traversing the API, because they can embed additional objects to decrease Network Usage. If you want to optimize your API usage, make sure to use the Clients where possible.
 
 The Library automatically minimizes Network Usage, so iterating over `category.Runs` multiple times for example only results in a single API Call. If you are iterating over an IEnumerable that results in a Paginated API Call, the API will only be called for those pages that you are iterating over. If two completely unrelated events result in the same API Call, the SpeedrunComSharp Library will notice that and return a cached result for the second API Call.
