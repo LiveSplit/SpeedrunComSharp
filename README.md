@@ -1,5 +1,7 @@
 # SpeedrunComSharp
 
+[![Build Status](https://travis-ci.org/LiveSplit/SpeedrunComSharp.svg?branch=master)](https://travis-ci.org/LiveSplit/SpeedrunComSharp)
+
 SpeedrunComSharp is a .NET wrapper Library for the [Speedrun.com
 API](https://github.com/speedruncom/api). The current implementation of
 SpeedrunComSharp implements all of the features available at [`999c48...`](https://github.com/speedruncom/api/tree/999c48272c4152b0598652c475b10945168f0284)
