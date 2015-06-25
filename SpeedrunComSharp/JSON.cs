@@ -51,7 +51,6 @@ namespace SpeedrunComSharp
 
         public static dynamic FromUri(Uri uri, string userAgent)
         {
-            Console.WriteLine(uri.AbsoluteUri);
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.UserAgent = userAgent;
             var response = request.GetResponse();
