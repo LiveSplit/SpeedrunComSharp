@@ -18,7 +18,7 @@ namespace SpeedrunComSharp
 
         #region Links
 
-        private Lazy<Game> game;
+        internal Lazy<Game> game;
         private Lazy<ReadOnlyCollection<Variable>> variables;
         private Lazy<ReadOnlyCollection<Record>> leaderboard;
         private Lazy<Record> worldRecord;

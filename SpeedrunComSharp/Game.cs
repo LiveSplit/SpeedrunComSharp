@@ -157,7 +157,17 @@ namespace SpeedrunComSharp
             }
             else
             {
-                game.categories = new Lazy<ReadOnlyCollection<Category>>(() => client.Games.GetCategories(game.ID));
+                game.categories = new Lazy<ReadOnlyCollection<Category>>(() => 
+                    {
+                        var categories = client.Games.GetCategories(game.ID);
+                        
+                        foreach (var category in categories)
+                        {
+                            category.game = new Lazy<Game>(() => game);
+                        }
+                        
+                        return categories;
+                    });
             }
 
             if (properties.ContainsKey("variables"))
@@ -184,7 +194,20 @@ namespace SpeedrunComSharp
                 game.parent = new Lazy<Game>(() => null);
             }
 
-            game.children = new Lazy<ReadOnlyCollection<Game>>(() => client.Games.GetChildren(game.ID));
+            game.children = new Lazy<ReadOnlyCollection<Game>>(() => 
+                {
+                    var children = client.Games.GetChildren(game.ID);
+                    
+                    if (children != null)
+                    {
+                        foreach (var child in children)
+                        {
+                            child.parent = new Lazy<Game>(() => game);
+                        }
+                    }
+                    
+                    return children;
+                });
 
             game.leaderboards = new Lazy<IDictionary<string, ReadOnlyCollection<Record>>>(() => 
                 client
