@@ -215,12 +215,34 @@ namespace SpeedrunComSharp
                     return children;
                 });
 
-            game.leaderboards = new Lazy<IDictionary<string, ReadOnlyCollection<Record>>>(() => 
-                client
-                .Records
-                .GetRecords(gameName: game.Name, amount: RecordsClient.AllRecords)
-                .GroupBy(x => x.CategoryName)
-                .ToDictionary(x => x.Key, x => x.ToList().AsReadOnly()));
+            game.leaderboards = new Lazy<IDictionary<string, ReadOnlyCollection<Record>>>(() =>
+                {
+                    var records = client
+                        .Records
+                        .GetRecords(gameName: game.Name, amount: RecordsClient.AllRecords);
+                    
+                    foreach (var record in records)
+                    {
+                        record.game = new Lazy<Game>(() => game);    
+                    }
+                    
+                    var grouped = records.GroupBy(x => x.CategoryName)
+                        .ToDictionary(x => x.Key, x => x.ToList().AsReadOnly());
+                    
+                    if (game.categories.IsValueCreated)
+                    {
+                        foreach (var leaderboard in grouped)
+                        {
+                            var category = game.Categories.First(x => x.Name == leaderboard.Key);
+                            foreach (var record in leaderboard.Value)
+                            {
+                                record.category = new Lazy<Category>(() => category);
+                            }
+                        }
+                    }
+                    
+                    return grouped;
+                });
                  
             return game;
         }
