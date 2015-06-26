@@ -153,6 +153,12 @@ namespace SpeedrunComSharp
             {
                 var categoryElements = properties["categories"].data as IEnumerable<dynamic>;
                 var categories = categoryElements.Select(x => Category.Parse(client, x) as Category).ToList().AsReadOnly();
+                
+                foreach (var category in categories)
+                {
+                    category.game = new Lazy<Game>(() => game);
+                }
+                
                 game.categories = new Lazy<ReadOnlyCollection<Category>>(() => categories);
             }
             else
