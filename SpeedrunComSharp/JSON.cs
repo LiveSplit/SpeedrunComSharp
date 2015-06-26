@@ -32,9 +32,7 @@ namespace SpeedrunComSharp
             {
                 json = reader.ReadToEnd();
             }
-            catch (Exception ex)
-            {
-            }
+            catch { }
             return FromString(json);
         }
 

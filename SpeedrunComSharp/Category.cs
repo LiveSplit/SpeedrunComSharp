@@ -21,12 +21,14 @@ namespace SpeedrunComSharp
         private Lazy<Game> game;
         private Lazy<ReadOnlyCollection<Variable>> variables;
         private Lazy<ReadOnlyCollection<Record>> leaderboard;
+        private Lazy<Record> worldRecord;
 
         public string GameID { get; private set; }
         public Game Game { get { return game.Value; } }
         public ReadOnlyCollection<Variable> Variables { get { return variables.Value; } }
         public IEnumerable<Run> Runs { get; private set; }
         public ReadOnlyCollection<Record> Leaderboard { get { return leaderboard.Value; } }
+        public Record WorldRecord { get { return worldRecord.Value; }}
 
         #endregion
 
@@ -83,6 +85,13 @@ namespace SpeedrunComSharp
                 .Where(x => x.CategoryName == category.Name)
                 .ToList()
                 .AsReadOnly());
+            category.worldRecord = new Lazy<Record>(() =>
+                {
+                    if (category.leaderboard.IsValueCreated)
+                        return category.Leaderboard.First();
+                    else
+                        return client.Records.GetWorldRecord(category.Game.Name, category.Name);
+                });
 
             return category;
         }
