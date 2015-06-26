@@ -71,6 +71,11 @@ namespace SpeedrunComSharp
 
             return Game.Parse(baseClient, result.data);
         }
+        
+        public Game SearchGame(string name, GameEmbeds embeds = default(GameEmbeds))
+        {
+            return GetGames(name: name, embeds: embeds, elementsPerPage: 1).FirstOrDefault();
+        }
 
         public ReadOnlyCollection<Category> GetCategories(
             string gameId, bool miscellaneous = true,

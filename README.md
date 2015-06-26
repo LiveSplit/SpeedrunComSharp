@@ -38,7 +38,7 @@ The Sub-Clients implement all the API Calls for retrieving the Objects from the 
 var client = new SpeedrunComClient();
 
 //Searching for a game called "Wind Waker"
-var game = client.Games.GetGames(name: "Wind Waker").First();
+var game = client.Games.SearchGame(name: "Wind Waker");
 
 //Printing all the categories of the game
 foreach (var category in game.Categories)
@@ -49,11 +49,8 @@ foreach (var category in game.Categories)
 //Searching for the category "Any%"
 var anyPercent = game.Categories.First(category => category.Name == "Any%");
 
-//Getting the leaderboard for the category
-var leaderboard = anyPercent.Leaderboard;
-
 //Finding the World Record of the category
-var worldRecord = leaderboard.First();
+var worldRecord = anyPercent.WorldRecord;
 
 //Getting the World Record Run
 var worldRecordRun = worldRecord.Run;
