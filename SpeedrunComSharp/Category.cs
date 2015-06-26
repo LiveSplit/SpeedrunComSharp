@@ -79,16 +79,34 @@ namespace SpeedrunComSharp
 
             category.Runs = client.Runs.GetRuns(categoryId: category.ID);
             category.leaderboard = new Lazy<ReadOnlyCollection<Record>>(() => 
-                client
-                .Records
-                .GetRecords(gameName: category.Game.Name, amount: RecordsClient.AllRecords)
-                .Where(x => x.CategoryName == category.Name)
-                .ToList()
-                .AsReadOnly());
+                {                                                        
+                    var leaderboard = client
+                                        .Records
+                                        .GetRecords(gameName: category.Game.Name, amount: RecordsClient.AllRecords)
+                                        .Where(x => x.CategoryName == category.Name)
+                                        .ToList()
+                                        .AsReadOnly();
+                    
+                    foreach (var record in leaderboard)
+                    {
+                        record.category = new Lazy<Category>(() => category);
+                        record.game = category.game;
+                    }
+                    
+                    return leaderboard;
+                });
+            
             category.worldRecord = new Lazy<Record>(() =>
                 {
                     if (category.leaderboard.IsValueCreated)
-                        return category.Leaderboard.First();
+                    {
+                        var record = category.Leaderboard.First();
+                        
+                        record.category = new Lazy<Category>(() => category);
+                        record.game = category.game;
+                        
+                        return record;
+                    }
                     else
                         return client.Records.GetWorldRecord(category.Game.Name, category.Name);
                 });

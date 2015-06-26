@@ -28,8 +28,8 @@ namespace SpeedrunComSharp
         #region Links
 
         private Lazy<Run> run;
-        private Lazy<Game> game;
-        private Lazy<Category> category;
+        internal Lazy<Game> game;
+        internal Lazy<Category> category;
 
         public Run Run { get { return run.Value; } }
         public User Player { get { return Players.FirstOrDefault(); } }
@@ -117,7 +117,7 @@ namespace SpeedrunComSharp
 
             record.run = new Lazy<Run>(() => client.Runs.GetRun(record.RunID));
             record.Players = record.PlayerNames.Select(x => client.Users.GetUsers(name: x).FirstOrDefault()).Cache();
-            record.game = new Lazy<Game>(() => client.Games.GetGames(name: record.GameName).FirstOrDefault());
+            record.game = new Lazy<Game>(() => client.Games.GetGames(name: record.GameName, elementsPerPage: 1).FirstOrDefault());
             record.category = new Lazy<Category>(() => record.Game.Categories.FirstOrDefault(x => x.Name == record.CategoryName));
 
             return record;
