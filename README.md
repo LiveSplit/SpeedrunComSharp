@@ -4,7 +4,7 @@
 
 SpeedrunComSharp is a .NET wrapper Library for the [Speedrun.com
 API](https://github.com/speedruncom/api). The current implementation of
-SpeedrunComSharp implements all of the features available at [`999c48...`](https://github.com/speedruncom/api/tree/999c48272c4152b0598652c475b10945168f0284)
+SpeedrunComSharp implements all of the features available at [`5734df...`](https://github.com/speedruncom/api/tree/5734df52a8902a8c26e6a1060e8511092eb568ef)
 
 ## How to use
 

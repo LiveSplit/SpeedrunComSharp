@@ -13,8 +13,8 @@ namespace SpeedrunComSharp
 
         #region Links
 
-        private Lazy<Platform> platform;
-        private Lazy<Region> region;
+        internal Lazy<Platform> platform;
+        internal Lazy<Region> region;
 
         public Platform Platform { get { return platform.Value; } }
         public Region Region { get { return region.Value; } }
@@ -27,19 +27,27 @@ namespace SpeedrunComSharp
         {
             var system = new RunSystem();
 
-            system.PlatformID = systemElement.platform as string;
             system.IsEmulated = (bool)systemElement.emulated;
-            system.RegionID = systemElement.region as string;
 
-            if (!string.IsNullOrEmpty(system.PlatformID))
+            if (!string.IsNullOrEmpty(systemElement.platform as string))
+            {
+                system.PlatformID = systemElement.platform as string;
                 system.platform = new Lazy<Platform>(() => client.Platforms.GetPlatform(system.PlatformID));
+            }
             else
+            {
                 system.platform = new Lazy<Platform>(() => null);
+            }
 
-            if (!string.IsNullOrEmpty(system.RegionID))
+            if (!string.IsNullOrEmpty(systemElement.region as string))
+            {
+                system.RegionID = systemElement.region as string;
                 system.region = new Lazy<Region>(() => client.Regions.GetRegion(system.RegionID));
+            }
             else
+            {
                 system.region = new Lazy<Region>(() => null);
+            }
 
             return system;
         }

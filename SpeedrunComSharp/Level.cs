@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class Level
+    public class Level : IAPIElementWithID
     {
         public string ID { get; private set; }
         public string Name { get; private set; }
@@ -32,6 +33,9 @@ namespace SpeedrunComSharp
 
         public static Level Parse(SpeedrunComClient client, dynamic levelElement)
         {
+            if (levelElement is ArrayList)
+                return null;
+
             var level = new Level();
 
             //Parse Attributes

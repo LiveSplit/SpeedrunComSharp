@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -7,10 +8,11 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class Category
+    public class Category : IAPIElementWithID
     {
         public string ID { get; private set; }
         public string Name { get; private set; }
+        public Uri WebLink { get; private set; }
         public CategoryType Type { get; private set; }
         public string Rules { get; private set; }
         public Players Players { get; private set; }
@@ -36,12 +38,16 @@ namespace SpeedrunComSharp
 
         public static Category Parse(SpeedrunComClient client, dynamic categoryElement)
         {
+            if (categoryElement is ArrayList)
+                return null;
+
             var category = new Category();
 
             //Parse Attributes
 
             category.ID = categoryElement.id as string;
             category.Name = categoryElement.name as string;
+            category.WebLink = new Uri(categoryElement.weblink as string);
             category.Type = categoryElement.type == "per-game" ? CategoryType.PerGame : CategoryType.PerLevel;
             category.Rules = categoryElement.rules as string;
             category.Players = Players.Parse(client, categoryElement.players);
@@ -68,8 +74,8 @@ namespace SpeedrunComSharp
 
             if (properties.ContainsKey("variables"))
             {
-                var variableElements = properties["variables"].data as IEnumerable<dynamic>;
-                var variables = variableElements.Select(x => Variable.Parse(client, x) as Variable).ToList().AsReadOnly();
+                Func<dynamic, Variable> parser = x => Variable.Parse(client, x) as Variable;
+                var variables = client.ParseCollection(properties["variables"].data, parser);
                 category.variables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
             }
             else

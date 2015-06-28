@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -83,11 +84,17 @@ namespace SpeedrunComSharp
 
             if (Cache.ContainsKey(uri))
             {
+#if DEBUG_WITH_API_CALLS
+                Debug.WriteLine(uri.AbsoluteUri, "Cached API Call");
+#endif
                 result = Cache[uri];
                 Cache.Remove(uri);
             }
             else
             {
+#if DEBUG_WITH_API_CALLS
+                Debug.WriteLine(uri.AbsoluteUri, "Uncached API Call");
+#endif
                 result = JSON.FromUri(uri, UserAgent);
             }
 

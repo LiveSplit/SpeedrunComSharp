@@ -44,7 +44,7 @@ namespace SpeedrunComSharp
             string userName = null, int? amount = null,
             TimingMethod? timingMethod = null)
         {
-            var parameters = new List<string>() { "restids=yes" };
+            var parameters = new List<string>();
 
             if (!string.IsNullOrEmpty(gameName))
                 parameters.Add(string.Format("game={0}", HttpUtility.UrlPathEncode(gameName)));

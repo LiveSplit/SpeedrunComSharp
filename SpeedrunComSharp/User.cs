@@ -7,16 +7,22 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class User
+    public class User : IAPIElementWithID
     {
         public string ID { get; private set; }
-        public Uri WebLink { get; private set; }
         public string Name { get; private set; }
         public string JapaneseName { get; private set; }
+        public Uri WebLink { get; private set; }
         public UserNameStyle NameStyle { get; private set; }
         public UserRole Role { get; private set; }
         public DateTime? SignUpDate { get; private set; }
         public Location Location { get; private set; }
+
+        public Uri TwitchProfile { get; private set; }
+        public Uri HitboxProfile { get; private set; }
+        public Uri YoutubeProfile { get; private set; }
+        public Uri TwitterProfile { get; private set; }
+        public Uri SpeedRunsLiveProfile { get; private set; }
 
         #region Links
 
@@ -25,12 +31,6 @@ namespace SpeedrunComSharp
         public IEnumerable<Run> Runs { get; private set; }
         public IEnumerable<Game> ModeratedGames { get; private set; }
         public ReadOnlyCollection<Record> Records { get { return records.Value; } }
-
-        public Uri TwitchProfile { get; private set; }
-        public Uri HitboxProfile { get; private set; }
-        public Uri YoutubeProfile { get; private set; }
-        public Uri TwitterProfile { get; private set; }
-        public Uri SpeedRunsLiveProfile { get; private set; }
 
         #endregion
 
@@ -67,9 +67,9 @@ namespace SpeedrunComSharp
             //Parse Attributes
 
             user.ID = userElement.id as string;
-            user.WebLink = new Uri(userElement.weblink as string);
             user.Name = userElement.names.international as string;
             user.JapaneseName = userElement.names.japanese as string;
+            user.WebLink = new Uri(userElement.weblink as string);
             user.NameStyle = UserNameStyle.Parse(client, properties["name-style"]) as UserNameStyle;
             user.Role = parseUserRole(userElement.role as string);
 
@@ -79,31 +79,31 @@ namespace SpeedrunComSharp
 
             user.Location = Location.Parse(client, userElement.location) as Location;
 
+            var twitchLink = userElement.twitch;
+            if (twitchLink != null)
+                user.TwitchProfile = new Uri(twitchLink.uri as string);
+
+            var hitboxLink = userElement.hitbox;
+            if (hitboxLink != null)
+                user.HitboxProfile = new Uri(hitboxLink.uri as string);
+
+            var youtubeLink = userElement.youtube;
+            if (youtubeLink != null)
+                user.YoutubeProfile = new Uri(youtubeLink.uri as string);
+
+            var twitterLink = userElement.twitter;
+            if (twitterLink != null)
+                user.TwitterProfile = new Uri(twitterLink.uri as string);
+
+            var speedRunsLiveLink = userElement.speedrunslive;
+            if (speedRunsLiveLink != null)
+                user.SpeedRunsLiveProfile = new Uri(speedRunsLiveLink.uri as string);
+
             //Parse Links
 
             user.Runs = client.Runs.GetRuns(userId: user.ID);
             user.ModeratedGames = client.Games.GetGames(moderatorId: user.ID);
             user.records = new Lazy<ReadOnlyCollection<Record>>(() => client.Records.GetRecords(userName: user.Name));
-
-            var twitchLink = links.FirstOrDefault(x => x.rel == "twitch");
-            if (twitchLink != null)
-                user.TwitchProfile = new Uri(twitchLink.uri as string);
-
-            var hitboxLink = links.FirstOrDefault(x => x.rel == "hitbox");
-            if (hitboxLink != null)
-                user.HitboxProfile = new Uri(hitboxLink.uri as string);
-
-            var youtubeLink = links.FirstOrDefault(x => x.rel == "youtube");
-            if (youtubeLink != null)
-                user.YoutubeProfile = new Uri(youtubeLink.uri as string);
-
-            var twitterLink = links.FirstOrDefault(x => x.rel == "twitter");
-            if (twitterLink != null)
-                user.TwitterProfile = new Uri(twitterLink.uri as string);
-
-            var speedRunsLiveLink = links.FirstOrDefault(x => x.rel == "speedrunslive");
-            if (speedRunsLiveLink != null)
-                user.SpeedRunsLiveProfile = new Uri(speedRunsLiveLink.uri as string);
 
             return user;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class Platform
+    public class Platform : IAPIElementWithID
     {
         public string ID { get; private set; }
         public string Name { get; private set; }
@@ -23,6 +24,9 @@ namespace SpeedrunComSharp
 
         public static Platform Parse(SpeedrunComClient client, dynamic platformElement)
         {
+            if (platformElement is ArrayList)
+                return null;
+
             var platform = new Platform();
 
             //Parse Attributes

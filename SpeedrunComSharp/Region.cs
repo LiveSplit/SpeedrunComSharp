@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class Region
+    public class Region : IAPIElementWithID
     {
         public string ID { get; private set; }
         public string Name { get; private set; }
@@ -22,6 +23,9 @@ namespace SpeedrunComSharp
 
         public static Region Parse(SpeedrunComClient client, dynamic regionElement)
         {
+            if (regionElement is ArrayList)
+                return null;
+
             var region = new Region();
 
             //Parse Attributes

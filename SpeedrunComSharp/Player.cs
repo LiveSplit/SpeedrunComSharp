@@ -28,19 +28,41 @@ namespace SpeedrunComSharp
         {
             var player = new Player();
 
-            var id = playerElement.id as string;
+            var properties = playerElement.Properties as IDictionary<string, dynamic>;
 
-            if (playerElement.rel as string == "user")
+            if (properties.ContainsKey("uri"))
             {
-                player.UserID = id;
-                player.user = new Lazy<User>(() => client.Users.GetUser(player.UserID));
-                player.guest = new Lazy<Guest>(() => null);
+                var id = playerElement.id as string;
+
+                if (playerElement.rel as string == "user")
+                {
+                    player.UserID = id;
+                    player.user = new Lazy<User>(() => client.Users.GetUser(player.UserID));
+                    player.guest = new Lazy<Guest>(() => null);
+                }
+                else
+                {
+                    player.GuestName = id;
+                    player.guest = new Lazy<Guest>(() => client.Guests.GetGuest(player.GuestName));
+                    player.user = new Lazy<User>(() => null);
+                }
             }
             else
             {
-                player.GuestName = id;
-                player.guest = new Lazy<Guest>(() => client.Guests.GetGuest(player.GuestName));
-                player.user = new Lazy<User>(() => null);
+                if (playerElement.rel as string == "user")
+                {
+                    var user = User.Parse(client, playerElement) as User;
+                    player.user = new Lazy<User>(() => user);
+                    player.UserID = user.ID;
+                    player.guest = new Lazy<Guest>(() => null);
+                }
+                else
+                {
+                    var guest = Guest.Parse(client, playerElement) as Guest;
+                    player.guest = new Lazy<Guest>(() => guest);
+                    player.GuestName = guest.Name;
+                    player.user = new Lazy<User>(() => null);
+                }
             }
 
             return player;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class VariableChoice
+    public class VariableChoice : IAPIElementWithID
     {
         public string ID { get; private set; }
         public string Value { get; private set; }

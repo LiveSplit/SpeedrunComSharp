@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace SpeedrunComSharp
         public RunStatusType Type { get; private set; }
         public string ExaminerUserID { get; private set; }
         public string Reason { get; private set; }
+        public DateTime? VerifyDate { get; private set; }
 
         #region Links
 
@@ -40,6 +42,8 @@ namespace SpeedrunComSharp
         {
             var status = new RunStatus();
 
+            var properties = statusElement.Properties as IDictionary<string, dynamic>;
+
             status.Type = ParseType(statusElement.status as string);
 
             if (status.Type == RunStatusType.Rejected 
@@ -47,6 +51,13 @@ namespace SpeedrunComSharp
             {
                 status.ExaminerUserID = statusElement.examiner as string;
                 status.examiner = new Lazy<User>(() => client.Users.GetUser(status.ExaminerUserID));
+
+                if (status.Type == RunStatusType.Verified)
+                {
+                    var date = properties["verify-date"] as string;
+                    if (!string.IsNullOrEmpty(date))
+                        status.VerifyDate = DateTime.Parse(date, CultureInfo.InvariantCulture);
+                }
             }
             else
             {

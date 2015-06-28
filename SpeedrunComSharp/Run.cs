@@ -7,14 +7,14 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class Run
+    public class Run : IAPIElementWithID
     {
         public string ID { get; private set; }
         public Uri WebLink { get; private set; }
         public string GameID { get; private set; }
         public string LevelID { get; private set; }
         public string CategoryID { get; private set; }
-        public Uri Video { get; private set; }
+        public RunVideos Videos { get; private set; }
         public string Comment { get; private set; }
         public RunStatus Status { get; private set; }
         public Player Player { get { return Players.FirstOrDefault(); } }
@@ -23,6 +23,7 @@ namespace SpeedrunComSharp
         public DateTime? DateSubmitted { get; private set; }
         public RunTimes Times { get; private set; }
         public RunSystem System { get; private set; }
+        public Uri SplitsUri { get; private set; }
         public ReadOnlyCollection<VariableValue> VariableValues { get; private set; }
 
         #region Links
@@ -30,23 +31,20 @@ namespace SpeedrunComSharp
         private Lazy<Game> game;
         private Lazy<Category> category;
         private Lazy<Level> level;
-        private Lazy<Platform> platform;
-        private Lazy<Region> region;
         private Lazy<User> examiner;
 
         public Game Game { get { return game.Value; } }
         public Category Category { get { return category.Value; } }
         public Level Level { get { return level.Value; } }
-        public Platform Platform { get { return platform.Value; } }
-        public Region Region { get { return region.Value; } }
+        public Platform Platform { get { return System.Platform; } }
+        public Region Region { get { return System.Region; } }
         public User Examiner { get { return examiner.Value; } }
-        public Uri SplitsIOUri { get; private set; }
 
         #endregion
 
         private Run() { }
 
-        internal static Run Parse(SpeedrunComClient client, dynamic runElement)
+        public static Run Parse(SpeedrunComClient client, dynamic runElement)
         {
             var run = new Run();
 
@@ -54,24 +52,20 @@ namespace SpeedrunComSharp
 
             run.ID = runElement.id as string;
             run.WebLink = new Uri(runElement.weblink as string);
-            run.LevelID = runElement.level as string;
-            run.CategoryID = runElement.category as string;
-
-            var videoUri = runElement.video as string;
-            if (!string.IsNullOrEmpty(videoUri))
-            {
-                if (!videoUri.StartsWith("http"))
-                    videoUri = "http://" + videoUri;
-
-                if (Uri.IsWellFormedUriString(videoUri, UriKind.Absolute))
-                    run.Video = new Uri(videoUri);
-            }
-
+            run.Videos = RunVideos.Parse(client, runElement.videos) as RunVideos;
             run.Comment = runElement.comment as string;
             run.Status = RunStatus.Parse(client, runElement.status) as RunStatus;
 
-            var playerElements = runElement.players as IEnumerable<dynamic>;
-            run.Players = playerElements.Select(x => Player.Parse(client, x) as Player).ToList().AsReadOnly();
+            Func<dynamic, Player> parsePlayer = x => Player.Parse(client, x) as Player;
+
+            if (runElement.players is IEnumerable<dynamic>)
+            {
+                run.Players = client.ParseCollection(runElement.players, parsePlayer);
+            }
+            else
+            {
+                run.Players = client.ParseCollection(runElement.players.data, parsePlayer);
+            }
 
             var runDate = runElement.date;
             if (!string.IsNullOrEmpty(runDate))
@@ -83,6 +77,12 @@ namespace SpeedrunComSharp
 
             run.Times = RunTimes.Parse(client, runElement.times) as RunTimes;
             run.System = RunSystem.Parse(client, runElement.system) as RunSystem;
+
+            var splits = runElement.splits;
+            if (splits != null)
+            {
+                run.SplitsUri = new Uri(splits.uri as string);
+            }
 
             if (runElement.values is DynamicJsonObject)
             {
@@ -111,41 +111,50 @@ namespace SpeedrunComSharp
                 run.GameID = game.ID;
             }
             
-
-            if (!string.IsNullOrEmpty(run.CategoryID))
+            if (properties["category"] == null)
             {
+                run.category = new Lazy<Category>(() => null);
+            }
+            else if (properties["category"] is string)
+            {
+                run.CategoryID = runElement.category as string;
                 run.category = new Lazy<Category>(() => client.Categories.GetCategory(run.CategoryID));
             }
             else
             {
-                run.category = new Lazy<Category>(() => null);
+                var category = Category.Parse(client, properties["category"].data) as Category;
+                run.category = new Lazy<Category>(() => category);
+                if (category != null)
+                    run.CategoryID = category.ID;
             }
 
-            if (!string.IsNullOrEmpty(run.LevelID))
-            {
-                run.level = new Lazy<Level>(() => client.Levels.GetLevel(run.LevelID));
-            }
-            else
+            if (properties["level"] == null)
             {
                 run.level = new Lazy<Level>(() => null);
             }
-
-            if (!string.IsNullOrEmpty(run.System.PlatformID))
+            else if (properties["level"] is string)
             {
-                run.platform = new Lazy<Platform>(() => client.Platforms.GetPlatform(run.System.PlatformID));
+                run.LevelID = runElement.level as string;
+                run.level = new Lazy<Level>(() => client.Levels.GetLevel(run.LevelID));
             }
             else
-            {
-                run.platform = new Lazy<Platform>(() => null);
+            { 
+                var level = Level.Parse(client, properties["level"].data) as Level;
+                run.level = new Lazy<Level>(() => level);
+                if (level != null)
+                    run.LevelID = level.ID;
             }
 
-            if (!string.IsNullOrEmpty(run.System.RegionID))
+            if (properties.ContainsKey("platform"))
             {
-                run.region = new Lazy<Region>(() => client.Regions.GetRegion(run.System.RegionID));
+                var platform = Platform.Parse(client, properties["platform"].data) as Platform;
+                run.System.platform = new Lazy<Platform>(() => platform);
             }
-            else
+
+            if (properties.ContainsKey("region"))
             {
-                run.region = new Lazy<Region>(() => null);
+                var region = Region.Parse(client, properties["region"].data) as Region;
+                run.System.region = new Lazy<Region>(() => region);
             }
 
             if (!string.IsNullOrEmpty(run.Status.ExaminerUserID))
@@ -155,12 +164,6 @@ namespace SpeedrunComSharp
             else
             {
                 run.examiner = new Lazy<User>(() => null);
-            }
-
-            var splitsIOLink = links.FirstOrDefault(x => x.rel == "splits");
-            if (splitsIOLink != null)
-            {
-                run.SplitsIOUri = new Uri(splitsIOLink.uri as string);
             }
 
             return run;

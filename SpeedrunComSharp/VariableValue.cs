@@ -22,7 +22,7 @@ namespace SpeedrunComSharp
 
         private VariableValue() { }
 
-        internal static VariableValue Parse(SpeedrunComClient client, KeyValuePair<string, dynamic> valueElement)
+        public static VariableValue Parse(SpeedrunComClient client, KeyValuePair<string, dynamic> valueElement)
         {
             var value = new VariableValue();
 

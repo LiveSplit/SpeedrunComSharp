@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class Variable
+    public class Variable : IAPIElementWithID
     {
         public string ID { get; private set; }
         public string Name { get; private set; }
