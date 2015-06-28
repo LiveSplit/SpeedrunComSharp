@@ -37,9 +37,12 @@ namespace SpeedrunComSharp
 
         public ReadOnlyCollection<Category> GetCategories(
             string levelId, bool miscellaneous = true,
-            CategoryEmbeds embeds = default(CategoryEmbeds))
+            CategoryEmbeds embeds = default(CategoryEmbeds),
+            CategoriesOrdering orderBy = default(CategoriesOrdering))
         {
             var parameters = new List<string>() { embeds.ToString() };
+
+            parameters.AddRange(orderBy.ToParameters());
 
             if (!miscellaneous)
                 parameters.Add("miscellaneous=no");
@@ -52,9 +55,15 @@ namespace SpeedrunComSharp
                 x => Category.Parse(baseClient, x));
         }
 
-        public ReadOnlyCollection<Variable> GetVariables(string levelId)
+        public ReadOnlyCollection<Variable> GetVariables(string levelId,
+            VariablesOrdering orderBy = default(VariablesOrdering))
         {
-            var uri = GetLevelsUri(string.Format("/{0}/variables", HttpUtility.UrlPathEncode(levelId)));
+            var parameters = new List<string>(orderBy.ToParameters());
+
+            var uri = GetLevelsUri(string.Format("/{0}/variables{1}", 
+                HttpUtility.UrlPathEncode(levelId),
+                parameters.ToParameters()));
+
             return baseClient.DoDataCollectionRequest<Variable>(uri,
                 x => Variable.Parse(baseClient, x));
         }

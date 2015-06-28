@@ -28,7 +28,8 @@ namespace SpeedrunComSharp
             string platformId = null, string regionId = null,
             bool onlyEmulatedRuns = false, RunStatusType? status = null,
             int? elementsPerPage = null,
-            RunEmbeds embeds = default(RunEmbeds))
+            RunEmbeds embeds = default(RunEmbeds),
+            RunsOrdering orderBy = default(RunsOrdering))
         {
             var parameters = new List<string>() { embeds.ToString() };
 
@@ -63,8 +64,10 @@ namespace SpeedrunComSharp
                 }
             }
 
+            parameters.AddRange(orderBy.ToParameters());
+
             var uri = GetRunsUri(parameters.ToParameters());
-            return baseClient.DoPaginatedRequest<Run>(uri,
+            return baseClient.DoPaginatedRequest(uri,
                 x => Run.Parse(baseClient, x) as Run);
         }
 

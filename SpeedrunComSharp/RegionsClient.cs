@@ -20,15 +20,19 @@ namespace SpeedrunComSharp
             return SpeedrunComClient.GetAPIUri(string.Format("regions{0}", subUri));
         }
 
-        public IEnumerable<Region> GetRegions(int? elementsPerPage = null)
+        public IEnumerable<Region> GetRegions(int? elementsPerPage = null,
+            RegionsOrdering orderBy = default(RegionsOrdering))
         {
-            var path = "";
+            var parameters = new List<string>();
+
+            parameters.AddRange(orderBy.ToParameters());
+
             if (elementsPerPage.HasValue)
-                path = "?max=" + elementsPerPage.Value;
+                parameters.Add(string.Format("max={0}", elementsPerPage.Value));
 
-            var uri = GetRegionsUri(path);
+            var uri = GetRegionsUri(parameters.ToParameters());
 
-            return baseClient.DoPaginatedRequest<Region>(uri,
+            return baseClient.DoPaginatedRequest(uri,
                 x => Region.Parse(baseClient, x) as Region);
         }
 

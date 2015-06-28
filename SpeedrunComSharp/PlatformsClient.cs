@@ -20,15 +20,19 @@ namespace SpeedrunComSharp
             return SpeedrunComClient.GetAPIUri(string.Format("platforms{0}", subUri));
         }
 
-        public IEnumerable<Platform> GetPlatforms(int? elementsPerPage = null)
+        public IEnumerable<Platform> GetPlatforms(int? elementsPerPage = null,
+            PlatformsOrdering orderBy = default(PlatformsOrdering))
         {
-            var path = "";
+            var parameters = new List<string>();
+
+            parameters.AddRange(orderBy.ToParameters());
+
             if (elementsPerPage.HasValue)
-                path = "?max=" + elementsPerPage.Value;
+                parameters.Add(string.Format("max={0}", elementsPerPage.Value));
 
-            var uri = GetPlatformsUri(path);
+            var uri = GetPlatformsUri(parameters.ToParameters());
 
-            return baseClient.DoPaginatedRequest<Platform>(uri,
+            return baseClient.DoPaginatedRequest(uri,
                 x => Platform.Parse(baseClient, x) as Platform);
         }
 

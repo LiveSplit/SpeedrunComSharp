@@ -25,9 +25,12 @@ namespace SpeedrunComSharp
             string name = null, int? yearOfRelease = null, 
             string platformId = null, string regionId = null, 
             string moderatorId = null, int? elementsPerPage = null,
-            GameEmbeds embeds = default(GameEmbeds))
+            GameEmbeds embeds = default(GameEmbeds),
+            GamesOrdering orderBy = default(GamesOrdering))
         {
             var parameters = new List<string>() { embeds.ToString() };
+
+            parameters.AddRange(orderBy.ToParameters());
 
             if (name != null)
                 parameters.Add(string.Format("name={0}", HttpUtility.UrlPathEncode(name)));
@@ -84,9 +87,12 @@ namespace SpeedrunComSharp
 
         public ReadOnlyCollection<Category> GetCategories(
             string gameId, bool miscellaneous = true,
-            CategoryEmbeds embeds = default(CategoryEmbeds))
+            CategoryEmbeds embeds = default(CategoryEmbeds),
+            CategoriesOrdering orderBy = default(CategoriesOrdering))
         {
             var parameters = new List<string>() { embeds.ToString() };
+
+            parameters.AddRange(orderBy.ToParameters());
 
             if (!miscellaneous)
                 parameters.Add("miscellaneous=no");
@@ -100,9 +106,12 @@ namespace SpeedrunComSharp
         }
 
         public ReadOnlyCollection<Level> GetLevels(string gameId,
-            LevelEmbeds embeds = default(LevelEmbeds))
+            LevelEmbeds embeds = default(LevelEmbeds),
+            LevelsOrdering orderBy = default(LevelsOrdering))
         {
             var parameters = new List<string>() { embeds.ToString() };
+
+            parameters.AddRange(orderBy.ToParameters());
 
             var uri = GetGamesUri(string.Format("/{0}/levels{1}", 
                 HttpUtility.UrlPathEncode(gameId),
@@ -112,17 +121,26 @@ namespace SpeedrunComSharp
                  x => Level.Parse(baseClient, x) as Level);
         }
 
-        public ReadOnlyCollection<Variable> GetVariables(string gameId)
+        public ReadOnlyCollection<Variable> GetVariables(string gameId,
+            VariablesOrdering orderBy = default(VariablesOrdering))
         {
-            var uri = GetGamesUri(string.Format("/{0}/variables", HttpUtility.UrlPathEncode(gameId)));
+            var parameters = new List<string>(orderBy.ToParameters());
+
+            var uri = GetGamesUri(string.Format("/{0}/variables{1}", 
+                HttpUtility.UrlPathEncode(gameId),
+                parameters.ToParameters()));
+
             return baseClient.DoDataCollectionRequest(uri,
                 x => Variable.Parse(baseClient, x) as Variable);
         }
 
         public ReadOnlyCollection<Game> GetChildren(string gameId,
-            GameEmbeds embeds = default(GameEmbeds))
+            GameEmbeds embeds = default(GameEmbeds),
+            GamesOrdering orderBy = default(GamesOrdering))
         {
             var parameters = new List<string>() { embeds.ToString() };
+
+            parameters.AddRange(orderBy.ToParameters());
 
             var uri = GetGamesUri(string.Format("/{0}/children{1}", 
                 HttpUtility.UrlPathEncode(gameId),
