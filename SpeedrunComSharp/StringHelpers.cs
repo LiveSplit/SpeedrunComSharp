@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    internal static class ParameterHelpers
+    internal static class StringHelpers
     {
         internal static string ToParameters(this string parameters)
         {
@@ -19,9 +19,24 @@ namespace SpeedrunComSharp
         {
             var list = parameters.Where(x => !string.IsNullOrEmpty(x)).ToList();
             if (list.Any())
-                return "?" + list.Aggregate((a, b) => a + "&" + b);
+                return "?" + list.Aggregate("&");
             else
                 return "";
+        }
+
+        internal static string Aggregate(this IEnumerable<string> list, string combiner)
+        {
+            var builder = new StringBuilder();
+
+            foreach (var element in list)
+            {
+                builder.Append(element);
+                builder.Append(combiner);
+            }
+
+            builder.Length -= combiner.Length;
+
+            return builder.ToString();
         }
     }
 }

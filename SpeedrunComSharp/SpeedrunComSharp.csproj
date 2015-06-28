@@ -75,7 +75,7 @@
     <Compile Include="Moderator.cs" />
     <Compile Include="ModeratorType.cs" />
     <Compile Include="NotAuthorizedException.cs" />
-    <Compile Include="ParameterHelpers.cs" />
+    <Compile Include="StringHelpers.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="PlatformsClient.cs" />
     <Compile Include="Player.cs" />
