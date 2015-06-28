@@ -55,9 +55,16 @@ namespace SpeedrunComSharp
                 x => Game.Parse(baseClient, x) as Game);
         }
 
-        public IEnumerable<GameHeader> GetGameHeaders(int elementsPerPage = 1000)
+        public IEnumerable<GameHeader> GetGameHeaders(int elementsPerPage = 1000,
+            GamesOrdering orderBy = default(GamesOrdering))
         {
-            var uri = GetGamesUri(string.Format("?_bulk=yes&max={0}", elementsPerPage));
+            var parameters = new List<string>() { "_bulk=yes" };
+
+            parameters.AddRange(orderBy.ToParameters());
+            parameters.Add(string.Format("max={0}", elementsPerPage));
+
+            var uri = GetGamesUri(parameters.ToParameters());
+
             return baseClient.DoPaginatedRequest(uri,
                 x => GameHeader.Parse(baseClient, x) as GameHeader);
         }
