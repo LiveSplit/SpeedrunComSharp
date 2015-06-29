@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -104,7 +105,7 @@ namespace SpeedrunComSharp
                 game.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(() => new List<User>().AsReadOnly());
             }
 
-            if (properties["platforms"] is IList<dynamic>)
+            if (properties["platforms"] is IList)
             {
                 game.PlatformIDs = client.ParseCollection<string>(gameElement.platforms);
                 game.platforms = new Lazy<ReadOnlyCollection<Platform>>(
@@ -118,7 +119,7 @@ namespace SpeedrunComSharp
                 game.PlatformIDs = platforms.Select(x => x.ID).ToList().AsReadOnly();
             }
 
-            if (properties["regions"] is IList<dynamic>)
+            if (properties["regions"] is IList)
             {
                 game.RegionIDs = client.ParseCollection<string>(gameElement.regions);
                 game.regions = new Lazy<ReadOnlyCollection<Region>>(
