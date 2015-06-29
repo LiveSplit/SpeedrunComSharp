@@ -104,32 +104,32 @@ namespace SpeedrunComSharp
                 game.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(() => new List<User>().AsReadOnly());
             }
 
-            if (properties["platforms"] is IDictionary<string, dynamic> && properties["platforms"].data is IEnumerable<dynamic>)
-            {
-                var platformElements = properties["platforms"].data as IEnumerable<dynamic>;
-                var platforms = platformElements.Select(x => Platform.Parse(client, x) as Platform).ToList().AsReadOnly();
-                game.platforms = new Lazy<ReadOnlyCollection<Platform>>(() => platforms);
-                game.PlatformIDs = platforms.Select(x => x.ID).ToList().AsReadOnly();
-            }
-            else
+            if (properties["platforms"] is IList<dynamic>)
             {
                 game.PlatformIDs = client.ParseCollection<string>(gameElement.platforms);
                 game.platforms = new Lazy<ReadOnlyCollection<Platform>>(
                     () => game.PlatformIDs.Select(x => client.Platforms.GetPlatform(x)).ToList().AsReadOnly());
             }
-
-            if (properties["regions"] is IDictionary<string, dynamic> && properties["regions"].data is IEnumerable<dynamic>)
-            {
-                var regionElements = properties["regions"].data as IEnumerable<dynamic>;
-                var regions = regionElements.Select(x => Region.Parse(client, x) as Region).ToList().AsReadOnly();
-                game.regions = new Lazy<ReadOnlyCollection<Region>>(() => regions);
-                game.RegionIDs = regions.Select(x => x.ID).ToList().AsReadOnly();
-            }
             else
+            {
+                Func<dynamic, Platform> platformParser = x => Platform.Parse(client, x) as Platform;
+                ReadOnlyCollection<Platform> platforms = client.ParseCollection(gameElement.platforms.data, platformParser);
+                game.platforms = new Lazy<ReadOnlyCollection<Platform>>(() => platforms);
+                game.PlatformIDs = platforms.Select(x => x.ID).ToList().AsReadOnly();
+            }
+
+            if (properties["regions"] is IList<dynamic>)
             {
                 game.RegionIDs = client.ParseCollection<string>(gameElement.regions);
                 game.regions = new Lazy<ReadOnlyCollection<Region>>(
                     () => game.RegionIDs.Select(x => client.Regions.GetRegion(x)).ToList().AsReadOnly());
+            }
+            else
+            {
+                Func<dynamic, Region> regionParser = x => Region.Parse(client, x) as Region;
+                ReadOnlyCollection<Region> regions = client.ParseCollection(gameElement.regions.data, regionParser);
+                game.regions = new Lazy<ReadOnlyCollection<Region>>(() => regions);
+                game.RegionIDs = regions.Select(x => x.ID).ToList().AsReadOnly();
             }
 
             //Parse Links
@@ -176,8 +176,8 @@ namespace SpeedrunComSharp
 
             if (properties.ContainsKey("variables"))
             {
-                var variableElements = properties["variables"].data as IEnumerable<dynamic>;
-                var variables = variableElements.Select(x => Variable.Parse(client, x) as Variable).ToList().AsReadOnly();
+                Func<dynamic, Variable> variableParser = x => Variable.Parse(client, x) as Variable;
+                ReadOnlyCollection<Variable> variables = client.ParseCollection(gameElement.variables.data, variableParser);
                 game.variables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
             }
             else
