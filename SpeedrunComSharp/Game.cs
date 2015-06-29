@@ -26,13 +26,7 @@ namespace SpeedrunComSharp
         private Lazy<ReadOnlyCollection<Platform>> platforms;
         private Lazy<ReadOnlyCollection<Region>> regions;
 
-        /// <summary>
-        /// null when embedded
-        /// </summary>
         public ReadOnlyCollection<string> PlatformIDs { get; private set; }
-        /// <summary>
-        /// null when embedded
-        /// </summary>
         public ReadOnlyCollection<string> RegionIDs { get; private set; }
         /// <summary>
         /// null when embedded
@@ -102,7 +96,7 @@ namespace SpeedrunComSharp
                 var moderatorsProperties = gameElement.moderators.Properties as IDictionary<string, dynamic>;
                 game.Moderators = moderatorsProperties.Select(x => Moderator.Parse(client, x)).ToList().AsReadOnly();
                 game.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(
-                    () => game.Moderators.Select(x => client.Users.GetUser(x.UserID)).ToList().AsReadOnly());
+                    () => game.Moderators.Select(x => x.User).ToList().AsReadOnly());
             }
             else
             {
@@ -115,6 +109,7 @@ namespace SpeedrunComSharp
                 var platformElements = properties["platforms"].data as IEnumerable<dynamic>;
                 var platforms = platformElements.Select(x => Platform.Parse(client, x) as Platform).ToList().AsReadOnly();
                 game.platforms = new Lazy<ReadOnlyCollection<Platform>>(() => platforms);
+                game.PlatformIDs = platforms.Select(x => x.ID).ToList().AsReadOnly();
             }
             else
             {
@@ -128,6 +123,7 @@ namespace SpeedrunComSharp
                 var regionElements = properties["regions"].data as IEnumerable<dynamic>;
                 var regions = regionElements.Select(x => Region.Parse(client, x) as Region).ToList().AsReadOnly();
                 game.regions = new Lazy<ReadOnlyCollection<Region>>(() => regions);
+                game.RegionIDs = regions.Select(x => x.ID).ToList().AsReadOnly();
             }
             else
             {
