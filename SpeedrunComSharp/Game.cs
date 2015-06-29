@@ -60,8 +60,8 @@ namespace SpeedrunComSharp
         public IEnumerable<Category> FullGameCategories { get { return Categories.Where(category => category.Type == CategoryType.PerGame); } }
         public IEnumerable<Category> LevelCategories { get { return Categories.Where(category => category.Type == CategoryType.PerLevel); } }
         public ReadOnlyCollection<Variable> Variables { get { return variables.Value; } }
-        public IEnumerable<Variable> FullGameVariables { get { return Variables.Where(variable => variable.Type == CategoryType.PerGame); } }
-        public IEnumerable<Variable> LevelVariables { get { return Variables.Where(variable => variable.Type == CategoryType.PerLevel); } }
+        public IEnumerable<Variable> FullGameVariables { get { return Variables.Where(variable => variable.Scope.Type == VariableScopeType.FullGame || variable.Scope.Type == VariableScopeType.Global); } }
+        public IEnumerable<Variable> LevelVariables { get { return Variables.Where(variable => variable.Scope.Type == VariableScopeType.AllLevels || variable.Scope.Type == VariableScopeType.Global); } }
         public string ParentGameID { get; private set; }
         public Game Parent { get { return parent.Value; } }
         public ReadOnlyCollection<Game> Children { get { return children.Value; } }
