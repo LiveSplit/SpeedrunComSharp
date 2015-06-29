@@ -56,8 +56,8 @@ namespace SpeedrunComSharp
 
             if (properties.ContainsKey("categories"))
             {
-                var categoryElements = properties["categories"].data as IEnumerable<dynamic>;
-                var categories = categoryElements.Select(x => Category.Parse(client, x) as Category).ToList().AsReadOnly();
+                Func<dynamic, Category> categoryParser = x => Category.Parse(client, x) as Category;
+                ReadOnlyCollection<Category> categories = client.ParseCollection(levelElement.categories.data, categoryParser);
                 level.categories = new Lazy<ReadOnlyCollection<Category>>(() => categories);
             }
             else
@@ -67,8 +67,8 @@ namespace SpeedrunComSharp
 
             if (properties.ContainsKey("variables"))
             {
-                var variableElements = properties["variables"].data as IEnumerable<dynamic>;
-                var variables = variableElements.Select(x => Variable.Parse(client, x) as Variable).ToList().AsReadOnly();
+                Func<dynamic, Variable> variableParser = x => Variable.Parse(client, x) as Variable;
+                ReadOnlyCollection<Variable> variables = client.ParseCollection(levelElement.variables.data, variableParser);
                 level.variables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
             }
             else

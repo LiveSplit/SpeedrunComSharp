@@ -85,10 +85,10 @@ namespace SpeedrunComSharp
 
             var properties = gameElement.Properties as IDictionary<string, dynamic>;
 
-            if (properties["moderators"] is IDictionary<string, dynamic> && properties["moderators"].data is IEnumerable<dynamic>)
+            if (gameElement.moderators is DynamicJsonObject && gameElement.moderators.Properties.ContainsKey("data"))
             {
-                var userElements = properties["moderators"].data as IEnumerable<dynamic>;
-                var users = userElements.Select(x => User.Parse(client, x) as User).ToList().AsReadOnly();
+                Func<dynamic, User> userParser = x => User.Parse(client, x) as User;
+                ReadOnlyCollection<User> users = client.ParseCollection(gameElement.moderators.data, userParser);
                 game.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(() => users);
             }
             else if (gameElement.moderators is DynamicJsonObject)
@@ -138,8 +138,8 @@ namespace SpeedrunComSharp
 
             if (properties.ContainsKey("levels"))
             {
-                var levelElements = properties["levels"].data as IEnumerable<dynamic>;
-                var levels = levelElements.Select(x => Level.Parse(client, x) as Level).ToList().AsReadOnly();
+                Func<dynamic, Level> levelParser = x => Level.Parse(client, x) as Level;
+                ReadOnlyCollection<Level> levels = client.ParseCollection(gameElement.levels.data, levelParser);
                 game.levels = new Lazy<ReadOnlyCollection<Level>>(() => levels);
             }
             else
@@ -149,8 +149,8 @@ namespace SpeedrunComSharp
 
             if (properties.ContainsKey("categories"))
             {
-                var categoryElements = properties["categories"].data as IEnumerable<dynamic>;
-                var categories = categoryElements.Select(x => Category.Parse(client, x) as Category).ToList().AsReadOnly();
+                Func<dynamic, Category> categoryParser = x => Category.Parse(client, x) as Category;
+                ReadOnlyCollection<Category> categories = client.ParseCollection(gameElement.categories.data, categoryParser);
                 
                 foreach (var category in categories)
                 {
