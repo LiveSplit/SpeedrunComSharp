@@ -82,13 +82,17 @@ namespace SpeedrunComSharp
             return Game.Parse(baseClient, result.data);
         }
         
-        public Game SearchGame(string name, bool nameHasToMatch = false, GameEmbeds embeds = default(GameEmbeds))
+        public Game SearchGame(string name, GameEmbeds embeds = default(GameEmbeds))
         {
             var game = GetGames(name: name, embeds: embeds, elementsPerPage: 1).FirstOrDefault();
             
-            if (nameHasToMatch && game != null && game.Name != name)
-                return null;
-            
+            return game;
+        }
+
+        public Game SearchGameExact(string name, GameEmbeds embeds = default(GameEmbeds))
+        {
+            var game = GetGames(name: name, embeds: embeds).FirstOrDefault(x => x.Name == name);
+
             return game;
         }
 
