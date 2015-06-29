@@ -7,11 +7,8 @@ namespace SpeedrunComSharp
 {
     public class ProfileClient
     {
-        private SpeedrunComClient baseClient;
-
         public ProfileClient(SpeedrunComClient baseClient)
         {
-            this.baseClient = baseClient;
         }
 
         public User GetProfile()
