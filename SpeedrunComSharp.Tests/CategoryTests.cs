@@ -1,4 +1,12 @@
-﻿using System;
+﻿#if __MonoCS__
+#define MONO
+#else
+#define DOTNET
+#endif
+
+#if DOTNET
+
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
 
@@ -65,3 +73,5 @@ namespace SpeedrunComSharp.Tests
         }
     }
 }
+
+#endif
