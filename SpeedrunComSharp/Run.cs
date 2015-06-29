@@ -97,7 +97,6 @@ namespace SpeedrunComSharp
             //Parse Links
 
             var properties = runElement.Properties as IDictionary<string, dynamic>;
-            var links = properties["links"] as IEnumerable<dynamic>;
 
             if (properties["game"] is string)
             {

@@ -53,6 +53,14 @@
     <Compile Include="Assets.cs" />
     <Compile Include="CachedEnumerable.cs" />
     <Compile Include="CategoriesClient.cs" />
+    <Compile Include="UsersOrdering.cs" />
+    <Compile Include="RunsOrdering.cs" />
+    <Compile Include="RegionsOrdering.cs" />
+    <Compile Include="PlatformsOrdering.cs" />
+    <Compile Include="LevelsOrdering.cs" />
+    <Compile Include="CategoriesOrdering.cs" />
+    <Compile Include="GamesOrdering.cs" />
+    <Compile Include="VariablesOrdering.cs" />
     <Compile Include="Category.cs" />
     <Compile Include="CategoryEmbeds.cs" />
     <Compile Include="CategoryType.cs" />
@@ -75,7 +83,7 @@
     <Compile Include="Moderator.cs" />
     <Compile Include="ModeratorType.cs" />
     <Compile Include="NotAuthorizedException.cs" />
-    <Compile Include="ParameterHelpers.cs" />
+    <Compile Include="StringHelpers.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="PlatformsClient.cs" />
     <Compile Include="Player.cs" />

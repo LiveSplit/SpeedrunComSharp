@@ -65,7 +65,7 @@ namespace SpeedrunComSharp
             if (!list.Any())
                 list.Add("No Rules");
 
-            return list.Aggregate((a, b) => a + ", " + b);
+            return list.Aggregate(", ");
         }
     }
 }

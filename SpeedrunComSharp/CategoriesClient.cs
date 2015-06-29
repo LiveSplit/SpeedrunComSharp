@@ -29,9 +29,15 @@ namespace SpeedrunComSharp
             return Category.Parse(baseClient, result.data);
         }
 
-        public ReadOnlyCollection<Variable> GetVariables(string categoryId)
+        public ReadOnlyCollection<Variable> GetVariables(string categoryId,
+            VariablesOrdering orderBy = default(VariablesOrdering))
         {
-            var uri = GetCategoriesUri(string.Format("/{0}/variables", HttpUtility.UrlPathEncode(categoryId)));
+            var parameters = new List<string>(orderBy.ToParameters());
+
+            var uri = GetCategoriesUri(string.Format("/{0}/variables{1}", 
+                HttpUtility.UrlPathEncode(categoryId), 
+                parameters.ToParameters()));
+
             return baseClient.DoDataCollectionRequest<Variable>(uri,
                 x => Variable.Parse(baseClient, x));
         }

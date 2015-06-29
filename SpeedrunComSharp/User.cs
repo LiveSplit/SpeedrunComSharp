@@ -62,7 +62,6 @@ namespace SpeedrunComSharp
             var user = new User();
 
             var properties = userElement.Properties as IDictionary<string, dynamic>;
-            var links = properties["links"] as IEnumerable<dynamic>;
 
             //Parse Attributes
 

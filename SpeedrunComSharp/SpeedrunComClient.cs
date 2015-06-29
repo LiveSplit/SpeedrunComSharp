@@ -85,7 +85,7 @@ namespace SpeedrunComSharp
             if (Cache.ContainsKey(uri))
             {
 #if DEBUG_WITH_API_CALLS
-                Debug.WriteLine(uri.AbsoluteUri, "Cached API Call");
+                Console.WriteLine(uri.AbsoluteUri, "Cached API Call");
 #endif
                 result = Cache[uri];
                 Cache.Remove(uri);
@@ -93,7 +93,7 @@ namespace SpeedrunComSharp
             else
             {
 #if DEBUG_WITH_API_CALLS
-                Debug.WriteLine(uri.AbsoluteUri, "Uncached API Call");
+                Console.WriteLine(uri.AbsoluteUri, "Uncached API Call");
 #endif
                 result = JSON.FromUri(uri, UserAgent);
             }

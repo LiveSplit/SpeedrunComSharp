@@ -49,7 +49,7 @@ namespace SpeedrunComSharp
                 embedDictionary
                 .Where(x => x.Value)
                 .Select(x => HttpUtility.UrlPathEncode(x.Key))
-                .Aggregate((a, b) => a + "," + b);
+                .Aggregate(",");
         }
     }
 }

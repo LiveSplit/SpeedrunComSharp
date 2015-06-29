@@ -22,7 +22,8 @@ namespace SpeedrunComSharp
 
         public IEnumerable<User> GetUsers(
             string name = null, string twitch = null,
-            string hitbox = null, string speedrunslive = null)
+            string hitbox = null, string speedrunslive = null,
+            UsersOrdering orderBy = default(UsersOrdering))
         {
             var parameters = new List<string>();
 
@@ -41,6 +42,8 @@ namespace SpeedrunComSharp
             if (!string.IsNullOrEmpty(speedrunslive))
                 parameters.Add(string.Format("speedrunslive={0}",
                     HttpUtility.UrlPathEncode(speedrunslive)));
+
+            parameters.AddRange(orderBy.ToParameters());
 
             var uri = GetUsersUri(parameters.ToParameters());
             return baseClient.DoPaginatedRequest(uri,
