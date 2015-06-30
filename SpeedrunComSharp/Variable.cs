@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -45,12 +46,19 @@ namespace SpeedrunComSharp
             variable.ID = variableElement.id as string;
             variable.Name = variableElement.name as string;
             variable.Scope = VariableScope.Parse(client, variableElement.scope) as VariableScope;
-            variable.IsMandatory = (bool)variableElement.mandatory;
-            variable.IsUserDefined = (bool)properties["user-defined"];
+            variable.IsMandatory = (bool)(variableElement.mandatory ?? false);
+            variable.IsUserDefined = (bool)(properties["user-defined"] ?? false);
             variable.IsUsedForObsoletingRuns = (bool)variableElement.obsoletes;
 
-            var choiceElements = variableElement.values.choices.Properties as IDictionary<string, dynamic>;
-            variable.Choices = choiceElements.Select(x => VariableChoice.Parse(client, x) as VariableChoice).ToList().AsReadOnly();
+            if (!(variableElement.values.choices is ArrayList))
+            {
+                var choiceElements = variableElement.values.choices.Properties as IDictionary<string, dynamic>;
+                variable.Choices = choiceElements.Select(x => VariableChoice.Parse(client, x) as VariableChoice).ToList().AsReadOnly();
+            }
+            else
+            {
+                variable.Choices = new ReadOnlyCollection<VariableChoice>(new VariableChoice[0]);
+            }
 
             var valuesProperties = variableElement.values.Properties as IDictionary<string, dynamic>;
             var defaultChoice = valuesProperties["default"] as string;
