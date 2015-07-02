@@ -3,6 +3,7 @@
 [![API Version](https://img.shields.io/badge/API-91cda5...-blue.svg)](https://github.com/speedruncom/api/tree/91cda547806fae422e020f2dd2b39e2b89497054)
 [![Build Status](https://travis-ci.org/LiveSplit/SpeedrunComSharp.svg?branch=master)](https://travis-ci.org/LiveSplit/SpeedrunComSharp) 
 [![Build status](https://ci.appveyor.com/api/projects/status/w383t09ffk5ovo7y/branch/master?svg=true)](https://ci.appveyor.com/project/CryZe/speedruncomsharp/branch/master)
+[![Coverity Scan Build Status](https://img.shields.io/coverity/scan/5662.svg)](https://scan.coverity.com/projects/5662)
 
 SpeedrunComSharp is a .NET wrapper Library for the [Speedrun.com
 API](https://github.com/speedruncom/api).
