@@ -1,5 +1,6 @@
 language: csharp
 solution: SpeedrunComSharp.sln
+
 deploy:
   provider: releases
   api_key:
@@ -8,3 +9,19 @@ deploy:
   skip_cleanup: true
   on:
     tags: true
+    
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "fFmV9VEAOQMjYdgbNl84gYzUHRClzgONDctvZu59frNI92C2LOoPFHjvhNsQjqZ65zFJs5SRSJ2/D+OWezeilC/2UQxQWyESOiEpEAqla2so9rC3cmXWLKgeS73CvMbuwfdRPYXJ+IdLJ1jQgULY6H4GNTEJq79n8dv9niIzPO4LS3ZX0H+MjGWWfSdxe/saj6yPVLXZxDMfKdBrgdkkm1Pc8IC5hVPwLgO5kGjwvj+Ss9dsDQkqSXEoclXwtltjdGnBWwUHF/qSs2KBCr5/IRMeSg5cwC6AhgSvwJE58D+s2q+RyzvfZ2ZQYWcNvsDEbctPklTw2JRorW7F3z88fF1tiVn0H+VHqdY7Hl6T4ijL5X/0ZApd3a9Z6q7Sm/lsDlMkOQgSsFXsL/YC55d89q8JJ1xcOz8nSv/7nT1DYKXEyidvXIePwp8lDyfUn4WO1lua5OEopvSdrubUapNenSfVv6rD9hamMi/mLO6QAJ6ii0zTyyWhL+Zv1CPZ2Qioo4G9855L4KGD6Vx7HGdgOOhNbujTA/3Hrt9B7PpBW+SEUMJtAmXb46H5Ov2MJmCnYOXSPn06saDPAp9tQJ26ep+GW6UNI15PRrC4P0hrFuwMBP33ljGxE9aQTC4GUfl5o+7mD0cXYPNRN3nZCVHcuNTxryEStC5HdmDwSXlPujw="
+
+addons:
+  coverity_scan:
+    project:
+      name: "LiveSplit/SpeedrunComSharp"
+      description: "Build submitted via Travis CI"
+    notification_email: cryze92@gmail.com
+    build_command_prepend: "msbuild /t:Clean"
+    build_command:   "msbuild /t:Rebuild"
+    branch_pattern: coverity_scan
