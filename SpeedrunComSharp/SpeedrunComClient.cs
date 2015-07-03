@@ -80,30 +80,33 @@ namespace SpeedrunComSharp
 
         internal dynamic DoRequest(Uri uri)
         {
-            dynamic result;
-
-            if (Cache.ContainsKey(uri))
+            lock (this)
             {
+                dynamic result;
+
+                if (Cache.ContainsKey(uri))
+                {
 #if DEBUG_WITH_API_CALLS
                 Console.WriteLine(uri.AbsoluteUri, "Cached API Call");
 #endif
-                result = Cache[uri];
-                Cache.Remove(uri);
-            }
-            else
-            {
+                    result = Cache[uri];
+                    Cache.Remove(uri);
+                }
+                else
+                {
 #if DEBUG_WITH_API_CALLS
                 Console.WriteLine(uri.AbsoluteUri, "Uncached API Call");
 #endif
-                result = JSON.FromUri(uri, UserAgent);
+                    result = JSON.FromUri(uri, UserAgent);
+                }
+
+                Cache.Add(uri, result);
+
+                while (Cache.Count > MaxCacheElements)
+                    Cache.Remove(Cache.Keys.First());
+
+                return result;
             }
-
-            Cache.Add(uri, result);
-
-            while (Cache.Count > MaxCacheElements)
-                Cache.Remove(Cache.Keys.First());
-
-            return result;
         }
 
         internal ReadOnlyCollection<T> DoDataCollectionRequest<T>(Uri uri, Func<dynamic, T> parser)
