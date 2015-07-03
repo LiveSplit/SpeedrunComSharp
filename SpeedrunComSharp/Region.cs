@@ -12,6 +12,23 @@ namespace SpeedrunComSharp
         public string ID { get; private set; }
         public string Name { get; private set; }
 
+        public string Abbreviation
+        {
+            get
+            {
+                switch (Name)
+                {
+                    case "USA / NTSC": return "NTSC-U";
+                    case "EUR / PAL": return "PAL";
+                    case "JPN / NTSC": return "NTSC-J";
+                    case "CHN / iQue": return "CHN";
+                    case "KOR / NTSC": return "KOR";
+                }
+
+                return Name;
+            }
+        }
+
         #region Links
 
         public IEnumerable<Game> Games { get; private set; }
