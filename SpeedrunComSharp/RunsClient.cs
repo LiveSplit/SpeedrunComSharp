@@ -21,6 +21,27 @@ namespace SpeedrunComSharp
             return SpeedrunComClient.GetAPIUri(string.Format("runs{0}", subUri));
         }
 
+        public string GetRunIDFromSiteUri(string siteUri)
+        {
+            if (!siteUri.Contains("speedrun.com/run/"))
+                return null;
+
+            var index = siteUri.LastIndexOf('/');
+            var id = siteUri.Substring(index + 1);
+
+            return id;
+        }
+
+        public Run GetRunFromSiteUri(string siteUri, RunEmbeds embeds = default(RunEmbeds))
+        {
+            var id = GetRunIDFromSiteUri(siteUri);
+
+            if (string.IsNullOrEmpty(id))
+                return null;
+
+            return GetRun(id, embeds);
+        }
+
         public IEnumerable<Run> GetRuns(
             string userId = null, string guestName = null,
             string examerUserId = null, string gameId = null,
