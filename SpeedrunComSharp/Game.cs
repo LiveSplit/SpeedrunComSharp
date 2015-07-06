@@ -96,8 +96,32 @@ namespace SpeedrunComSharp
             {
                 var moderatorsProperties = gameElement.moderators.Properties as IDictionary<string, dynamic>;
                 game.Moderators = moderatorsProperties.Select(x => Moderator.Parse(client, x)).ToList().AsReadOnly();
+                
                 game.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(
-                    () => game.Moderators.Select(x => x.User).ToList().AsReadOnly());
+                    () =>
+                    {
+                        ReadOnlyCollection<User> users;
+
+                        if (game.Moderators.Count(x => !x.user.IsValueCreated) > 1)
+                        {
+                            users = client.Games.GetGame(game.ID, embeds: new GameEmbeds(embedModerators: true)).ModeratorUsers;
+                            
+                            foreach (var user in users)
+                            {
+                                var moderator = game.Moderators.FirstOrDefault(x => x.UserID == user.ID);
+                                if (moderator != null)
+                                {
+                                    moderator.user = new Lazy<User>(() => user);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            users = game.Moderators.Select(x => x.User).ToList().AsReadOnly();
+                        }
+
+                        return users;
+                    });
             }
             else
             {
@@ -108,8 +132,17 @@ namespace SpeedrunComSharp
             if (properties["platforms"] is IList)
             {
                 game.PlatformIDs = client.ParseCollection<string>(gameElement.platforms);
-                game.platforms = new Lazy<ReadOnlyCollection<Platform>>(
-                    () => game.PlatformIDs.Select(x => client.Platforms.GetPlatform(x)).ToList().AsReadOnly());
+                
+                if (game.PlatformIDs.Count > 1)
+                {
+                    game.platforms = new Lazy<ReadOnlyCollection<Platform>>(
+                        () => client.Games.GetGame(game.ID, embeds: new GameEmbeds(embedPlatforms: true)).Platforms);
+                }
+                else
+                {
+                    game.platforms = new Lazy<ReadOnlyCollection<Platform>>(
+                        () => game.PlatformIDs.Select(x => client.Platforms.GetPlatform(x)).ToList().AsReadOnly());
+                }
             }
             else
             {
@@ -122,8 +155,17 @@ namespace SpeedrunComSharp
             if (properties["regions"] is IList)
             {
                 game.RegionIDs = client.ParseCollection<string>(gameElement.regions);
-                game.regions = new Lazy<ReadOnlyCollection<Region>>(
-                    () => game.RegionIDs.Select(x => client.Regions.GetRegion(x)).ToList().AsReadOnly());
+                
+                if (game.RegionIDs.Count > 1)
+                {
+                    game.regions = new Lazy<ReadOnlyCollection<Region>>(
+                        () => client.Games.GetGame(game.ID, embeds: new GameEmbeds(embedRegions: true)).Regions);
+                }
+                else
+                {
+                    game.regions = new Lazy<ReadOnlyCollection<Region>>(
+                        () => game.RegionIDs.Select(x => client.Regions.GetRegion(x)).ToList().AsReadOnly());
+                }
             }
             else
             {

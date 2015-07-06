@@ -13,7 +13,7 @@ namespace SpeedrunComSharp
 
         #region Links
 
-        private Lazy<User> user;
+        internal Lazy<User> user;
         
         public User User { get { return user.Value; } }
         public string Name { get { return User.Name; } }
