@@ -15,12 +15,15 @@ namespace SpeedrunComSharp
         public static Location Parse(SpeedrunComClient client, dynamic locationElement)
         {
             var location = new Location();
+            
+            if (locationElement != null)
+            {
+                location.Country = Country.Parse(client, locationElement.country) as Country;
 
-            location.Country = Country.Parse(client, locationElement.country) as Country;
-
-            if (locationElement.region != null)
-                location.Region = CountryRegion.Parse(client, locationElement.region) as CountryRegion;
-
+                if (locationElement.region != null)
+                    location.Region = CountryRegion.Parse(client, locationElement.region) as CountryRegion;
+            }
+            
             return location;
         }
 
