@@ -23,7 +23,7 @@ namespace SpeedrunComSharp
         public Variable GetVariable(string variableId)
         {
             var uri = GetVariablesUri(string.Format("/{0}",
-                HttpUtility.UrlPathEncode(variableId)));
+                Uri.EscapeDataString(variableId)));
 
             var result = baseClient.DoRequest(uri);
 

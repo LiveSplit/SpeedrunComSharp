@@ -27,7 +27,7 @@ namespace SpeedrunComSharp
             var parameters = new List<string>() { embeds.ToString() };
 
             var uri = GetLevelsUri(string.Format("/{0}{1}",
-                HttpUtility.UrlPathEncode(levelId), 
+                Uri.EscapeDataString(levelId), 
                 parameters.ToParameters()));
 
             var result = baseClient.DoRequest(uri);
@@ -48,7 +48,7 @@ namespace SpeedrunComSharp
                 parameters.Add("miscellaneous=no");
 
             var uri = GetLevelsUri(string.Format("/{0}/categories{1}", 
-                HttpUtility.UrlPathEncode(levelId), 
+                Uri.EscapeDataString(levelId), 
                 parameters.ToParameters()));
 
             return baseClient.DoDataCollectionRequest<Category>(uri,
@@ -61,7 +61,7 @@ namespace SpeedrunComSharp
             var parameters = new List<string>(orderBy.ToParameters());
 
             var uri = GetLevelsUri(string.Format("/{0}/variables{1}", 
-                HttpUtility.UrlPathEncode(levelId),
+                Uri.EscapeDataString(levelId),
                 parameters.ToParameters()));
 
             return baseClient.DoDataCollectionRequest<Variable>(uri,

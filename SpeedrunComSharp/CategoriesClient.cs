@@ -23,7 +23,7 @@ namespace SpeedrunComSharp
 
         public Category GetCategory(string categoryId, CategoryEmbeds embeds = default(CategoryEmbeds))
         {
-            var uri = GetCategoriesUri(string.Format("/{0}{1}", HttpUtility.UrlPathEncode(categoryId), embeds.ToString().ToParameters()));
+            var uri = GetCategoriesUri(string.Format("/{0}{1}", Uri.EscapeDataString(categoryId), embeds.ToString().ToParameters()));
             var result = baseClient.DoRequest(uri);
 
             return Category.Parse(baseClient, result.data);
@@ -35,7 +35,7 @@ namespace SpeedrunComSharp
             var parameters = new List<string>(orderBy.ToParameters());
 
             var uri = GetCategoriesUri(string.Format("/{0}/variables{1}", 
-                HttpUtility.UrlPathEncode(categoryId), 
+                Uri.EscapeDataString(categoryId), 
                 parameters.ToParameters()));
 
             return baseClient.DoDataCollectionRequest<Variable>(uri,

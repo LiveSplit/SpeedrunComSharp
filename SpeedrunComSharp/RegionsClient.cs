@@ -38,7 +38,7 @@ namespace SpeedrunComSharp
 
         public Region GetRegion(string regionId)
         {
-            var uri = GetRegionsUri(string.Format("/{0}", HttpUtility.UrlPathEncode(regionId)));
+            var uri = GetRegionsUri(string.Format("/{0}", Uri.EscapeDataString(regionId)));
             var result = baseClient.DoRequest(uri);
 
             return Region.Parse(baseClient, result.data);

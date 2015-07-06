@@ -48,7 +48,7 @@ namespace SpeedrunComSharp
             return "embed=" +
                 embedDictionary
                 .Where(x => x.Value)
-                .Select(x => HttpUtility.UrlPathEncode(x.Key))
+                .Select(x => Uri.EscapeDataString(x.Key))
                 .Aggregate(",");
         }
     }

@@ -47,11 +47,11 @@ namespace SpeedrunComSharp
             var parameters = new List<string>();
 
             if (!string.IsNullOrEmpty(gameName))
-                parameters.Add(string.Format("game={0}", HttpUtility.UrlPathEncode(gameName)));
+                parameters.Add(string.Format("game={0}", Uri.EscapeDataString(gameName)));
             if (!string.IsNullOrEmpty(seriesName))
-                parameters.Add(string.Format("series={0}", HttpUtility.UrlPathEncode(seriesName)));
+                parameters.Add(string.Format("series={0}", Uri.EscapeDataString(seriesName)));
             if (!string.IsNullOrEmpty(userName))
-                parameters.Add(string.Format("user={0}", HttpUtility.UrlPathEncode(userName)));
+                parameters.Add(string.Format("user={0}", Uri.EscapeDataString(userName)));
             if (amount.HasValue)
                 parameters.Add(string.Format("amount={0}", amount.Value));
             if (timingMethod.HasValue)

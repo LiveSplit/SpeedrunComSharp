@@ -29,19 +29,19 @@ namespace SpeedrunComSharp
 
             if (!string.IsNullOrEmpty(name))
                 parameters.Add(string.Format("name={0}", 
-                    HttpUtility.UrlPathEncode(name)));
+                    Uri.EscapeDataString(name)));
 
             if (!string.IsNullOrEmpty(twitch))
                 parameters.Add(string.Format("twitch={0}",
-                    HttpUtility.UrlPathEncode(twitch)));
+                    Uri.EscapeDataString(twitch)));
 
             if (!string.IsNullOrEmpty(hitbox))
                 parameters.Add(string.Format("hitbox={0}",
-                    HttpUtility.UrlPathEncode(hitbox)));
+                    Uri.EscapeDataString(hitbox)));
 
             if (!string.IsNullOrEmpty(speedrunslive))
                 parameters.Add(string.Format("speedrunslive={0}",
-                    HttpUtility.UrlPathEncode(speedrunslive)));
+                    Uri.EscapeDataString(speedrunslive)));
 
             parameters.AddRange(orderBy.ToParameters());
 
@@ -53,7 +53,7 @@ namespace SpeedrunComSharp
         public User GetUser(string userId)
         {
             var uri = GetUsersUri(string.Format("/{0}",
-                HttpUtility.UrlPathEncode(userId)));
+                Uri.EscapeDataString(userId)));
 
             var result = baseClient.DoRequest(uri);
 

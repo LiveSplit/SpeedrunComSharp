@@ -38,7 +38,7 @@ namespace SpeedrunComSharp
 
         public Platform GetPlatform(string platformId)
         {
-            var uri = GetPlatformsUri(string.Format("/{0}", HttpUtility.UrlPathEncode(platformId)));
+            var uri = GetPlatformsUri(string.Format("/{0}", Uri.EscapeDataString(platformId)));
             var result = baseClient.DoRequest(uri);
 
             return Platform.Parse(baseClient, result.data);

@@ -33,19 +33,19 @@ namespace SpeedrunComSharp
             parameters.AddRange(orderBy.ToParameters());
 
             if (name != null)
-                parameters.Add(string.Format("name={0}", HttpUtility.UrlPathEncode(name)));
+                parameters.Add(string.Format("name={0}", Uri.EscapeDataString(name)));
 
             if (yearOfRelease.HasValue)
                 parameters.Add(string.Format("released={0}", yearOfRelease.Value));
 
             if (!string.IsNullOrEmpty(platformId))
-                parameters.Add(string.Format("platform={0}", HttpUtility.UrlPathEncode(platformId)));
+                parameters.Add(string.Format("platform={0}", Uri.EscapeDataString(platformId)));
 
             if (!string.IsNullOrEmpty(regionId))
-                parameters.Add(string.Format("region={0}", HttpUtility.UrlPathEncode(regionId)));
+                parameters.Add(string.Format("region={0}", Uri.EscapeDataString(regionId)));
 
             if (!string.IsNullOrEmpty(moderatorId))
-                parameters.Add(string.Format("moderator={0}", HttpUtility.UrlPathEncode(moderatorId)));
+                parameters.Add(string.Format("moderator={0}", Uri.EscapeDataString(moderatorId)));
 
             if (elementsPerPage.HasValue)
                 parameters.Add(string.Format("max={0}", elementsPerPage.Value));
@@ -74,7 +74,7 @@ namespace SpeedrunComSharp
             var parameters = new List<string>() { embeds.ToString() };
 
             var uri = GetGamesUri(string.Format("/{0}{1}", 
-                HttpUtility.UrlPathEncode(gameId), 
+                Uri.EscapeDataString(gameId), 
                 parameters.ToParameters()));
 
             var result = baseClient.DoRequest(uri);
@@ -109,7 +109,7 @@ namespace SpeedrunComSharp
                 parameters.Add("miscellaneous=no");
 
             var uri = GetGamesUri(string.Format("/{0}/categories{1}", 
-                HttpUtility.UrlPathEncode(gameId), 
+                Uri.EscapeDataString(gameId), 
                 parameters.ToParameters()));
 
             return baseClient.DoDataCollectionRequest(uri,
@@ -125,7 +125,7 @@ namespace SpeedrunComSharp
             parameters.AddRange(orderBy.ToParameters());
 
             var uri = GetGamesUri(string.Format("/{0}/levels{1}", 
-                HttpUtility.UrlPathEncode(gameId),
+                Uri.EscapeDataString(gameId),
                 parameters.ToParameters()));
 
             return baseClient.DoDataCollectionRequest(uri,
@@ -138,7 +138,7 @@ namespace SpeedrunComSharp
             var parameters = new List<string>(orderBy.ToParameters());
 
             var uri = GetGamesUri(string.Format("/{0}/variables{1}", 
-                HttpUtility.UrlPathEncode(gameId),
+                Uri.EscapeDataString(gameId),
                 parameters.ToParameters()));
 
             return baseClient.DoDataCollectionRequest(uri,
@@ -154,7 +154,7 @@ namespace SpeedrunComSharp
             parameters.AddRange(orderBy.ToParameters());
 
             var uri = GetGamesUri(string.Format("/{0}/children{1}", 
-                HttpUtility.UrlPathEncode(gameId),
+                Uri.EscapeDataString(gameId),
                 parameters.ToParameters()));
 
             return baseClient.DoDataCollectionRequest(uri, 

@@ -55,21 +55,21 @@ namespace SpeedrunComSharp
             var parameters = new List<string>() { embeds.ToString() };
 
             if (!string.IsNullOrEmpty(userId))
-                parameters.Add(string.Format("user={0}", HttpUtility.UrlPathEncode(userId)));
+                parameters.Add(string.Format("user={0}", Uri.EscapeDataString(userId)));
             if (!string.IsNullOrEmpty(guestName))
-                parameters.Add(string.Format("guest={0}", HttpUtility.UrlPathEncode(guestName)));
+                parameters.Add(string.Format("guest={0}", Uri.EscapeDataString(guestName)));
             if (!string.IsNullOrEmpty(examerUserId))
-                parameters.Add(string.Format("examiner={0}", HttpUtility.UrlPathEncode(examerUserId)));
+                parameters.Add(string.Format("examiner={0}", Uri.EscapeDataString(examerUserId)));
             if (!string.IsNullOrEmpty(gameId))
-                parameters.Add(string.Format("game={0}", HttpUtility.UrlPathEncode(gameId)));
+                parameters.Add(string.Format("game={0}", Uri.EscapeDataString(gameId)));
             if (!string.IsNullOrEmpty(levelId))
-                parameters.Add(string.Format("level={0}", HttpUtility.UrlPathEncode(levelId)));
+                parameters.Add(string.Format("level={0}", Uri.EscapeDataString(levelId)));
             if (!string.IsNullOrEmpty(categoryId))
-                parameters.Add(string.Format("category={0}", HttpUtility.UrlPathEncode(categoryId)));
+                parameters.Add(string.Format("category={0}", Uri.EscapeDataString(categoryId)));
             if (!string.IsNullOrEmpty(platformId))
-                parameters.Add(string.Format("platform={0}", HttpUtility.UrlPathEncode(platformId)));
+                parameters.Add(string.Format("platform={0}", Uri.EscapeDataString(platformId)));
             if (!string.IsNullOrEmpty(regionId))
-                parameters.Add(string.Format("region={0}", HttpUtility.UrlPathEncode(regionId)));
+                parameters.Add(string.Format("region={0}", Uri.EscapeDataString(regionId)));
             if (onlyEmulatedRuns)
                 parameters.Add("emulated=yes");
             if (status.HasValue)
@@ -98,7 +98,7 @@ namespace SpeedrunComSharp
             var parameters = new List<string>() { embeds.ToString() };
 
             var uri = GetRunsUri(string.Format("/{0}{1}",
-                HttpUtility.UrlPathEncode(runId),
+                Uri.EscapeDataString(runId),
                 parameters.ToParameters()));
 
             var result = baseClient.DoRequest(uri);
