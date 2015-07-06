@@ -61,9 +61,18 @@ namespace SpeedrunComSharp
             }
 
             var uri = GetRecordsUri(parameters.ToParameters());
-            var result = baseClient.DoRequest(uri);
-
+            
             var records = new List<Record>();
+            dynamic result;
+            
+            try 
+            {
+                result = baseClient.DoRequest(uri);  
+            }
+            catch
+            {
+                return records.AsReadOnly();
+            }
 
             var games = result.Properties as IDictionary<string, dynamic>;
             foreach (var game in games)
