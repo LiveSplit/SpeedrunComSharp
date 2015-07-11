@@ -26,6 +26,7 @@ The Client is separated into the following Sub-Clients, just like the Speedrun.c
 * Records
 * Regions
 * Runs
+* Series
 * Users
 * Variables
 
