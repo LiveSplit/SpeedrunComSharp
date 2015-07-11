@@ -8,7 +8,7 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class Level : IAPIElementWithID
+    public class Level : IElementWithID
     {
         public string ID { get; private set; }
         public string Name { get; private set; }

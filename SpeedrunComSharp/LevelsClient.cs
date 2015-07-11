@@ -9,6 +9,8 @@ namespace SpeedrunComSharp
 {
     public class LevelsClient
     {
+        public const string Name = "levels";
+
         private SpeedrunComClient baseClient;
 
         public LevelsClient(SpeedrunComClient baseClient)
@@ -18,7 +20,28 @@ namespace SpeedrunComSharp
 
         public static Uri GetLevelsUri(string subUri)
         {
-            return SpeedrunComClient.GetAPIUri(string.Format("levels{0}", subUri));
+            return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
+        }
+
+        public Level GetLevelFromSiteUri(string siteUri, LevelEmbeds embeds = default(LevelEmbeds))
+        {
+            var id = GetLevelIDFromSiteUri(siteUri);
+
+            if (string.IsNullOrEmpty(id))
+                return null;
+
+            return GetLevel(id, embeds);
+        }
+
+        public string GetLevelIDFromSiteUri(string siteUri)
+        {
+            var elementDescription = SpeedrunComClient.GetElementDescriptionFromSiteUri(siteUri);
+
+            if (elementDescription == null
+                || elementDescription.Type != ElementType.Level)
+                return null;
+
+            return elementDescription.ID;
         }
 
         public Level GetLevel(string levelId, 

@@ -50,9 +50,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ElementDescription.cs" />
     <Compile Include="Assets.cs" />
     <Compile Include="CachedEnumerable.cs" />
     <Compile Include="CategoriesClient.cs" />
+    <Compile Include="ElementType.cs" />
+    <Compile Include="HttpWebLink.cs" />
+    <Compile Include="SeriesOrdering.cs" />
+    <Compile Include="SeriesEmbeds.cs" />
+    <Compile Include="Series.cs" />
+    <Compile Include="SeriesClient.cs" />
     <Compile Include="UsersOrdering.cs" />
     <Compile Include="RunsOrdering.cs" />
     <Compile Include="RegionsOrdering.cs" />
@@ -73,7 +80,7 @@
     <Compile Include="GamesClient.cs" />
     <Compile Include="Guest.cs" />
     <Compile Include="GuestsClient.cs" />
-    <Compile Include="IAPIElementWithID.cs" />
+    <Compile Include="IElementWithID.cs" />
     <Compile Include="ImageAsset.cs" />
     <Compile Include="JSON.cs" />
     <Compile Include="Level.cs" />

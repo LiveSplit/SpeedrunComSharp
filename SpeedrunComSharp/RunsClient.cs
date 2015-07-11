@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web;
 
@@ -9,6 +10,8 @@ namespace SpeedrunComSharp
 {
     public class RunsClient
     {
+        public const string Name = "runs";
+
         private SpeedrunComClient baseClient;
 
         public RunsClient(SpeedrunComClient baseClient)
@@ -18,18 +21,7 @@ namespace SpeedrunComSharp
 
         public static Uri GetRunsUri(string subUri)
         {
-            return SpeedrunComClient.GetAPIUri(string.Format("runs{0}", subUri));
-        }
-
-        public string GetRunIDFromSiteUri(string siteUri)
-        {
-            if (!siteUri.Contains("speedrun.com/run/"))
-                return null;
-
-            var index = siteUri.LastIndexOf('/');
-            var id = siteUri.Substring(index + 1);
-
-            return id;
+            return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
         }
 
         public Run GetRunFromSiteUri(string siteUri, RunEmbeds embeds = default(RunEmbeds))
@@ -40,6 +32,17 @@ namespace SpeedrunComSharp
                 return null;
 
             return GetRun(id, embeds);
+        }
+
+        public string GetRunIDFromSiteUri(string siteUri)
+        {
+            var elementDescription = SpeedrunComClient.GetElementDescriptionFromSiteUri(siteUri);
+
+            if (elementDescription == null 
+                || elementDescription.Type != ElementType.Run)
+                return null;
+
+            return elementDescription.ID;
         }
 
         public IEnumerable<Run> GetRuns(

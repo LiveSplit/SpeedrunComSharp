@@ -8,6 +8,8 @@ namespace SpeedrunComSharp
 {
     public class PlatformsClient
     {
+        public const string Name = "platforms";
+
         private SpeedrunComClient baseClient;
 
         public PlatformsClient(SpeedrunComClient baseClient)
@@ -17,7 +19,28 @@ namespace SpeedrunComSharp
 
         public static Uri GetPlatformsUri(string subUri)
         {
-            return SpeedrunComClient.GetAPIUri(string.Format("platforms{0}", subUri));
+            return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
+        }
+
+        public Platform GetPlatformFromSiteUri(string siteUri)
+        {
+            var id = GetPlatformIDFromSiteUri(siteUri);
+
+            if (string.IsNullOrEmpty(id))
+                return null;
+
+            return GetPlatform(id);
+        }
+
+        public string GetPlatformIDFromSiteUri(string siteUri)
+        {
+            var elementDescription = SpeedrunComClient.GetElementDescriptionFromSiteUri(siteUri);
+
+            if (elementDescription == null
+                || elementDescription.Type != ElementType.Platform)
+                return null;
+
+            return elementDescription.ID;
         }
 
         public IEnumerable<Platform> GetPlatforms(int? elementsPerPage = null,

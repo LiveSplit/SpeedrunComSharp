@@ -8,6 +8,8 @@ namespace SpeedrunComSharp
 {
     public class RegionsClient
     {
+        public const string Name = "regions";
+
         private SpeedrunComClient baseClient;
 
         public RegionsClient(SpeedrunComClient baseClient)
@@ -17,7 +19,28 @@ namespace SpeedrunComSharp
 
         public static Uri GetRegionsUri(string subUri)
         {
-            return SpeedrunComClient.GetAPIUri(string.Format("regions{0}", subUri));
+            return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
+        }
+
+        public Region GetRegionFromSiteUri(string siteUri)
+        {
+            var id = GetRegionIDFromSiteUri(siteUri);
+
+            if (string.IsNullOrEmpty(id))
+                return null;
+
+            return GetRegion(id);
+        }
+
+        public string GetRegionIDFromSiteUri(string siteUri)
+        {
+            var elementDescription = SpeedrunComClient.GetElementDescriptionFromSiteUri(siteUri);
+
+            if (elementDescription == null
+                || elementDescription.Type != ElementType.Region)
+                return null;
+
+            return elementDescription.ID;
         }
 
         public IEnumerable<Region> GetRegions(int? elementsPerPage = null,

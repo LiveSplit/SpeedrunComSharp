@@ -9,6 +9,8 @@ namespace SpeedrunComSharp
 {
     public class CategoriesClient
     {
+        public const string Name = "categories";
+
         private SpeedrunComClient baseClient;
 
         public CategoriesClient(SpeedrunComClient baseClient)
@@ -18,7 +20,28 @@ namespace SpeedrunComSharp
 
         public static Uri GetCategoriesUri(string subUri)
         {
-            return SpeedrunComClient.GetAPIUri(string.Format("categories{0}", subUri));
+            return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
+        }
+
+        public Category GetCategoryFromSiteUri(string siteUri, CategoryEmbeds embeds = default(CategoryEmbeds))
+        {
+            var id = GetCategoryIDFromSiteUri(siteUri);
+
+            if (string.IsNullOrEmpty(id))
+                return null;
+
+            return GetCategory(id, embeds);
+        }
+
+        public string GetCategoryIDFromSiteUri(string siteUri)
+        {
+            var elementDescription = SpeedrunComClient.GetElementDescriptionFromSiteUri(siteUri);
+
+            if (elementDescription == null
+                || elementDescription.Type != ElementType.Category)
+                return null;
+
+            return elementDescription.ID;
         }
 
         public Category GetCategory(string categoryId, CategoryEmbeds embeds = default(CategoryEmbeds))

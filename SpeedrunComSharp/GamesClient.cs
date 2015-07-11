@@ -9,6 +9,8 @@ namespace SpeedrunComSharp
 {
     public class GamesClient
     {
+        public const string Name = "games";
+
         private SpeedrunComClient baseClient;
 
         public GamesClient(SpeedrunComClient baseClient)
@@ -18,7 +20,28 @@ namespace SpeedrunComSharp
 
         public static Uri GetGamesUri(string subUri)
         {
-            return SpeedrunComClient.GetAPIUri(string.Format("games{0}", subUri));
+            return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
+        }
+
+        public Game GetGameFromSiteUri(string siteUri, GameEmbeds embeds = default(GameEmbeds))
+        {
+            var id = GetGameIDFromSiteUri(siteUri);
+
+            if (string.IsNullOrEmpty(id))
+                return null;
+
+            return GetGame(id, embeds);
+        }
+
+        public string GetGameIDFromSiteUri(string siteUri)
+        {
+            var elementDescription = SpeedrunComClient.GetElementDescriptionFromSiteUri(siteUri);
+
+            if (elementDescription == null
+                || elementDescription.Type != ElementType.Game)
+                return null;
+
+            return elementDescription.ID;
         }
 
         public IEnumerable<Game> GetGames(
@@ -32,7 +55,7 @@ namespace SpeedrunComSharp
 
             parameters.AddRange(orderBy.ToParameters());
 
-            if (name != null)
+            if (!string.IsNullOrEmpty(name))
                 parameters.Add(string.Format("name={0}", Uri.EscapeDataString(name)));
 
             if (yearOfRelease.HasValue)
@@ -145,7 +168,7 @@ namespace SpeedrunComSharp
                 x => Variable.Parse(baseClient, x) as Variable);
         }
 
-        public ReadOnlyCollection<Game> GetChildren(string gameId,
+        public ReadOnlyCollection<Game> GetRomHacks(string gameId,
             GameEmbeds embeds = default(GameEmbeds),
             GamesOrdering orderBy = default(GamesOrdering))
         {
@@ -153,7 +176,7 @@ namespace SpeedrunComSharp
 
             parameters.AddRange(orderBy.ToParameters());
 
-            var uri = GetGamesUri(string.Format("/{0}/children{1}", 
+            var uri = GetGamesUri(string.Format("/{0}/romhacks{1}", 
                 Uri.EscapeDataString(gameId),
                 parameters.ToParameters()));
 

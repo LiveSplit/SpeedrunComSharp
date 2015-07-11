@@ -6,7 +6,7 @@ using System.Text;
 namespace SpeedrunComSharp
 {
     internal class PotentialEmbed<T>
-        where T : IAPIElementWithID
+        where T : IElementWithID
     {
         public Lazy<T> Object { get; private set; }
         public string ID { get; private set; }
@@ -14,7 +14,7 @@ namespace SpeedrunComSharp
         private PotentialEmbed() { }
 
         public static PotentialEmbed<G> Parse<G>(dynamic element, Func<string, G> objectQuery, Func<dynamic, G> objectParser)
-            where G : IAPIElementWithID
+            where G : IElementWithID
         {
             var potentialEmbed = new PotentialEmbed<G>();
 

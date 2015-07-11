@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class GameHeader : IAPIElementWithID
+    public class GameHeader : IElementWithID
     {
         public string ID { get; private set; }
         public string Name { get; private set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace SpeedrunComSharp
@@ -11,6 +12,7 @@ namespace SpeedrunComSharp
     {
         public static readonly Uri BaseUri = new Uri("http://www.speedrun.com/");
         public static readonly Uri APIUri = new Uri(BaseUri, "api/v1/");
+        public const string APIHttpHeaderRelation = "alternate http://www.speedrun.com/api";
 
         public string UserAgent { get; private set; }
         private Dictionary<Uri, dynamic> Cache { get; set; }
@@ -25,6 +27,7 @@ namespace SpeedrunComSharp
         public RecordsClient Records { get; private set; }
         public RegionsClient Regions { get; private set; }
         public RunsClient Runs { get; private set; }
+        public SeriesClient Series { get; private set; }
         public UsersClient Users { get; private set; }
         public VariablesClient Variables { get; private set; }
 
@@ -46,6 +49,7 @@ namespace SpeedrunComSharp
             Records = new RecordsClient(this);
             Regions = new RegionsClient(this);
             Runs = new RunsClient(this);
+            Series = new SeriesClient(this);
             Users = new UsersClient(this);
             Variables = new VariablesClient(this);
         }
@@ -58,6 +62,30 @@ namespace SpeedrunComSharp
         public static Uri GetAPIUri(string subUri)
         {
             return new Uri(APIUri, subUri);
+        }
+
+        public static ElementDescription GetElementDescriptionFromSiteUri(string siteUri)
+        {
+            try
+            {
+                var request = WebRequest.Create(siteUri);
+                var response = request.GetResponse();
+                var linksString = response.Headers["Link"];
+                var links = HttpWebLink.ParseLinks(linksString);
+                var link = links.FirstOrDefault(x => x.Relation == APIHttpHeaderRelation);
+
+                if (link == null)
+                    return null;
+
+                var uri = link.Uri;
+                var elementDescription = ElementDescription.ParseUri(uri);
+
+                return elementDescription;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         internal ReadOnlyCollection<T> ParseCollection<T>(dynamic collection, Func<dynamic, T> parser)

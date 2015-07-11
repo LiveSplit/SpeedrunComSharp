@@ -8,7 +8,7 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class Game : IAPIElementWithID
+    public class Game : IElementWithID
     {
         public GameHeader Header { get; private set; }
         public string ID { get { return Header.ID; } }
@@ -18,6 +18,7 @@ namespace SpeedrunComSharp
         public Uri WebLink { get { return Header.WebLink; } }
         public int? YearOfRelease { get; private set; }
         public Ruleset Ruleset { get; private set; }
+        public bool IsRomHack { get; private set; }
         public DateTime? CreationDate { get; private set; }
         public Assets Assets { get; private set; }
 
@@ -45,8 +46,9 @@ namespace SpeedrunComSharp
         private Lazy<ReadOnlyCollection<Level>> levels;
         private Lazy<ReadOnlyCollection<Category>> categories;
         private Lazy<ReadOnlyCollection<Variable>> variables;
-        private Lazy<Game> parent;
-        private Lazy<ReadOnlyCollection<Game>> children;
+        internal Lazy<Series> series;
+        private Lazy<Game> originalGame;
+        private Lazy<ReadOnlyCollection<Game>> romHacks;
         private Lazy<IDictionary<string, ReadOnlyCollection<Record>>> leaderboards;
 
         public IEnumerable<Run> Runs { get; private set; }
@@ -57,9 +59,11 @@ namespace SpeedrunComSharp
         public ReadOnlyCollection<Variable> Variables { get { return variables.Value; } }
         public IEnumerable<Variable> FullGameVariables { get { return Variables.Where(variable => variable.Scope.Type == VariableScopeType.FullGame || variable.Scope.Type == VariableScopeType.Global); } }
         public IEnumerable<Variable> LevelVariables { get { return Variables.Where(variable => variable.Scope.Type == VariableScopeType.AllLevels || variable.Scope.Type == VariableScopeType.Global); } }
-        public string ParentGameID { get; private set; }
-        public Game Parent { get { return parent.Value; } }
-        public ReadOnlyCollection<Game> Children { get { return children.Value; } }
+        public string SeriesID { get; private set; }
+        public Series Series { get { return series.Value; } }
+        public string OriginalGameID { get; private set; }
+        public Game OriginalGame { get { return originalGame.Value; } }
+        public ReadOnlyCollection<Game> RomHacks { get { return romHacks.Value; } }
         public IDictionary<string, ReadOnlyCollection<Record>> Leaderboards { get { return leaderboards.Value; } }
 
         #endregion
@@ -75,6 +79,8 @@ namespace SpeedrunComSharp
             game.Header = GameHeader.Parse(client, gameElement);
             game.YearOfRelease = gameElement.released;
             game.Ruleset = Ruleset.Parse(client, gameElement.ruleset);
+
+            game.IsRomHack = gameElement.romhack;
 
             var created = gameElement.created as string;
             if (!string.IsNullOrEmpty(created))
@@ -229,31 +235,43 @@ namespace SpeedrunComSharp
             }
 
             var links = properties["links"] as IEnumerable<dynamic>;
-            var parentLink = links.FirstOrDefault(x => x.rel == "parent");
-            if (parentLink != null)
+            var seriesLink = links.FirstOrDefault(x => x.rel == "series");
+            if (seriesLink != null)
             {
-                var parentUri = parentLink.uri as string;
-                game.ParentGameID = parentUri.Substring(parentUri.LastIndexOf('/') + 1);
-                game.parent = new Lazy<Game>(() => client.Games.GetGame(game.ParentGameID));
+                var parentUri = seriesLink.uri as string;
+                game.SeriesID = parentUri.Substring(parentUri.LastIndexOf('/') + 1);
+                game.series = new Lazy<Series>(() => client.Series.GetSingleSeries(game.SeriesID));
             }
             else
             {
-                game.parent = new Lazy<Game>(() => null);
+                game.series = new Lazy<Series>(() => null);
             }
 
-            game.children = new Lazy<ReadOnlyCollection<Game>>(() => 
+            var originalGameLink = links.FirstOrDefault(x => x.rel == "game");
+            if (originalGameLink != null)
+            {
+                var originalGameUri = originalGameLink.uri as string;
+                game.OriginalGameID = originalGameUri.Substring(originalGameUri.LastIndexOf('/') + 1);
+                game.originalGame = new Lazy<Game>(() => client.Games.GetGame(game.OriginalGameID));
+            }
+            else
+            {
+                game.originalGame = new Lazy<Game>(() => null);
+            }
+
+            game.romHacks = new Lazy<ReadOnlyCollection<Game>>(() => 
                 {
-                    var children = client.Games.GetChildren(game.ID);
+                    var romHacks = client.Games.GetRomHacks(game.ID);
                     
-                    if (children != null)
+                    if (romHacks != null)
                     {
-                        foreach (var child in children)
+                        foreach (var romHack in romHacks)
                         {
-                            child.parent = new Lazy<Game>(() => game);
+                            romHack.originalGame = new Lazy<Game>(() => game);
                         }
                     }
                     
-                    return children;
+                    return romHacks;
                 });
 
             game.leaderboards = new Lazy<IDictionary<string, ReadOnlyCollection<Record>>>(() =>

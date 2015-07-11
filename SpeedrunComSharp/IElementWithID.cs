@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public interface IAPIElementWithID
+    public interface IElementWithID
     {
         string ID { get; }
     }

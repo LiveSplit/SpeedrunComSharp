@@ -8,6 +8,8 @@ namespace SpeedrunComSharp
 {
     public class UsersClient
     {
+        public const string Name = "users";
+
         private SpeedrunComClient baseClient;
 
         public UsersClient(SpeedrunComClient baseClient)
@@ -17,7 +19,28 @@ namespace SpeedrunComSharp
 
         public static Uri GetUsersUri(string subUri)
         {
-            return SpeedrunComClient.GetAPIUri(string.Format("users{0}", subUri));
+            return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
+        }
+
+        public User GetUserFromSiteUri(string siteUri)
+        {
+            var id = GetUserIDFromSiteUri(siteUri);
+
+            if (string.IsNullOrEmpty(id))
+                return null;
+
+            return GetUser(id);
+        }
+
+        public string GetUserIDFromSiteUri(string siteUri)
+        {
+            var elementDescription = SpeedrunComClient.GetElementDescriptionFromSiteUri(siteUri);
+
+            if (elementDescription == null
+                || elementDescription.Type != ElementType.User)
+                return null;
+
+            return elementDescription.ID;
         }
 
         public IEnumerable<User> GetUsers(

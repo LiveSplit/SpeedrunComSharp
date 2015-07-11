@@ -7,7 +7,7 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class Run : IAPIElementWithID
+    public class Run : IElementWithID
     {
         public string ID { get; private set; }
         public Uri WebLink { get; private set; }
