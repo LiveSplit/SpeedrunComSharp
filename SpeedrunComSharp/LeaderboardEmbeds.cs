@@ -8,6 +8,7 @@ namespace SpeedrunComSharp
     public struct LeaderboardEmbeds
     {
         private Embeds embeds;
+        private bool isConstructed;
 
         public bool EmbedGame 
         { 
@@ -55,11 +56,13 @@ namespace SpeedrunComSharp
             bool embedGame = false,
             bool embedCategory = false,
             bool embedLevel = false,
-            bool embedPlayers = false,
+            bool embedPlayers = true,
             bool embedRegions = false,
             bool embedPlatforms = false,
             bool embedVariables = false)
         {
+            isConstructed = true;
+
             embeds = new Embeds();
             EmbedGame = embedGame;
             EmbedCategory = embedCategory;
@@ -72,6 +75,11 @@ namespace SpeedrunComSharp
 
         public override string ToString()
         {
+            if (!isConstructed)
+            {
+                EmbedPlayers = true;
+            }
+
             return embeds.ToString();
         }
     }
