@@ -5,19 +5,18 @@ using System.Text;
 
 namespace SpeedrunComSharp
 {
-    public class Record
+    public class Record : Run
     {
         public int Rank { get; private set; }
-        public Run Run { get; private set; }
 
         private Record() { }
-
+        
         public static Record Parse(SpeedrunComClient client, dynamic recordElement)
         {
             var record = new Record();
 
             record.Rank = recordElement.place;
-            record.Run = Run.Parse(client, recordElement.run) as Run;
+            Run.Parse(record, client, recordElement.run);
 
             return record;
         }

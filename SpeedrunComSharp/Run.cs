@@ -18,12 +18,13 @@ namespace SpeedrunComSharp
         public string Comment { get; private set; }
         public RunStatus Status { get; private set; }
         public Player Player { get { return Players.FirstOrDefault(); } }
-        public ReadOnlyCollection<Player> Players { get; private set; }
+        public ReadOnlyCollection<Player> Players { get; internal set; }
         public DateTime? Date { get; private set; }
         public DateTime? DateSubmitted { get; private set; }
         public RunTimes Times { get; private set; }
         public RunSystem System { get; private set; }
         public Uri SplitsUri { get; private set; }
+        public bool SplitsAvailable { get { return SplitsUri != null; } }
         public ReadOnlyCollection<VariableValue> VariableValues { get; private set; }
 
         #region Links
@@ -42,12 +43,10 @@ namespace SpeedrunComSharp
 
         #endregion
 
-        private Run() { }
+        protected Run() { }
 
-        public static Run Parse(SpeedrunComClient client, dynamic runElement)
+        internal static void Parse(Run run, SpeedrunComClient client, dynamic runElement)
         {
-            var run = new Run();
-
             //Parse Attributes
 
             run.ID = runElement.id as string;
@@ -109,7 +108,7 @@ namespace SpeedrunComSharp
                 run.game = new Lazy<Game>(() => game);
                 run.GameID = game.ID;
             }
-            
+
             if (properties["category"] == null)
             {
                 run.category = new Lazy<Category>(() => null);
@@ -137,7 +136,7 @@ namespace SpeedrunComSharp
                 run.level = new Lazy<Level>(() => client.Levels.GetLevel(run.LevelID));
             }
             else
-            { 
+            {
                 var level = Level.Parse(client, properties["level"].data) as Level;
                 run.level = new Lazy<Level>(() => level);
                 if (level != null)
@@ -164,6 +163,13 @@ namespace SpeedrunComSharp
             {
                 run.examiner = new Lazy<User>(() => null);
             }
+        }
+
+        public static Run Parse(SpeedrunComClient client, dynamic runElement)
+        {
+            var run = new Run();
+
+            Parse(run, client, runElement);
 
             return run;
         }

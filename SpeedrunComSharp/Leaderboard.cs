@@ -168,45 +168,95 @@ namespace SpeedrunComSharp
             if (properties.ContainsKey("players"))
             {
                 Func<dynamic, Player> playerParser = x => Player.Parse(client, x) as Player;
-                leaderboard.players = new Lazy<ReadOnlyCollection<Player>>(() => client.ParseCollection(leaderboardElement.players.data, playerParser));
+                var players = client.ParseCollection(leaderboardElement.players.data, playerParser) as ReadOnlyCollection<Player>;
+
+                foreach (var record in leaderboard.Records)
+                {
+                    record.Players = record.Players.Select(x => players.FirstOrDefault(y => x.Equals(y))).ToList().AsReadOnly();
+                }
+
+                leaderboard.players = new Lazy<ReadOnlyCollection<Player>>(() => players);
             }
             else
             {
-                leaderboard.players = new Lazy<ReadOnlyCollection<Player>>(() => leaderboard.Records.SelectMany(x => x.Run.Players).ToList().Distinct().ToList().AsReadOnly());
+                leaderboard.players = new Lazy<ReadOnlyCollection<Player>>(() => leaderboard.Records.SelectMany(x => x.Players).ToList().Distinct().ToList().AsReadOnly());
             }
 
             if (properties.ContainsKey("regions"))
             {
                 Func<dynamic, Region> regionParser = x => Region.Parse(client, x) as Region;
-                leaderboard.usedRegions = new Lazy<ReadOnlyCollection<Region>>(() => client.ParseCollection(leaderboardElement.regions.data, regionParser));
+                var regions = client.ParseCollection(leaderboardElement.regions.data, regionParser) as ReadOnlyCollection<Region>;
+                
+                foreach (var record in leaderboard.Records)
+                {
+                    record.System.region = new Lazy<Region>(() => regions.FirstOrDefault(x => x.ID == record.System.RegionID));
+                }
+                
+                leaderboard.usedRegions = new Lazy<ReadOnlyCollection<Region>>(() => regions);
             }
             else
             {
-                leaderboard.usedRegions = new Lazy<ReadOnlyCollection<Region>>(() => leaderboard.Records.Select(x => x.Run.Region).Distinct().ToList().AsReadOnly());
+                leaderboard.usedRegions = new Lazy<ReadOnlyCollection<Region>>(() => leaderboard.Records.Select(x => x.Region).Distinct().Where(x => x != null).ToList().AsReadOnly());
             }
 
             if (properties.ContainsKey("platforms"))
             {
                 Func<dynamic, Platform> platformParser = x => Platform.Parse(client, x) as Platform;
-                leaderboard.usedPlatforms = new Lazy<ReadOnlyCollection<Platform>>(() => client.ParseCollection(leaderboardElement.platforms.data, platformParser));
+                var platforms = client.ParseCollection(leaderboardElement.platforms.data, platformParser) as ReadOnlyCollection<Platform>;
+
+                foreach (var record in leaderboard.Records)
+                {
+                    record.System.platform = new Lazy<Platform>(() => platforms.FirstOrDefault(x => x.ID == record.System.PlatformID));
+                }
+
+                leaderboard.usedPlatforms = new Lazy<ReadOnlyCollection<Platform>>(() => platforms);
             }
             else
             {
-                leaderboard.usedPlatforms = new Lazy<ReadOnlyCollection<Platform>>(() => leaderboard.Records.Select(x => x.Run.Platform).Distinct().ToList().AsReadOnly());
+                leaderboard.usedPlatforms = new Lazy<ReadOnlyCollection<Platform>>(() => leaderboard.Records.Select(x => x.Platform).Distinct().Where(x => x != null).ToList().AsReadOnly());
             }
+
+            Action<ReadOnlyCollection<Variable>> patchVariablesOfRecords = variables =>
+                {
+                    foreach (var record in leaderboard.Records)
+                    {
+                        foreach (var value in record.VariableValues)
+                        {
+                            value.variable = new Lazy<Variable>(() => variables.FirstOrDefault(x => x.ID == value.VariableID));
+                        }
+                    }
+                };
 
             if (properties.ContainsKey("variables"))
             {
                 Func<dynamic, Variable> variableParser = x => Variable.Parse(client, x) as Variable;
-                leaderboard.applicableVariables = new Lazy<ReadOnlyCollection<Variable>>(() => client.ParseCollection(leaderboardElement.variables.data, variableParser));
+                var variables = client.ParseCollection(leaderboardElement.variables.data, variableParser) as ReadOnlyCollection<Variable>;
+
+                patchVariablesOfRecords(variables);
+
+                leaderboard.applicableVariables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
             }
             else if (string.IsNullOrEmpty(leaderboard.LevelID))
             {
-                leaderboard.applicableVariables = new Lazy<ReadOnlyCollection<Variable>>(() => leaderboard.Category.Variables);
+                leaderboard.applicableVariables = new Lazy<ReadOnlyCollection<Variable>>(() =>
+                    {
+                        var variables = leaderboard.Category.Variables;
+
+                        patchVariablesOfRecords(variables);
+
+                        return variables;
+                    });
             }
             else
             {
-                leaderboard.applicableVariables = new Lazy<ReadOnlyCollection<Variable>>(() => leaderboard.Category.Variables.Concat(leaderboard.Level.Variables).ToList().Distinct().ToList().AsReadOnly());
+                leaderboard.applicableVariables = new Lazy<ReadOnlyCollection<Variable>>(() =>
+                    {
+                        var variables = leaderboard.Category.Variables.Concat(leaderboard.Level.Variables).ToList().Distinct().ToList().AsReadOnly();
+
+                        patchVariablesOfRecords(variables);
+
+                        return variables;
+                    });
             }
 
             return leaderboard;

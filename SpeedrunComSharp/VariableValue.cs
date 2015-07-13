@@ -12,7 +12,7 @@ namespace SpeedrunComSharp
 
         #region Links
 
-        private Lazy<Variable> variable;
+        internal Lazy<Variable> variable;
 
         public Variable Variable { get { return variable.Value; } }
         public string Value { get { return Variable.Choices.FirstOrDefault(x => x.ID == VariableChoiceID).Value; } }
