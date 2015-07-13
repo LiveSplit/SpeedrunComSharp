@@ -25,12 +25,9 @@ namespace SpeedrunComSharp
         public Uri SpeedRunsLiveProfile { get; private set; }
 
         #region Links
-
-        private Lazy<ReadOnlyCollection<Record>> records;
             
         public IEnumerable<Run> Runs { get; private set; }
         public IEnumerable<Game> ModeratedGames { get; private set; }
-        public ReadOnlyCollection<Record> Records { get { return records.Value; } }
 
         #endregion
 
@@ -102,9 +99,23 @@ namespace SpeedrunComSharp
 
             user.Runs = client.Runs.GetRuns(userId: user.ID);
             user.ModeratedGames = client.Games.GetGames(moderatorId: user.ID);
-            user.records = new Lazy<ReadOnlyCollection<Record>>(() => client.Records.GetRecords(userName: user.Name));
-
+            
             return user;
+        }
+
+        public override int GetHashCode()
+        {
+            return (ID ?? string.Empty).GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as User;
+
+            if (other == null)
+                return false;
+
+            return ID == other.ID;
         }
 
         public override string ToString()

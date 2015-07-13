@@ -1,6 +1,6 @@
 # SpeedrunComSharp
 
-[![API Version](https://img.shields.io/badge/API-597d06...-blue.svg)](https://github.com/speedruncom/api/tree/597d06b4b7d5b1355a3f61daf6539b07926ac1fb)
+[![API Version](https://img.shields.io/badge/API-2139e9...-blue.svg)](https://github.com/speedruncom/api/tree/2139e9402057d53ee9226cb0b6e9c8f1c81f93d8)
 [![Build Status](https://travis-ci.org/LiveSplit/SpeedrunComSharp.svg?branch=master)](https://travis-ci.org/LiveSplit/SpeedrunComSharp)
 [![Build status](https://ci.appveyor.com/api/projects/status/w383t09ffk5ovo7y/branch/master?svg=true)](https://ci.appveyor.com/project/CryZe/speedruncomsharp/branch/master)
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/5662.svg)](https://scan.coverity.com/projects/5662)
@@ -20,17 +20,15 @@ The Client is separated into the following Sub-Clients, just like the Speedrun.c
 * Categories
 * Games
 * Guests
+* Leaderboards
 * Levels
 * Platforms
 * Profile
-* Records
 * Regions
 * Runs
 * Series
 * Users
 * Variables
-
-The only difference is the Records Sub-Client that allows you to use their legacy Records API that's available at http://www.speedrun.com/api_records.php.
 
 The Sub-Clients implement all the API Calls for retrieving the Objects from the API. Once you obtained objects from those Clients, you can either use the References within the Objects to retrieve additional objects or you can use their IDs to retrieve them through the Clients.
 

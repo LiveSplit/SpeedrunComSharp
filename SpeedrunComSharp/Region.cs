@@ -58,6 +58,21 @@ namespace SpeedrunComSharp
             return region;
         }
 
+        public override int GetHashCode()
+        {
+            return (ID ?? string.Empty).GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var region = obj as Region;
+
+            if (region == null)
+                return false;
+
+            return ID == region.ID;
+        }
+
         public override string ToString()
         {
             return Name;

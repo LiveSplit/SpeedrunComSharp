@@ -20,16 +20,22 @@ namespace SpeedrunComSharp
 
         #endregion
 
-        private VariableValue() { }
+        public VariableValue(Variable variable, VariableChoice choice)
+        {
+            VariableID = variable.ID;
+            VariableChoiceID = choice.ID;
+            this.variable = new Lazy<Variable>(() => variable);
+        }
+
+        public VariableValue(string variableId, string variableChoiceId)
+        {
+            VariableID = variableId;
+            VariableChoiceID = variableChoiceId;
+        }
 
         public static VariableValue Parse(SpeedrunComClient client, KeyValuePair<string, dynamic> valueElement)
         {
-            var value = new VariableValue();
-
-            //Parse Attributes
-
-            value.VariableID = valueElement.Key;
-            value.VariableChoiceID = valueElement.Value as string;
+            var value = new VariableValue(valueElement.Key, valueElement.Value as string);
 
             //Parse Links
 

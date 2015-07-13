@@ -17,21 +17,6 @@ namespace SpeedrunComSharp
 
         private Ruleset() { }
 
-        private static TimingMethod parseTimingMethod(string element)
-        {
-            switch (element)
-            {
-                case "realtime":
-                    return TimingMethod.RealTime;
-                case "realtime_noloads":
-                    return TimingMethod.RealTimeWithoutLoads;
-                case "ingame":
-                    return TimingMethod.GameTime;
-            }
-
-            throw new ArgumentException("element");
-        }
-
         public static Ruleset Parse(SpeedrunComClient client, dynamic rulesetElement)
         {
             var ruleset = new Ruleset();
@@ -42,9 +27,9 @@ namespace SpeedrunComSharp
             ruleset.RequiresVerification = properties["require-verification"];
             ruleset.RequiresVideo = properties["require-video"];
 
-            Func<dynamic, TimingMethod> timingMethodParser = x => parseTimingMethod(x as string);
+            Func<dynamic, TimingMethod> timingMethodParser = x => TimingMethodHelpers.FromString(x as string);
             ruleset.TimingMethods = client.ParseCollection(properties["run-times"], timingMethodParser);
-            ruleset.DefaultTimingMethod = parseTimingMethod(properties["default-time"]);
+            ruleset.DefaultTimingMethod = TimingMethodHelpers.FromString(properties["default-time"]);
 
             ruleset.EmulatorsAllowed = properties["emulators-allowed"];
 

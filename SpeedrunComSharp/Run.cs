@@ -168,6 +168,21 @@ namespace SpeedrunComSharp
             return run;
         }
 
+        public override int GetHashCode()
+        {
+            return (ID ?? string.Empty).GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as Run;
+
+            if (other == null)
+                return false;
+
+            return ID == other.ID;
+        }
+
         public override string ToString()
         {
             return string.Format("{0} - {1} in {2}", Game.Name, Category.Name, Times.Primary);

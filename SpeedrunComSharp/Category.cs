@@ -22,14 +22,14 @@ namespace SpeedrunComSharp
 
         internal Lazy<Game> game;
         private Lazy<ReadOnlyCollection<Variable>> variables;
-        private Lazy<ReadOnlyCollection<Record>> leaderboard;
+        private Lazy<Leaderboard> leaderboard;
         private Lazy<Record> worldRecord;
 
         public string GameID { get; private set; }
         public Game Game { get { return game.Value; } }
         public ReadOnlyCollection<Variable> Variables { get { return variables.Value; } }
         public IEnumerable<Run> Runs { get; private set; }
-        public ReadOnlyCollection<Record> Leaderboard { get { return leaderboard.Value; } }
+        public Leaderboard Leaderboard { get { return leaderboard.Value; } }
         public Record WorldRecord { get { return worldRecord.Value; }}
 
         #endregion
@@ -84,40 +84,44 @@ namespace SpeedrunComSharp
             }
 
             category.Runs = client.Runs.GetRuns(categoryId: category.ID);
-            category.leaderboard = new Lazy<ReadOnlyCollection<Record>>(() => 
-                {                                                        
-                    var leaderboard = client
-                                        .Records
-                                        .GetRecords(gameName: category.Game.Name, amount: RecordsClient.AllRecords)
-                                        .Where(x => x.CategoryName == category.Name)
-                                        .ToList()
-                                        .AsReadOnly();
-                    
-                    foreach (var record in leaderboard)
+
+            if (category.Type == CategoryType.PerGame)
+            {
+
+                category.leaderboard = new Lazy<Leaderboard>(() =>
                     {
-                        record.category = new Lazy<Category>(() => category);
-                        record.game = category.game;
-                    }
-                    
-                    return leaderboard;
-                });
-            
-            category.worldRecord = new Lazy<Record>(() =>
-                {
-                    if (category.leaderboard.IsValueCreated)
-                    {
-                        var record = category.Leaderboard.First();
-                        
-                        record.category = new Lazy<Category>(() => category);
-                        record.game = category.game;
-                        
-                        return record;
-                    }
-                    else
-                        return client.Records.GetWorldRecord(category.Game.Name, category.Name);
-                });
+                        var leaderboard = client.Leaderboards
+                                        .GetLeaderboardForFullGameCategory(category.GameID, category.ID);
+
+                        leaderboard.game = new Lazy<Game>(() => category.Game);
+                        leaderboard.category = new Lazy<Category>(() => category);
+
+                        return leaderboard;
+                    });
+                category.worldRecord = new Lazy<Record>(() => category.Leaderboard.Records.FirstOrDefault());
+            }
+            else
+            {
+                category.leaderboard = new Lazy<Leaderboard>(() => null);
+                category.worldRecord = new Lazy<Record>(() => null);
+            }
 
             return category;
+        }
+
+        public override int GetHashCode()
+        {
+            return (ID ?? string.Empty).GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as Category;
+
+            if (other == null)
+                return false;
+
+            return ID == other.ID;
         }
 
         public override string ToString()

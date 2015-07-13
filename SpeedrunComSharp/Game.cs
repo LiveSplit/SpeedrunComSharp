@@ -49,7 +49,6 @@ namespace SpeedrunComSharp
         internal Lazy<Series> series;
         private Lazy<Game> originalGame;
         private Lazy<ReadOnlyCollection<Game>> romHacks;
-        private Lazy<IDictionary<string, ReadOnlyCollection<Record>>> leaderboards;
 
         public IEnumerable<Run> Runs { get; private set; }
         public ReadOnlyCollection<Level> Levels { get { return levels.Value; } }
@@ -64,7 +63,6 @@ namespace SpeedrunComSharp
         public string OriginalGameID { get; private set; }
         public Game OriginalGame { get { return originalGame.Value; } }
         public ReadOnlyCollection<Game> RomHacks { get { return romHacks.Value; } }
-        public IDictionary<string, ReadOnlyCollection<Record>> Leaderboards { get { return leaderboards.Value; } }
 
         #endregion
 
@@ -273,37 +271,23 @@ namespace SpeedrunComSharp
                     
                     return romHacks;
                 });
-
-            game.leaderboards = new Lazy<IDictionary<string, ReadOnlyCollection<Record>>>(() =>
-                {
-                    var records = client
-                        .Records
-                        .GetRecords(gameName: game.Name, amount: RecordsClient.AllRecords);
-                    
-                    foreach (var record in records)
-                    {
-                        record.game = new Lazy<Game>(() => game);    
-                    }
-                    
-                    var grouped = records.GroupBy(x => x.CategoryName)
-                        .ToDictionary(x => x.Key, x => x.ToList().AsReadOnly());
-                    
-                    if (game.categories.IsValueCreated)
-                    {
-                        foreach (var leaderboard in grouped)
-                        {
-                            var category = game.Categories.First(x => x.Name == leaderboard.Key);
-                            foreach (var record in leaderboard.Value)
-                            {
-                                record.category = new Lazy<Category>(() => category);
-                            }
-                        }
-                    }
-                    
-                    return grouped;
-                });
                  
             return game;
+        }
+
+        public override int GetHashCode()
+        {
+            return (ID ?? string.Empty).GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as Game;
+
+            if (other == null)
+                return false;
+
+            return ID == other.ID;
         }
 
         public override string ToString()

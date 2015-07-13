@@ -21,10 +21,10 @@ namespace SpeedrunComSharp
         public CategoriesClient Categories { get; private set; }
         public GamesClient Games { get; private set; }
         public GuestsClient Guests { get; private set; }
+        public LeaderboardsClient Leaderboards { get; private set; }
         public LevelsClient Levels { get; private set; }
         public PlatformsClient Platforms { get; private set; }
         public ProfileClient Profile { get; private set; }
-        public RecordsClient Records { get; private set; }
         public RegionsClient Regions { get; private set; }
         public RunsClient Runs { get; private set; }
         public SeriesClient Series { get; private set; }
@@ -43,10 +43,10 @@ namespace SpeedrunComSharp
             Categories = new CategoriesClient(this);
             Games = new GamesClient(this);
             Guests = new GuestsClient(this);
+            Leaderboards = new LeaderboardsClient(this);
             Levels = new LevelsClient(this);
             Platforms = new PlatformsClient(this);
             Profile = new ProfileClient(this);
-            Records = new RecordsClient(this);
             Regions = new RegionsClient(this);
             Runs = new RunsClient(this);
             Series = new SeriesClient(this);
@@ -125,7 +125,29 @@ namespace SpeedrunComSharp
 #if DEBUG_WITH_API_CALLS
                 Console.WriteLine(uri.AbsoluteUri, "Uncached API Call");
 #endif
-                    result = JSON.FromUri(uri, UserAgent);
+                    try
+                    {
+                        result = JSON.FromUri(uri, UserAgent);
+                    }
+                    catch (WebException ex)
+                    {
+                        try
+                        {
+                            using (var stream = ex.Response.GetResponseStream())
+                            {
+                                var json = JSON.FromStream(stream);
+                                throw new APIException(json.message);
+                            }
+                        }
+                        catch (APIException ex2)
+                        {
+                            throw ex2;
+                        }
+                        catch
+                        {
+                            throw ex;
+                        }
+                    }
                 }
 
                 Cache.Add(uri, result);

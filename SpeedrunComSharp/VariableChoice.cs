@@ -22,6 +22,21 @@ namespace SpeedrunComSharp
             return choice;
         }
 
+        public override int GetHashCode()
+        {
+            return (ID ?? string.Empty).GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as VariableChoice;
+
+            if (other == null)
+                return false;
+
+            return ID == other.ID;
+        }
+
         public override string ToString()
         {
             return Value;

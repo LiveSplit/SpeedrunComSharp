@@ -10,6 +10,7 @@ namespace SpeedrunComSharp
         Category,
         Game,
         Guest,
+        Leaderboard,
         Level,
         Platform,
         Region,

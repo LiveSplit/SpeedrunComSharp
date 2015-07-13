@@ -55,11 +55,17 @@
     <Compile Include="CachedEnumerable.cs" />
     <Compile Include="CategoriesClient.cs" />
     <Compile Include="ElementType.cs" />
+    <Compile Include="EmulatorsFilter.cs" />
     <Compile Include="HttpWebLink.cs" />
+    <Compile Include="Leaderboard.cs" />
+    <Compile Include="LeaderboardsClient.cs" />
+    <Compile Include="LeaderboardEmbeds.cs" />
+    <Compile Include="Record.cs" />
     <Compile Include="SeriesOrdering.cs" />
     <Compile Include="SeriesEmbeds.cs" />
     <Compile Include="Series.cs" />
     <Compile Include="SeriesClient.cs" />
+    <Compile Include="APIException.cs" />
     <Compile Include="UsersOrdering.cs" />
     <Compile Include="RunsOrdering.cs" />
     <Compile Include="RegionsOrdering.cs" />
@@ -99,8 +105,6 @@
     <Compile Include="PotentialEmbed.cs" />
     <Compile Include="ProfileClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Record.cs" />
-    <Compile Include="RecordsClient.cs" />
     <Compile Include="Region.cs" />
     <Compile Include="RegionsClient.cs" />
     <Compile Include="Ruleset.cs" />
