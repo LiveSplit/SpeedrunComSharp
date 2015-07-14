@@ -58,8 +58,6 @@ namespace SpeedrunComSharp
 
             //Parse Embeds
 
-            var properties = seriesElement.Properties as IDictionary<string, dynamic>;
-
             if (seriesElement.moderators is DynamicJsonObject && seriesElement.moderators.Properties.ContainsKey("data"))
             {
                 Func<dynamic, User> userParser = x => User.Parse(client, x) as User;

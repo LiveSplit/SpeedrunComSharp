@@ -11,7 +11,7 @@ namespace SpeedrunComSharp
 
         private Record() { }
         
-        public static Record Parse(SpeedrunComClient client, dynamic recordElement)
+        public static new Record Parse(SpeedrunComClient client, dynamic recordElement)
         {
             var record = new Record();
 
