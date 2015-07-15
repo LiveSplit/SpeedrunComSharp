@@ -46,6 +46,7 @@ namespace SpeedrunComSharp
         public IEnumerable<User> GetUsers(
             string name = null, string twitch = null,
             string hitbox = null, string speedrunslive = null,
+            int? elementsPerPage = null,
             UsersOrdering orderBy = default(UsersOrdering))
         {
             var parameters = new List<string>();
@@ -65,6 +66,9 @@ namespace SpeedrunComSharp
             if (!string.IsNullOrEmpty(speedrunslive))
                 parameters.Add(string.Format("speedrunslive={0}",
                     Uri.EscapeDataString(speedrunslive)));
+            
+            if (elementsPerPage.HasValue)
+                parameters.Add(string.Format("max={0}", elementsPerPage));
 
             parameters.AddRange(orderBy.ToParameters());
 

@@ -87,6 +87,8 @@ namespace SpeedrunComSharp
                         parameters.Add("status=verified"); break;
                 }
             }
+            if (elementsPerPage.HasValue)
+                parameters.Add(string.Format("max={0}", elementsPerPage));
 
             parameters.AddRange(orderBy.ToParameters());
 
