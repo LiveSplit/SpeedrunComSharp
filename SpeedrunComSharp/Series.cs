@@ -52,7 +52,7 @@ namespace SpeedrunComSharp
 
             var created = seriesElement.created as string;
             if (!string.IsNullOrEmpty(created))
-                series.CreationDate = DateTime.Parse(created, CultureInfo.InvariantCulture);
+                series.CreationDate = DateTime.Parse(created, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
 
             series.Assets = Assets.Parse(client, seriesElement.assets);
 

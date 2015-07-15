@@ -68,11 +68,11 @@ namespace SpeedrunComSharp
 
             var runDate = runElement.date;
             if (!string.IsNullOrEmpty(runDate))
-                run.Date = DateTime.Parse(runDate, CultureInfo.InvariantCulture);
+                run.Date = DateTime.Parse(runDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
 
             var dateSubmitted = runElement.submitted;
             if (!string.IsNullOrEmpty(dateSubmitted))
-                run.DateSubmitted = DateTime.Parse(dateSubmitted, CultureInfo.InvariantCulture);
+                run.DateSubmitted = DateTime.Parse(dateSubmitted, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
 
             run.Times = RunTimes.Parse(client, runElement.times) as RunTimes;
             run.System = RunSystem.Parse(client, runElement.system) as RunSystem;

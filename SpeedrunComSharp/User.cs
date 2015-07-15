@@ -71,7 +71,7 @@ namespace SpeedrunComSharp
 
             var signUpDate = userElement.signup as string;
             if (!string.IsNullOrEmpty(signUpDate))
-                user.SignUpDate = DateTime.Parse(signUpDate, CultureInfo.InvariantCulture);
+                user.SignUpDate = DateTime.Parse(signUpDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
 
             user.Location = Location.Parse(client, userElement.location) as Location;
 

@@ -56,7 +56,7 @@ namespace SpeedrunComSharp
                 {
                     var date = properties["verify-date"] as string;
                     if (!string.IsNullOrEmpty(date))
-                        status.VerifyDate = DateTime.Parse(date, CultureInfo.InvariantCulture);
+                        status.VerifyDate = DateTime.Parse(date, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
                 }
             }
             else

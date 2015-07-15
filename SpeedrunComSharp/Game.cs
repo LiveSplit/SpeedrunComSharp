@@ -82,7 +82,7 @@ namespace SpeedrunComSharp
 
             var created = gameElement.created as string;
             if (!string.IsNullOrEmpty(created))
-                game.CreationDate = DateTime.Parse(created, CultureInfo.InvariantCulture);
+                game.CreationDate = DateTime.Parse(created, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
 
             game.Assets = Assets.Parse(client, gameElement.assets);
 
