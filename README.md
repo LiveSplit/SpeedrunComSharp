@@ -1,6 +1,6 @@
 # SpeedrunComSharp
 
-[![API Version](https://img.shields.io/badge/API-2139e9...-blue.svg)](https://github.com/speedruncom/api/tree/2139e9402057d53ee9226cb0b6e9c8f1c81f93d8)
+[![API Version](https://img.shields.io/badge/API-bf3dc2...-blue.svg)](https://github.com/speedruncom/api/tree/bf3dc296dc0da85ab4a1871ccc801755189f0032)
 [![Build Status](https://travis-ci.org/LiveSplit/SpeedrunComSharp.svg?branch=master)](https://travis-ci.org/LiveSplit/SpeedrunComSharp)
 [![Build status](https://ci.appveyor.com/api/projects/status/w383t09ffk5ovo7y/branch/master?svg=true)](https://ci.appveyor.com/project/CryZe/speedruncomsharp/branch/master)
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/5662.svg)](https://scan.coverity.com/projects/5662)
@@ -53,11 +53,8 @@ var anyPercent = game.Categories.First(category => category.Name == "Any%");
 //Finding the World Record of the category
 var worldRecord = anyPercent.WorldRecord;
 
-//Getting the World Record Run
-var worldRecordRun = worldRecord.Run;
-
 //Printing the World Record's information
-Console.WriteLine("The World Record is {0} by {1}", worldRecordRun.Times.Primary, worldRecordRun.Player.Name);
+Console.WriteLine("The World Record is {0} by {1}", worldRecord.Times.Primary, worldRecord.Player.Name);
 
 ```
 

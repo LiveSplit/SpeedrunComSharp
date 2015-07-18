@@ -29,8 +29,8 @@ namespace SpeedrunComSharp
 
         #region Links
 
-        private Lazy<Game> game;
-        private Lazy<Category> category;
+        internal Lazy<Game> game;
+        internal Lazy<Category> category;
         private Lazy<Level> level;
         private Lazy<User> examiner;
 

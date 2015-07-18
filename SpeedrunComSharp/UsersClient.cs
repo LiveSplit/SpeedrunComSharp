@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -85,6 +86,28 @@ namespace SpeedrunComSharp
             var result = baseClient.DoRequest(uri);
 
             return User.Parse(baseClient, result.data);
+        }
+
+        public ReadOnlyCollection<Record> GetPersonalBests(
+            string userId, int? top = null,
+            string seriesId = null, string gameId = null,
+            RunEmbeds embeds = default(RunEmbeds))
+        {
+            var parameters = new List<string>() { embeds.ToString() };
+
+            if (top.HasValue)
+                parameters.Add(string.Format("top={0}", top.Value));
+            if (!string.IsNullOrEmpty(seriesId))
+                parameters.Add(string.Format("series={0}", Uri.EscapeDataString(seriesId)));
+            if (!string.IsNullOrEmpty(gameId))
+                parameters.Add(string.Format("game={0}", Uri.EscapeDataString(gameId)));
+
+            var uri = GetUsersUri(string.Format("/{0}/personal-bests{1}",
+                Uri.EscapeDataString(userId),
+                parameters.ToParameters()));
+
+            return baseClient.DoDataCollectionRequest(uri,
+                x => Record.Parse(baseClient, x) as Record);
         }
     }
 }

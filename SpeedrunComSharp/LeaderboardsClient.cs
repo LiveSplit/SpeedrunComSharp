@@ -24,7 +24,7 @@ namespace SpeedrunComSharp
         }
 
         private Leaderboard getLeaderboard(
-            string uri,
+            string uri, int? top = null,
             string platformId = null, string regionId = null,
             EmulatorsFilter emulatorsFilter = EmulatorsFilter.NotSet, bool filterOutRunsWithoutVideo = false,
             TimingMethod? orderBy = null,
@@ -33,6 +33,8 @@ namespace SpeedrunComSharp
         {
             var parameters = new List<string>() { embeds.ToString() };
 
+            if (top.HasValue)
+                parameters.Add(string.Format("top={0}", top.Value));
             if (!string.IsNullOrEmpty(platformId))
                 parameters.Add(string.Format("platform={0}", Uri.EscapeDataString(platformId)));
             if (!string.IsNullOrEmpty(regionId))
@@ -67,6 +69,7 @@ namespace SpeedrunComSharp
 
         public Leaderboard GetLeaderboardForFullGameCategory(
             string gameId, string categoryId,
+            int? top = null,
             string platformId = null, string regionId = null,
             EmulatorsFilter emulatorsFilter = EmulatorsFilter.NotSet, bool filterOutRunsWithoutVideo = false,
             TimingMethod? orderBy = null,
@@ -78,6 +81,7 @@ namespace SpeedrunComSharp
                 Uri.EscapeDataString(categoryId));
 
             return getLeaderboard(uri,
+                top,
                 platformId, regionId,
                 emulatorsFilter, filterOutRunsWithoutVideo,
                 orderBy, variableFilters,
@@ -86,6 +90,7 @@ namespace SpeedrunComSharp
 
         public Leaderboard GetLeaderboardForLevel(
             string gameId, string levelId, string categoryId,
+            int? top = null,
             string platformId = null, string regionId = null,
             EmulatorsFilter emulatorsFilter = EmulatorsFilter.NotSet, bool filterOutRunsWithoutVideo = false,
             TimingMethod? orderBy = null,
@@ -98,6 +103,7 @@ namespace SpeedrunComSharp
                 Uri.EscapeDataString(categoryId));
 
             return getLeaderboard(uri,
+                top,
                 platformId, regionId,
                 emulatorsFilter, filterOutRunsWithoutVideo,
                 orderBy, variableFilters,

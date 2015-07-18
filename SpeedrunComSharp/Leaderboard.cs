@@ -8,6 +8,7 @@ namespace SpeedrunComSharp
 {
     public class Leaderboard
     {
+        public Uri WebLink { get; private set; }
         public EmulatorsFilter EmulatorFilter { get; private set; }
         public bool AreRunsWithoutVideoFilteredOut { get; private set; }
         public TimingMethod OrderedBy { get; private set; }
@@ -59,6 +60,8 @@ namespace SpeedrunComSharp
             var properties = leaderboardElement.Properties as IDictionary<string, dynamic>;
 
             //Parse Attributes
+
+            leaderboard.WebLink = new Uri(leaderboardElement.weblink as string);
 
             var emulators = leaderboardElement.emulators as string;
             if (emulators == "true")

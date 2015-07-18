@@ -96,9 +96,33 @@ namespace SpeedrunComSharp
                         leaderboard.game = new Lazy<Game>(() => category.Game);
                         leaderboard.category = new Lazy<Category>(() => category);
 
+                        foreach (var record in leaderboard.Records)
+                        {
+                            record.game = leaderboard.game;
+                            record.category = leaderboard.category;
+                        }
+
                         return leaderboard;
                     });
-                category.worldRecord = new Lazy<Record>(() => category.Leaderboard.Records.FirstOrDefault());
+                category.worldRecord = new Lazy<Record>(() =>
+                    {
+                        if (category.leaderboard.IsValueCreated)
+                            return category.Leaderboard.Records.FirstOrDefault();
+
+                        var leaderboard = client.Leaderboards
+                                        .GetLeaderboardForFullGameCategory(category.GameID, category.ID, top: 1);
+
+                        leaderboard.game = new Lazy<Game>(() => category.Game);
+                        leaderboard.category = new Lazy<Category>(() => category);
+
+                        foreach (var record in leaderboard.Records)
+                        {
+                            record.game = leaderboard.game;
+                            record.category = leaderboard.category;
+                        }
+
+                        return leaderboard.Records.FirstOrDefault();
+                    });
             }
             else
             {
