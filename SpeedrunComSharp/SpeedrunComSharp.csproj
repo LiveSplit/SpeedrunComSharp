@@ -123,7 +123,6 @@
     <Compile Include="UserRole.cs" />
     <Compile Include="UsersClient.cs" />
     <Compile Include="Variable.cs" />
-    <Compile Include="VariableChoice.cs" />
     <Compile Include="VariablesClient.cs" />
     <Compile Include="VariableScope.cs" />
     <Compile Include="VariableScopeType.cs" />

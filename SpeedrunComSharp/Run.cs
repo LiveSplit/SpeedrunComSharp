@@ -86,7 +86,7 @@ namespace SpeedrunComSharp
             if (runElement.values is DynamicJsonObject)
             {
                 var valueProperties = runElement.values.Properties as IDictionary<string, dynamic>;
-                run.VariableValues = valueProperties.Select(x => VariableValue.Parse(client, x) as VariableValue).ToList().AsReadOnly();
+                run.VariableValues = valueProperties.Select(x => VariableValue.ParseValueDescriptor(client, x) as VariableValue).ToList().AsReadOnly();
             }
             else
             {

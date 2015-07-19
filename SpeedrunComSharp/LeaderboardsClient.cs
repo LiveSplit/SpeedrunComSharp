@@ -55,7 +55,7 @@ namespace SpeedrunComSharp
                 {
                     parameters.Add(string.Format("var-{0}={1}",
                         Uri.EscapeDataString(variableValue.VariableID),
-                        Uri.EscapeDataString(variableValue.VariableChoiceID)));
+                        Uri.EscapeDataString(variableValue.ID)));
                 }
             }
 

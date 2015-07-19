@@ -46,7 +46,7 @@ namespace SpeedrunComSharp
 
         public override bool Equals(object obj)
         {
-            var other = obj as Run;
+            var other = obj as Record;
 
             if (other == null)
                 return false;

@@ -15,8 +15,8 @@ namespace SpeedrunComSharp
         public bool IsMandatory { get; private set; }
         public bool IsUserDefined { get; private set; }
         public bool IsUsedForObsoletingRuns { get; private set; }
-        public ReadOnlyCollection<VariableChoice> Choices { get; private set; }
-        public VariableChoice DefaultChoice { get; private set; }
+        public ReadOnlyCollection<VariableValue> Choices { get; private set; }
+        public VariableValue DefaultChoice { get; private set; }
 
         #region Links
 
@@ -53,11 +53,11 @@ namespace SpeedrunComSharp
             if (!(variableElement.values.choices is ArrayList))
             {
                 var choiceElements = variableElement.values.choices.Properties as IDictionary<string, dynamic>;
-                variable.Choices = choiceElements.Select(x => VariableChoice.Parse(client, x) as VariableChoice).ToList().AsReadOnly();
+                variable.Choices = choiceElements.Select(x => VariableValue.ParseIDPair(client, variable, x) as VariableValue).ToList().AsReadOnly();
             }
             else
             {
-                variable.Choices = new ReadOnlyCollection<VariableChoice>(new VariableChoice[0]);
+                variable.Choices = new ReadOnlyCollection<VariableValue>(new VariableValue[0]);
             }
 
             var valuesProperties = variableElement.values.Properties as IDictionary<string, dynamic>;
