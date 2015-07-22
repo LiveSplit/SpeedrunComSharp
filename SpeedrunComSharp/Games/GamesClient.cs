@@ -114,7 +114,7 @@ namespace SpeedrunComSharp
 
         public Game SearchGameExact(string name, GameEmbeds embeds = default(GameEmbeds))
         {
-            var game = GetGames(name: name, embeds: embeds).FirstOrDefault(x => x.Name == name);
+            var game = GetGames(name: name, embeds: embeds, elementsPerPage: 1).Take(1).FirstOrDefault(x => x.Name == name);
 
             return game;
         }
@@ -182,6 +182,33 @@ namespace SpeedrunComSharp
 
             return baseClient.DoDataCollectionRequest(uri, 
                 x => Game.Parse(baseClient, x) as Game);
+        }
+
+        public IEnumerable<Leaderboard> GetRecords(string gameId,
+            int? top = null, LeaderboardScope scope = LeaderboardScope.All,
+            bool includeMiscellaneousCategories = true, bool skipEmptyLeaderboards = false,
+            int? elementsPerPage = null,
+            LeaderboardEmbeds embeds = default(LeaderboardEmbeds))
+        {
+            var parameters = new List<string>() { embeds.ToString() };
+
+            if (top.HasValue)
+                parameters.Add(string.Format("top={0}", top.Value));
+            if (scope != LeaderboardScope.All)
+                parameters.Add(scope.ToParameter());
+            if (!includeMiscellaneousCategories)
+                parameters.Add("miscellaneous=false");
+            if (skipEmptyLeaderboards)
+                parameters.Add("skip-empty=true");
+            if (elementsPerPage.HasValue)
+                parameters.Add(string.Format("max={0}", elementsPerPage.Value));
+
+            var uri = GetGamesUri(string.Format("/{0}/records{1}",
+                Uri.EscapeDataString(gameId),
+                parameters.ToParameters()));
+
+            return baseClient.DoPaginatedRequest<Leaderboard>(uri,
+                x => Leaderboard.Parse(baseClient, x));
         }
     }
 }

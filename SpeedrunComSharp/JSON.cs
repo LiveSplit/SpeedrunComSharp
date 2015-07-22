@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -47,10 +48,12 @@ namespace SpeedrunComSharp
             return serializer.Deserialize<object>(value);
         }
 
-        public static dynamic FromUri(Uri uri, string userAgent)
+        public static dynamic FromUri(Uri uri, string userAgent, string accessToken)
         {
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.UserAgent = userAgent;
+            if (!string.IsNullOrEmpty(accessToken))
+                request.Headers.Add("X-API-Key", accessToken.ToString());
             var response = request.GetResponse();
             return FromResponse(response);
         }

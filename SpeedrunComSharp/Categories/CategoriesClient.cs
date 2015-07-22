@@ -64,5 +64,27 @@ namespace SpeedrunComSharp
             return baseClient.DoDataCollectionRequest<Variable>(uri,
                 x => Variable.Parse(baseClient, x));
         }
+
+        public IEnumerable<Leaderboard> GetRecords(string categoryId,
+            int? top = null, bool skipEmptyLeaderboards = false,
+            int? elementsPerPage = null,
+            LeaderboardEmbeds embeds = default(LeaderboardEmbeds))
+        {
+            var parameters = new List<string>() { embeds.ToString() };
+
+            if (top.HasValue)
+                parameters.Add(string.Format("top={0}", top.Value));
+            if (skipEmptyLeaderboards)
+                parameters.Add("skip-empty=true");
+            if (elementsPerPage.HasValue)
+                parameters.Add(string.Format("max={0}", elementsPerPage.Value));
+
+            var uri = GetCategoriesUri(string.Format("/{0}/records{1}",
+                Uri.EscapeDataString(categoryId),
+                parameters.ToParameters()));
+
+            return baseClient.DoPaginatedRequest<Leaderboard>(uri,
+                x => Leaderboard.Parse(baseClient, x));
+        }
     }
 }

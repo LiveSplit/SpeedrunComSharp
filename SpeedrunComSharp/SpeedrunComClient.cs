@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Security;
 using System.Text;
 
 namespace SpeedrunComSharp
@@ -14,6 +15,8 @@ namespace SpeedrunComSharp
         public static readonly Uri APIUri = new Uri(BaseUri, "api/v1/");
         public const string APIHttpHeaderRelation = "alternate http://www.speedrun.com/api";
 
+        internal string accessToken;
+
         public string UserAgent { get; private set; }
         private Dictionary<Uri, dynamic> Cache { get; set; }
         public int MaxCacheElements { get; private set; }
@@ -23,6 +26,7 @@ namespace SpeedrunComSharp
         public GuestsClient Guests { get; private set; }
         public LeaderboardsClient Leaderboards { get; private set; }
         public LevelsClient Levels { get; private set; }
+        public NotificationsClient Notifications { get; private set; }
         public PlatformsClient Platforms { get; private set; }
         public ProfileClient Profile { get; private set; }
         public RegionsClient Regions { get; private set; }
@@ -31,20 +35,19 @@ namespace SpeedrunComSharp
         public UsersClient Users { get; private set; }
         public VariablesClient Variables { get; private set; }
 
-        public SpeedrunComClient()
-            : this(userAgent: "SpeedRunComSharp/1.0")
-        { }
-
-        public SpeedrunComClient(string userAgent, int maxCacheElements = 50)
+        public SpeedrunComClient(string userAgent = "SpeedRunComSharp/1.0", 
+            string accessToken = null, int maxCacheElements = 50)
         {
             UserAgent = userAgent;
             MaxCacheElements = maxCacheElements;
+            this.accessToken = accessToken;
             Cache = new Dictionary<Uri, dynamic>();
             Categories = new CategoriesClient(this);
             Games = new GamesClient(this);
             Guests = new GuestsClient(this);
             Leaderboards = new LeaderboardsClient(this);
             Levels = new LevelsClient(this);
+            Notifications = new NotificationsClient(this);
             Platforms = new PlatformsClient(this);
             Profile = new ProfileClient(this);
             Regions = new RegionsClient(this);
@@ -127,7 +130,7 @@ namespace SpeedrunComSharp
 #endif
                     try
                     {
-                        result = JSON.FromUri(uri, UserAgent);
+                        result = JSON.FromUri(uri, UserAgent, accessToken);
                     }
                     catch (WebException ex)
                     {

@@ -7,7 +7,9 @@ namespace SpeedrunComSharp
 {
     public enum GamesOrdering : int
     {
-        Name = 0,
+        Similarity = 0,
+        SimilarityDescending,
+        Name,
         NameDescending,
         JapaneseName,
         JapaneseNameDescending,
@@ -31,6 +33,8 @@ namespace SpeedrunComSharp
 
             switch (ordering)
             {
+                case GamesOrdering.Name:
+                    str = "name.int"; break;
                 case GamesOrdering.JapaneseName:
                     str = "name.jap"; break;
                 case GamesOrdering.Abbreviation:

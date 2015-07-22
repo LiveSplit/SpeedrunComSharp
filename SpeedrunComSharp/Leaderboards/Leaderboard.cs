@@ -11,7 +11,7 @@ namespace SpeedrunComSharp
         public Uri WebLink { get; private set; }
         public EmulatorsFilter EmulatorFilter { get; private set; }
         public bool AreRunsWithoutVideoFilteredOut { get; private set; }
-        public TimingMethod OrderedBy { get; private set; }
+        public TimingMethod? OrderedBy { get; private set; }
         public ReadOnlyCollection<VariableValue> VariableFilters { get; private set; }
 
         public ReadOnlyCollection<Record> Records { get; private set; }
@@ -73,7 +73,9 @@ namespace SpeedrunComSharp
 
             leaderboard.AreRunsWithoutVideoFilteredOut = properties["video-only"];
 
-            leaderboard.OrderedBy = TimingMethodHelpers.FromString(leaderboardElement.timing as string);
+            //TODO Not actually optional
+            if (leaderboardElement.timing != null)
+                leaderboard.OrderedBy = TimingMethodHelpers.FromString(leaderboardElement.timing as string);
 
             if (leaderboardElement.values is DynamicJsonObject)
             {

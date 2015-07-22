@@ -28,6 +28,8 @@ namespace SpeedrunComSharp
                     return ElementType.Guest;
                 case LevelsClient.Name:
                     return ElementType.Level;
+                case NotificationsClient.Name:
+                    return ElementType.Notification;
                 case PlatformsClient.Name:
                     return ElementType.Platform;
                 case RegionsClient.Name:

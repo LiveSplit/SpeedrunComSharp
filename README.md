@@ -1,6 +1,6 @@
 # SpeedrunComSharp
 
-[![API Version](https://img.shields.io/badge/API-bf3dc2...-blue.svg)](https://github.com/speedruncom/api/tree/bf3dc296dc0da85ab4a1871ccc801755189f0032)
+[![API Version](https://img.shields.io/badge/API-cacad8...-blue.svg)](https://github.com/speedruncom/api/tree/cacad851913a74da30cdcb7afb8273c26f6795ed)
 [![Build Status](https://travis-ci.org/LiveSplit/SpeedrunComSharp.svg?branch=master)](https://travis-ci.org/LiveSplit/SpeedrunComSharp)
 [![Build status](https://ci.appveyor.com/api/projects/status/w383t09ffk5ovo7y/branch/master?svg=true)](https://ci.appveyor.com/project/CryZe/speedruncomsharp/branch/master)
 [![Coverity Scan Build Status](https://img.shields.io/coverity/scan/5662.svg)](https://scan.coverity.com/projects/5662)
@@ -22,6 +22,7 @@ The Client is separated into the following Sub-Clients, just like the Speedrun.c
 * Guests
 * Leaderboards
 * Levels
+* Notifications
 * Platforms
 * Profile
 * Regions
