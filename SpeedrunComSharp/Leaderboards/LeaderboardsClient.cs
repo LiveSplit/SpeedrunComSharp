@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace SpeedrunComSharp
 {
@@ -23,7 +24,7 @@ namespace SpeedrunComSharp
             string uri, int? top = null,
             string platformId = null, string regionId = null,
             EmulatorsFilter emulatorsFilter = EmulatorsFilter.NotSet, bool filterOutRunsWithoutVideo = false,
-            TimingMethod? orderBy = null,
+            TimingMethod? orderBy = null, DateTime? filterOutRunsAfter = null,
             IEnumerable<VariableValue> variableFilters = null,
             LeaderboardEmbeds embeds = default(LeaderboardEmbeds))
         {
@@ -44,6 +45,12 @@ namespace SpeedrunComSharp
             {
                 var timing = orderBy.Value.ToAPIString();
                 parameters.Add(string.Format("timing={0}", timing));
+            }
+            if (filterOutRunsAfter.HasValue)
+            {
+                var date = filterOutRunsAfter.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+                parameters.Add(string.Format("date={0}", 
+                    Uri.EscapeDataString(date)));
             }
             if (variableFilters != null)
             {
@@ -68,7 +75,7 @@ namespace SpeedrunComSharp
             int? top = null,
             string platformId = null, string regionId = null,
             EmulatorsFilter emulatorsFilter = EmulatorsFilter.NotSet, bool filterOutRunsWithoutVideo = false,
-            TimingMethod? orderBy = null,
+            TimingMethod? orderBy = null, DateTime? filterOutRunsAfter = null,
             IEnumerable<VariableValue> variableFilters = null,
             LeaderboardEmbeds embeds = default(LeaderboardEmbeds))
         {
@@ -80,7 +87,8 @@ namespace SpeedrunComSharp
                 top,
                 platformId, regionId,
                 emulatorsFilter, filterOutRunsWithoutVideo,
-                orderBy, variableFilters,
+                orderBy, filterOutRunsAfter,
+                variableFilters,
                 embeds);
         }
 
@@ -89,7 +97,7 @@ namespace SpeedrunComSharp
             int? top = null,
             string platformId = null, string regionId = null,
             EmulatorsFilter emulatorsFilter = EmulatorsFilter.NotSet, bool filterOutRunsWithoutVideo = false,
-            TimingMethod? orderBy = null,
+            TimingMethod? orderBy = null, DateTime? filterOutRunsAfter = null,
             IEnumerable<VariableValue> variableFilters = null,
             LeaderboardEmbeds embeds = default(LeaderboardEmbeds))
         {
@@ -102,7 +110,8 @@ namespace SpeedrunComSharp
                 top,
                 platformId, regionId,
                 emulatorsFilter, filterOutRunsWithoutVideo,
-                orderBy, variableFilters,
+                orderBy, filterOutRunsAfter,
+                variableFilters,
                 embeds);
         }
     }
