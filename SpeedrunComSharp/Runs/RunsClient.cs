@@ -179,7 +179,7 @@ namespace SpeedrunComSharp
                 runElement.comment = comment;
 
             if (splitsIOUri != null)
-                runElement.splitsio = splitsIOUri.PathAndQuery.Substring(1);
+                runElement.splitsio = splitsIOUri.PathAndQuery.Substring(splitsIOUri.PathAndQuery.LastIndexOf('/') + 1);
 
             if (variables != null)
             {
