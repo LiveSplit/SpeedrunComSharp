@@ -13,7 +13,25 @@ namespace SpeedrunComSharp
         public static readonly Uri APIUri = new Uri(BaseUri, "api/v1/");
         public const string APIHttpHeaderRelation = "alternate http://www.speedrun.com/api";
 
-        internal string accessToken;
+        public string AccessToken { internal get; set; }
+
+        public bool IsAccessTokenValid
+        {
+            get
+            {
+                if (AccessToken == null)
+                    return false;
+
+                try
+                {
+                    Profile.GetProfile();
+                    return true;
+                }
+                catch { }
+
+                return false;
+            }
+        }
 
         public string UserAgent { get; private set; }
         private Dictionary<Uri, dynamic> Cache { get; set; }
@@ -38,7 +56,7 @@ namespace SpeedrunComSharp
         {
             UserAgent = userAgent;
             MaxCacheElements = maxCacheElements;
-            this.accessToken = accessToken;
+            this.AccessToken = accessToken;
             Cache = new Dictionary<Uri, dynamic>();
             Categories = new CategoriesClient(this);
             Games = new GamesClient(this);
@@ -124,7 +142,7 @@ namespace SpeedrunComSharp
         {
             try
             {
-                return JSON.FromUriPost(uri, UserAgent, accessToken, postBody);
+                return JSON.FromUriPost(uri, UserAgent, AccessToken, postBody);
             }
             catch (WebException ex)
             {
@@ -167,7 +185,7 @@ namespace SpeedrunComSharp
 #endif
                     try
                     {
-                        result = JSON.FromUri(uri, UserAgent, accessToken);
+                        result = JSON.FromUri(uri, UserAgent, AccessToken);
                     }
                     catch (WebException ex)
                     {
