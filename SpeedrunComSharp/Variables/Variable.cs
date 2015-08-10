@@ -14,8 +14,8 @@ namespace SpeedrunComSharp
         public bool IsMandatory { get; private set; }
         public bool IsUserDefined { get; private set; }
         public bool IsUsedForObsoletingRuns { get; private set; }
-        public ReadOnlyCollection<VariableValue> Choices { get; private set; }
-        public VariableValue DefaultChoice { get; private set; }
+        public ReadOnlyCollection<VariableValue> Values { get; private set; }
+        public VariableValue DefaultValue { get; private set; }
 
         #region Links
 
@@ -37,6 +37,9 @@ namespace SpeedrunComSharp
 
         public VariableValue CreateCustomValue(string customValue)
         {
+            if (!IsUserDefined)
+                throw new NotSupportedException("This variable doesn't support custom values.");
+            
             return VariableValue.CreateCustomValue(client, ID, customValue);
         }
 
@@ -61,17 +64,17 @@ namespace SpeedrunComSharp
             if (!(variableElement.values.choices is ArrayList))
             {
                 var choiceElements = variableElement.values.choices.Properties as IDictionary<string, dynamic>;
-                variable.Choices = choiceElements.Select(x => VariableValue.ParseIDPair(client, variable, x) as VariableValue).ToList().AsReadOnly();
+                variable.Values = choiceElements.Select(x => VariableValue.ParseIDPair(client, variable, x) as VariableValue).ToList().AsReadOnly();
             }
             else
             {
-                variable.Choices = new ReadOnlyCollection<VariableValue>(new VariableValue[0]);
+                variable.Values = new ReadOnlyCollection<VariableValue>(new VariableValue[0]);
             }
 
             var valuesProperties = variableElement.values.Properties as IDictionary<string, dynamic>;
-            var defaultChoice = valuesProperties["default"] as string;
-            if (!string.IsNullOrEmpty(defaultChoice))
-                variable.DefaultChoice = variable.Choices.First(x => x.ID == defaultChoice);
+            var defaultValue = valuesProperties["default"] as string;
+            if (!string.IsNullOrEmpty(defaultValue))
+                variable.DefaultValue = variable.Values.First(x => x.ID == defaultValue);
 
             //Parse Links
 

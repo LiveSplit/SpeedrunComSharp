@@ -47,7 +47,7 @@ namespace SpeedrunComSharp
             //Parse Links
 
             value.variable = new Lazy<Variable>(() => client.Variables.GetVariable(value.VariableID));
-            value.value = new Lazy<string>(() => value.Variable.Choices.FirstOrDefault(x => x.ID == value.ID).Value);
+            value.value = new Lazy<string>(() => value.Variable.Values.FirstOrDefault(x => x.ID == value.ID).Value);
 
             return value;
         }
