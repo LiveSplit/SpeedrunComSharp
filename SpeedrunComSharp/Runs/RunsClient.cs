@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace SpeedrunComSharp
 {
@@ -102,6 +104,117 @@ namespace SpeedrunComSharp
                 parameters.ToParameters()));
 
             var result = baseClient.DoRequest(uri);
+
+            return Run.Parse(baseClient, result.data);
+        }
+
+        public Run Submit(string categoryId,
+            string platformId,
+            string levelId = null,
+            DateTime? date = null,
+            string regionId = null,
+            TimeSpan? realTime = null,
+            TimeSpan? realTimeWithoutLoads = null,
+            TimeSpan? gameTime = null,
+            bool? emulated = null,
+            Uri videoUri = null,
+            string comment = null,
+            Uri splitsIOUri = null,
+            IEnumerable<VariableValue> variables = null,
+            bool? verify = null,
+            bool simulateSubmitting = false)
+        {
+            var parameters = new List<string>();
+
+            if (simulateSubmitting)
+                parameters.Add("dry=yes");
+
+            var uri = GetRunsUri(parameters.ToParameters());
+
+            dynamic postBody = new DynamicJsonObject();
+            dynamic runElement = new DynamicJsonObject();
+
+            runElement.category = categoryId;
+            runElement.platform = platformId;
+
+            if (!string.IsNullOrEmpty(levelId))
+                runElement.level = levelId;
+
+            if (date.HasValue)
+                runElement.date = date.Value.ToUniversalTime().ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            if (!string.IsNullOrEmpty(regionId))
+                runElement.region = regionId;
+
+            if (verify.HasValue)
+                runElement.verified = verify;
+
+            dynamic timesElement = new DynamicJsonObject();
+
+            if (!realTime.HasValue
+                && !realTimeWithoutLoads.HasValue
+                && !gameTime.HasValue)
+            {
+                throw new APIException("You need to provide at least one time.");
+            }
+
+            if (realTime.HasValue)
+                timesElement.realtime = realTime.Value.TotalSeconds;
+
+            if (realTimeWithoutLoads.HasValue)
+                timesElement.withoutloads = realTimeWithoutLoads.Value.TotalSeconds;
+
+            if (gameTime.HasValue)
+                timesElement.ingame = gameTime.Value.TotalSeconds;
+
+            runElement.times = timesElement;
+
+            if (emulated.HasValue)
+                runElement.emulated = emulated.Value;
+
+            if (videoUri != null)
+                runElement.video = videoUri.AbsoluteUri;
+
+            if (!string.IsNullOrEmpty(comment))
+                runElement.comment = comment;
+
+            if (splitsIOUri != null)
+                runElement.splitsio = splitsIOUri.PathAndQuery.Substring(1);
+
+            if (variables != null)
+            {
+                var variablesList = variables.ToList();
+
+                if (variablesList.Any())
+                {
+                    var variablesElement = new Dictionary<string, dynamic>();
+
+                    foreach (var variable in variablesList)
+                    {
+                        var key = variable.VariableID;
+                        dynamic value = new DynamicJsonObject();
+
+                        if (variable.IsCustomValue)
+                        {
+                            value.type = "user-defined";
+                            value.value = variable.Value;
+                        }
+                        else
+                        {
+                            value.type = "pre-defined";
+                            value.value = variable.ID;
+                        }
+
+                        variablesElement.Add(key, value);
+                    }
+
+                    runElement.variables = variablesElement;
+                }
+            }
+
+            postBody.run = runElement;
+
+            var result = baseClient.DoPostRequest(uri, postBody.ToString());
 
             return Run.Parse(baseClient, result.data);
         }

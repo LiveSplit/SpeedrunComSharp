@@ -62,30 +62,18 @@ namespace SpeedrunComSharp
             return HttpUtility.JavaScriptStringEncode(value);
         }
 
-        public static dynamic FromUriPost(Uri uri, params string[] postValues)
+        public static dynamic FromUriPost(Uri uri, string userAgent, string accessToken, string postBody)
         {
             var request = (HttpWebRequest)WebRequest.Create(uri);
             request.Method = "POST";
+            request.UserAgent = userAgent;
+            if (!string.IsNullOrEmpty(accessToken))
+                request.Headers.Add("X-API-Key", accessToken.ToString());
             request.ContentType = "application/json";
-
-            var parameters = new StringBuilder();
-
-            parameters.Append("{");
-
-            for (var i = 0; i < postValues.Length; i += 2)
-            {
-                parameters.AppendFormat("\"{0}\": \"{1}\", ",
-                    Escape(postValues[i]),
-                    Escape(postValues[i + 1]));
-            }
-
-            parameters.Length -= 2;
-
-            parameters.Append("}");
 
             using (var writer = new StreamWriter(request.GetRequestStream()))
             {
-                writer.Write(parameters.ToString());
+                writer.Write(postBody);
             }
 
             var response = request.GetResponse();
@@ -161,6 +149,7 @@ namespace SpeedrunComSharp
                 }
                 else if (value is IDictionary<string, object>)
                 {
+                    sb.Append("\"" + HttpUtility.JavaScriptStringEncode(name) + "\": {\r\n");
                     new DynamicJsonObject((IDictionary<string, object>)value).ToString(sb, depth + 1);
                 }
                 else if (value is IEnumerable<object>)
@@ -182,6 +171,12 @@ namespace SpeedrunComSharp
                         }
                         else if (arrayValue is string)
                             sb.AppendFormat("\"{0}\"", HttpUtility.JavaScriptStringEncode((string)arrayValue));
+                        else if (arrayValue is bool)
+                            sb.AppendFormat("{0}", HttpUtility.JavaScriptStringEncode(((bool)arrayValue).ToString(CultureInfo.InvariantCulture).ToLowerInvariant()));
+                        else if (arrayValue is int)
+                            sb.AppendFormat("{0}", HttpUtility.JavaScriptStringEncode(((int)arrayValue).ToString(CultureInfo.InvariantCulture)));
+                        else if (arrayValue is double)
+                            sb.AppendFormat("{0}", HttpUtility.JavaScriptStringEncode(((double)arrayValue).ToString(CultureInfo.InvariantCulture)));
                         else if (arrayValue is decimal)
                             sb.AppendFormat("{0}", HttpUtility.JavaScriptStringEncode(((decimal)arrayValue).ToString(CultureInfo.InvariantCulture)));
                         else
@@ -192,10 +187,14 @@ namespace SpeedrunComSharp
                     sb.Append('\t', depth);
                     sb.Append("]");
                 }
+                else if (value is bool)
+                    sb.AppendFormat("\"{0}\": {1}", HttpUtility.JavaScriptStringEncode(name), HttpUtility.JavaScriptStringEncode(((bool)value).ToString(CultureInfo.InvariantCulture).ToLowerInvariant()));
+                else if (value is int)
+                    sb.AppendFormat("\"{0}\": {1}", HttpUtility.JavaScriptStringEncode(name), HttpUtility.JavaScriptStringEncode(((int)value).ToString(CultureInfo.InvariantCulture)));
+                else if (value is double)
+                    sb.AppendFormat("\"{0}\": {1}", HttpUtility.JavaScriptStringEncode(name), HttpUtility.JavaScriptStringEncode(((double)value).ToString(CultureInfo.InvariantCulture)));
                 else if (value is decimal)
-                {
                     sb.AppendFormat("\"{0}\": {1}", HttpUtility.JavaScriptStringEncode(name), HttpUtility.JavaScriptStringEncode(((decimal)value).ToString(CultureInfo.InvariantCulture)));
-                }
                 else
                 {
                     sb.AppendFormat("\"{0}\": \"{1}\"", HttpUtility.JavaScriptStringEncode(name), HttpUtility.JavaScriptStringEncode((value ?? "").ToString()));

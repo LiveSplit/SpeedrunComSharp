@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 
@@ -106,6 +107,45 @@ namespace SpeedrunComSharp
             return enumerable.OfType<T>().ToList().AsReadOnly();
         }
 
+        internal APIException ParseException(Stream stream)
+        {
+            var json = JSON.FromStream(stream);
+            var properties = json.Properties as IDictionary<string, dynamic>;
+            if (properties.ContainsKey("errors"))
+            {
+                var errors = json.errors as IList<dynamic>;
+                return new APIException(json.message as string, errors.Select(x => x as string));
+            }
+            else
+                return new APIException(json.message as string);
+        }
+
+        internal dynamic DoPostRequest(Uri uri, string postBody)
+        {
+            try
+            {
+                return JSON.FromUriPost(uri, UserAgent, accessToken, postBody);
+            }
+            catch (WebException ex)
+            {
+                try
+                {
+                    using (var stream = ex.Response.GetResponseStream())
+                    {
+                        throw ParseException(stream);
+                    }
+                }
+                catch (APIException ex2)
+                {
+                    throw ex2;
+                }
+                catch
+                {
+                    throw ex;
+                }
+            }
+        }
+
         internal dynamic DoRequest(Uri uri)
         {
             lock (this)
@@ -135,8 +175,7 @@ namespace SpeedrunComSharp
                         {
                             using (var stream = ex.Response.GetResponseStream())
                             {
-                                var json = JSON.FromStream(stream);
-                                throw new APIException(json.message);
+                                throw ParseException(stream);
                             }
                         }
                         catch (APIException ex2)

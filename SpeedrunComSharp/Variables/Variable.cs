@@ -31,11 +31,20 @@ namespace SpeedrunComSharp
 
         #endregion
 
+        private SpeedrunComClient client;
+
         private Variable() { }
+
+        public VariableValue CreateCustomValue(string customValue)
+        {
+            return VariableValue.CreateCustomValue(client, ID, customValue);
+        }
 
         public static Variable Parse(SpeedrunComClient client, dynamic variableElement)
         {
             var variable = new Variable();
+
+            variable.client = client;
 
             var properties = variableElement.Properties as IDictionary<string, dynamic>;
             var links = properties["links"] as IEnumerable<dynamic>;

@@ -8,8 +8,7 @@ namespace SpeedrunComSharp
     {
         public string ID { get; private set; }
 
-        public string VariableID { get; private set; }
-        
+        public string VariableID { get; private set; }        
 
         #region Links
 
@@ -20,9 +19,23 @@ namespace SpeedrunComSharp
         public string Value { get { return value.Value; } }
         public string Name { get { return Variable.Name; } }
 
+        public bool IsCustomValue { get { return string.IsNullOrEmpty(ID); } }
+
         #endregion
 
         private VariableValue() { }
+
+        public static VariableValue CreateCustomValue(SpeedrunComClient client, string variableId, string customValue)
+        {
+            var value = new VariableValue();
+
+            value.VariableID = variableId;
+
+            value.variable = new Lazy<Variable>(() => client.Variables.GetVariable(value.VariableID));
+            value.value = new Lazy<string>(() => customValue);
+
+            return value;
+        }
 
         public static VariableValue ParseValueDescriptor(SpeedrunComClient client, KeyValuePair<string, dynamic> valueElement)
         {
