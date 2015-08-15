@@ -139,7 +139,7 @@ namespace SpeedrunComSharp
             }
             else if (properties["platform"] is string)
             {
-                leaderboard.PlatformIDOfFilter = properties["platform"].data;
+                leaderboard.PlatformIDOfFilter = properties["platform"] as string;
                 leaderboard.platformFilter = new Lazy<Platform>(() => client.Platforms.GetPlatform(leaderboard.PlatformIDOfFilter));
             }
             else
@@ -156,7 +156,7 @@ namespace SpeedrunComSharp
             }
             else if (properties["region"] is string)
             {
-                leaderboard.RegionIDOfFilter = properties["region"].data;
+                leaderboard.RegionIDOfFilter = properties["region"] as string;
                 leaderboard.regionFilter = new Lazy<Region>(() => client.Regions.GetRegion(leaderboard.RegionIDOfFilter));
             }
             else
