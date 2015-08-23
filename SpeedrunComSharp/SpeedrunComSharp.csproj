@@ -109,7 +109,6 @@
     <Compile Include="Categories\Players.cs" />
     <Compile Include="Common\PlayersType.cs" />
     <Compile Include="PotentialEmbed.cs" />
-    <Compile Include="Profile\ProfileClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Regions\Region.cs" />
     <Compile Include="Regions\RegionsClient.cs" />

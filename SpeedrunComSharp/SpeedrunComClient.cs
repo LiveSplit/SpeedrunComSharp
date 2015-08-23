@@ -24,7 +24,7 @@ namespace SpeedrunComSharp
 
                 try
                 {
-                    Profile.GetProfile();
+                    var profile = Profile;
                     return true;
                 }
                 catch { }
@@ -44,19 +44,28 @@ namespace SpeedrunComSharp
         public LevelsClient Levels { get; private set; }
         public NotificationsClient Notifications { get; private set; }
         public PlatformsClient Platforms { get; private set; }
-        public ProfileClient Profile { get; private set; }
         public RegionsClient Regions { get; private set; }
         public RunsClient Runs { get; private set; }
         public SeriesClient Series { get; private set; }
         public UsersClient Users { get; private set; }
         public VariablesClient Variables { get; private set; }
 
+        public User Profile
+        {
+            get
+            {
+                var uri = GetProfileUri(string.Empty);
+                var result = DoRequest(uri);
+                return User.Parse(this, result.data);
+            }
+        }
+
         public SpeedrunComClient(string userAgent = "SpeedRunComSharp/1.0", 
             string accessToken = null, int maxCacheElements = 50)
         {
             UserAgent = userAgent;
             MaxCacheElements = maxCacheElements;
-            this.AccessToken = accessToken;
+            AccessToken = accessToken;
             Cache = new Dictionary<Uri, dynamic>();
             Categories = new CategoriesClient(this);
             Games = new GamesClient(this);
@@ -65,7 +74,6 @@ namespace SpeedrunComSharp
             Levels = new LevelsClient(this);
             Notifications = new NotificationsClient(this);
             Platforms = new PlatformsClient(this);
-            Profile = new ProfileClient(this);
             Regions = new RegionsClient(this);
             Runs = new RunsClient(this);
             Series = new SeriesClient(this);
@@ -81,6 +89,11 @@ namespace SpeedrunComSharp
         public static Uri GetAPIUri(string subUri)
         {
             return new Uri(APIUri, subUri);
+        }
+
+        public static Uri GetProfileUri(string subUri)
+        {
+            return GetAPIUri(string.Format("profile{0}", subUri));
         }
 
         public static ElementDescription GetElementDescriptionFromSiteUri(string siteUri)
