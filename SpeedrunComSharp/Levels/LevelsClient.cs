@@ -32,7 +32,7 @@ namespace SpeedrunComSharp
 
         public string GetLevelIDFromSiteUri(string siteUri)
         {
-            var elementDescription = SpeedrunComClient.GetElementDescriptionFromSiteUri(siteUri);
+            var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
 
             if (elementDescription == null
                 || elementDescription.Type != ElementType.Level)

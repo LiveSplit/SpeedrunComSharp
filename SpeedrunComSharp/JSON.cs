@@ -47,9 +47,10 @@ namespace SpeedrunComSharp
             return serializer.Deserialize<object>(value);
         }
 
-        public static dynamic FromUri(Uri uri, string userAgent, string accessToken)
+        public static dynamic FromUri(Uri uri, string userAgent, string accessToken, TimeSpan timeout)
         {
             var request = (HttpWebRequest)WebRequest.Create(uri);
+            request.Timeout = (int)timeout.TotalMilliseconds;
             request.UserAgent = userAgent;
             if (!string.IsNullOrEmpty(accessToken))
                 request.Headers.Add("X-API-Key", accessToken.ToString());
@@ -62,9 +63,10 @@ namespace SpeedrunComSharp
             return HttpUtility.JavaScriptStringEncode(value);
         }
 
-        public static dynamic FromUriPost(Uri uri, string userAgent, string accessToken, string postBody)
+        public static dynamic FromUriPost(Uri uri, string userAgent, string accessToken, TimeSpan timeout, string postBody)
         {
             var request = (HttpWebRequest)WebRequest.Create(uri);
+            request.Timeout = (int)timeout.TotalMilliseconds;
             request.Method = "POST";
             request.UserAgent = userAgent;
             if (!string.IsNullOrEmpty(accessToken))

@@ -31,7 +31,7 @@ namespace SpeedrunComSharp
 
         public string GetPlatformIDFromSiteUri(string siteUri)
         {
-            var elementDescription = SpeedrunComClient.GetElementDescriptionFromSiteUri(siteUri);
+            var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
 
             if (elementDescription == null
                 || elementDescription.Type != ElementType.Platform)

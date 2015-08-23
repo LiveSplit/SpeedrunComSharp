@@ -37,6 +37,8 @@ namespace SpeedrunComSharp
         private Dictionary<Uri, dynamic> Cache { get; set; }
         public int MaxCacheElements { get; private set; }
 
+        public TimeSpan Timeout { get; private set; }
+
         public CategoriesClient Categories { get; private set; }
         public GamesClient Games { get; private set; }
         public GuestsClient Guests { get; private set; }
@@ -61,8 +63,11 @@ namespace SpeedrunComSharp
         }
 
         public SpeedrunComClient(string userAgent = "SpeedRunComSharp/1.0", 
-            string accessToken = null, int maxCacheElements = 50)
+            string accessToken = null, int maxCacheElements = 50,
+            TimeSpan? timeout = null)
         {
+            Timeout = timeout ?? TimeSpan.FromSeconds(10);
+
             UserAgent = userAgent;
             MaxCacheElements = maxCacheElements;
             AccessToken = accessToken;
@@ -96,11 +101,12 @@ namespace SpeedrunComSharp
             return GetAPIUri(string.Format("profile{0}", subUri));
         }
 
-        public static ElementDescription GetElementDescriptionFromSiteUri(string siteUri)
+        public ElementDescription GetElementDescriptionFromSiteUri(string siteUri)
         {
             try
             {
                 var request = WebRequest.Create(siteUri);
+                request.Timeout = (int)Timeout.TotalMilliseconds;
                 var response = request.GetResponse();
                 var linksString = response.Headers["Link"];
                 var links = HttpWebLink.ParseLinks(linksString);
@@ -155,7 +161,7 @@ namespace SpeedrunComSharp
         {
             try
             {
-                return JSON.FromUriPost(uri, UserAgent, AccessToken, postBody);
+                return JSON.FromUriPost(uri, UserAgent, AccessToken, Timeout, postBody);
             }
             catch (WebException ex)
             {
@@ -198,7 +204,7 @@ namespace SpeedrunComSharp
 #endif
                     try
                     {
-                        result = JSON.FromUri(uri, UserAgent, AccessToken);
+                        result = JSON.FromUri(uri, UserAgent, AccessToken, Timeout);
                     }
                     catch (WebException ex)
                     {
