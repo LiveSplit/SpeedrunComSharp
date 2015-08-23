@@ -66,7 +66,7 @@ namespace SpeedrunComSharp
             string accessToken = null, int maxCacheElements = 50,
             TimeSpan? timeout = null)
         {
-            Timeout = timeout ?? TimeSpan.FromSeconds(10);
+            Timeout = timeout ?? TimeSpan.FromSeconds(30);
 
             UserAgent = userAgent;
             MaxCacheElements = maxCacheElements;
