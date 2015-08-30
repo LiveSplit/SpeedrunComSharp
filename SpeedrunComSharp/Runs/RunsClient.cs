@@ -162,7 +162,7 @@ namespace SpeedrunComSharp
                 timesElement.realtime = realTime.Value.TotalSeconds;
 
             if (realTimeWithoutLoads.HasValue)
-                timesElement.withoutloads = realTimeWithoutLoads.Value.TotalSeconds;
+                timesElement.realtime_noloads = realTimeWithoutLoads.Value.TotalSeconds;
 
             if (gameTime.HasValue)
                 timesElement.ingame = gameTime.Value.TotalSeconds;
