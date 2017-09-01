@@ -74,7 +74,7 @@ namespace SpeedrunComSharp
             var valuesProperties = variableElement.values.Properties as IDictionary<string, dynamic>;
             var defaultValue = valuesProperties["default"] as string;
             if (!string.IsNullOrEmpty(defaultValue))
-                variable.DefaultValue = variable.Values.First(x => x.ID == defaultValue);
+                variable.DefaultValue = variable.Values.FirstOrDefault(x => x.ID == defaultValue);
 
             //Parse Links
 
