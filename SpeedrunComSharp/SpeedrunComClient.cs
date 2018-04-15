@@ -9,9 +9,9 @@ namespace SpeedrunComSharp
 {
     public class SpeedrunComClient
     {
-        public static readonly Uri BaseUri = new Uri("http://www.speedrun.com/");
+        public static readonly Uri BaseUri = new Uri("https://www.speedrun.com/");
         public static readonly Uri APIUri = new Uri(BaseUri, "api/v1/");
-        public const string APIHttpHeaderRelation = "alternate http://www.speedrun.com/api";
+        public const string APIHttpHeaderRelation = "alternate https://www.speedrun.com/api";
 
         public string AccessToken { internal get; set; }
 
