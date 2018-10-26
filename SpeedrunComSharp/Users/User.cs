@@ -51,6 +51,8 @@ namespace SpeedrunComSharp
                     return UserRole.Admin;
                 case "programmer":
                     return UserRole.Programmer;
+                case "contentmoderator":
+                    return UserRole.ContentModerator;
             }
 
             throw new ArgumentException("role");
