@@ -56,9 +56,12 @@ namespace SpeedrunComSharp
             {
                 foreach (var variableValue in variableFilters)
                 {
-                    parameters.Add(string.Format("var-{0}={1}",
+                    if (variableValue != null)
+                    {
+                        parameters.Add(string.Format("var-{0}={1}",
                         Uri.EscapeDataString(variableValue.VariableID),
                         Uri.EscapeDataString(variableValue.ID)));
+                    }
                 }
             }
 
