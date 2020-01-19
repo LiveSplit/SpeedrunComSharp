@@ -60,6 +60,10 @@ namespace SpeedrunComSharp
             {
                 run.Players = client.ParseCollection(runElement.players, parsePlayer);
             }
+            else if (runElement.players is System.Collections.ArrayList && runElement.players.Count == 0)
+            {
+                run.Players = new List<Player>().AsReadOnly();
+            }
             else
             {
                 run.Players = client.ParseCollection(runElement.players.data, parsePlayer);
