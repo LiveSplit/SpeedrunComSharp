@@ -12,7 +12,7 @@ namespace SpeedrunComSharp
 
         public static ImageAsset Parse(SpeedrunComClient client, dynamic imageElement)
         {
-            if (imageElement == null)
+            if (imageElement == null || imageElement.uri == null || imageElement.width == null || imageElement.height == null)
                 return null;
 
             var image = new ImageAsset();
