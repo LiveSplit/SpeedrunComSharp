@@ -16,6 +16,7 @@ namespace SpeedrunComSharp
         public bool IsUsedForObsoletingRuns { get; private set; }
         public ReadOnlyCollection<VariableValue> Values { get; private set; }
         public VariableValue DefaultValue { get; private set; }
+        public bool IsSubcategory { get; private set; }
 
         #region Links
 
@@ -75,6 +76,8 @@ namespace SpeedrunComSharp
             var defaultValue = valuesProperties["default"] as string;
             if (!string.IsNullOrEmpty(defaultValue))
                 variable.DefaultValue = variable.Values.FirstOrDefault(x => x.ID == defaultValue);
+
+            variable.IsSubcategory = (bool)(properties["is-subcategory"] ?? false);
 
             //Parse Links
 
