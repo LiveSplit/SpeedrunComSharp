@@ -4,7 +4,7 @@ namespace SpeedrunComSharp
 {
     public enum NotificationType
     {
-        Post, Run, Game, Guide
+        Post, Run, Game, Guide, Thread, Resource, Moderator
     }
 
     public static class NotificationTypeHelpers
@@ -21,6 +21,12 @@ namespace SpeedrunComSharp
                     return NotificationType.Game;
                 case "guide":
                     return NotificationType.Guide;
+                case "thread":
+                    return NotificationType.Thread;
+                case "resource":
+                    return NotificationType.Resource;
+                case "moderator":
+                    return NotificationType.Moderator;
             }
 
             throw new ArgumentException("type");
