@@ -13,8 +13,10 @@ namespace SpeedrunComSharp
         public string ID { get { return Header.ID; } }
         public string Name { get { return Header.Name; } }
         public string JapaneseName { get { return Header.JapaneseName; } }
+        public string TwitchName { get { return Header.TwitchName; } }
         public string Abbreviation { get { return Header.Abbreviation; } }
         public Uri WebLink { get { return Header.WebLink; } }
+        public DateTime? ReleaseDate { get; private set; }
         public int? YearOfRelease { get; private set; }
         public Ruleset Ruleset { get; private set; }
         public bool IsRomHack { get; private set; }
@@ -70,10 +72,15 @@ namespace SpeedrunComSharp
         public static Game Parse(SpeedrunComClient client, dynamic gameElement)
         {
             var game = new Game();
-
+            var gProperties = gameElement.Properties as IDictionary<string, dynamic>;
             //Parse Attributes
 
             game.Header = GameHeader.Parse(client, gameElement);
+
+            var releaseDate = gProperties["release-date"];
+            if (!string.IsNullOrEmpty(releaseDate))
+                game.ReleaseDate = DateTime.Parse(releaseDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+
             game.YearOfRelease = gameElement.released;
             game.Ruleset = Ruleset.Parse(client, gameElement.ruleset);
 

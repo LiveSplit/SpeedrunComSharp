@@ -11,6 +11,7 @@ namespace SpeedrunComSharp
         public string ID { get; private set; }
         public string Name { get; private set; }
         public string JapaneseName { get; private set; }
+        public string[] Pronouns { get; private set; }
         public Uri WebLink { get; private set; }
         public UserNameStyle NameStyle { get; private set; }
         public UserRole Role { get; private set; }
@@ -22,6 +23,9 @@ namespace SpeedrunComSharp
         public Uri YoutubeProfile { get; private set; }
         public Uri TwitterProfile { get; private set; }
         public Uri SpeedRunsLiveProfile { get; private set; }
+
+        public Uri Icon { get; private set; }
+        public Uri Image { get; private set; }
 
         #region Links
 
@@ -69,6 +73,11 @@ namespace SpeedrunComSharp
             user.ID = userElement.id as string;
             user.Name = userElement.names.international as string;
             user.JapaneseName = userElement.names.japanese as string;
+
+            var pronounsTemp = userElement.pronouns as string;
+            if (!string.IsNullOrWhiteSpace(pronounsTemp))
+                user.Pronouns = pronounsTemp.Split(new string[] { ", " }, StringSplitOptions.None);
+
             user.WebLink = new Uri(userElement.weblink as string);
             user.NameStyle = UserNameStyle.Parse(client, properties["name-style"]) as UserNameStyle;
             user.Role = parseUserRole(userElement.role as string);
@@ -98,6 +107,14 @@ namespace SpeedrunComSharp
             var speedRunsLiveLink = userElement.speedrunslive;
             if (speedRunsLiveLink != null)
                 user.SpeedRunsLiveProfile = new Uri(speedRunsLiveLink.uri as string);
+
+            var iconTemp = userElement.assets.icon.uri;
+            if (iconTemp != null)
+                user.Icon = new Uri(iconTemp as string);
+
+            var imageTemp = userElement.assets.image.uri;
+            if (imageTemp != null)
+                user.Image = new Uri(imageTemp as string);
 
             //Parse Links
 

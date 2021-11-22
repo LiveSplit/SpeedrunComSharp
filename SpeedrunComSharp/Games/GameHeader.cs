@@ -7,6 +7,7 @@ namespace SpeedrunComSharp
         public string ID { get; private set; }
         public string Name { get; private set; }
         public string JapaneseName { get; private set; }
+        public string TwitchName { get; private set; }
         public string Abbreviation { get; private set; }
         public Uri WebLink { get; private set; }
 
@@ -19,6 +20,7 @@ namespace SpeedrunComSharp
             gameHeader.ID = gameHeaderElement.id as string;
             gameHeader.Name = gameHeaderElement.names.international as string;
             gameHeader.JapaneseName = gameHeaderElement.names.japanese as string;
+            gameHeader.TwitchName = gameHeaderElement.names.twitch as string;
             gameHeader.WebLink = new Uri(gameHeaderElement.weblink as string);
             gameHeader.Abbreviation = gameHeaderElement.abbreviation as string;
 
