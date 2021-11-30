@@ -21,6 +21,12 @@ namespace SpeedrunComSharp
             return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
         }
 
+        /// <summary>
+        /// Fetch a Run object identified by its URI.
+        /// </summary>
+        /// <param name="siteUri">The site URI for the run.</param>
+        /// <param name="embeds">Optional. If included, will dictate the embedded resources included in the response.</param>
+        /// <returns></returns>
         public Run GetRunFromSiteUri(string siteUri, RunEmbeds embeds = default(RunEmbeds))
         {
             var id = GetRunIDFromSiteUri(siteUri);
@@ -31,6 +37,11 @@ namespace SpeedrunComSharp
             return GetRun(id, embeds);
         }
 
+        /// <summary>
+        /// Fetch a Run ID identified by its URI.
+        /// </summary>
+        /// <param name="siteUri">The site URI for the run.</param>
+        /// <returns></returns>
         public string GetRunIDFromSiteUri(string siteUri)
         {
             var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
@@ -42,6 +53,23 @@ namespace SpeedrunComSharp
             return elementDescription.ID;
         }
 
+        /// <summary>
+        /// Fetch a Collection of Run objects identified by the parameters provided.
+        /// </summary>
+        /// <param name="userId">Optional. If included, will filter runs by the user ID of the runner(s).</param>
+        /// <param name="guestName">Optional. If included, will filter runs by the name of the guest runner(s).</param>
+        /// <param name="examerUserId">Optional. If included, will filter runs by the user ID of the examiner.</param>
+        /// <param name="gameId">Optional. If included, will filter runs by the ID of the corresponding game.</param>
+        /// <param name="levelId">Optional. If included, will filter runs by the ID of the corresponding level.</param>
+        /// <param name="categoryId">Optional. If included, will filter runs by the ID of the corresponding category</param>
+        /// <param name="platformId">Optional. If included, will filter runs by their platform.</param>
+        /// <param name="regionId">Optional. If included, will filter runs by their region.</param>
+        /// <param name="onlyEmulatedRuns">Optional. If included, will filter runs by their use of emulator.</param>
+        /// <param name="status">Optional. If included, will filter runs by their verification status.</param>
+        /// <param name="elementsPerPage">Optional. If included, will dictate the amount of elements included in each pagination.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <param name="orderBy">Optional. If omitted, runs will be in the same order as the API.</param>
+        /// <returns></returns>
         public IEnumerable<Run> GetRuns(
             string userId = null, string guestName = null,
             string examerUserId = null, string gameId = null,
@@ -94,6 +122,12 @@ namespace SpeedrunComSharp
                 x => Run.Parse(baseClient, x) as Run);
         }
 
+        /// <summary>
+        /// Fetch a Run object identified by its ID.
+        /// </summary>
+        /// <param name="runId">The ID of the run.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <returns></returns>
         public Run GetRun(string runId,
             RunEmbeds embeds = default(RunEmbeds))
         {
@@ -108,6 +142,25 @@ namespace SpeedrunComSharp
             return Run.Parse(baseClient, result.data);
         }
 
+        /// <summary>
+        /// Posts a Run object to Speedrun.com. Authentication is required for this action.
+        /// </summary>
+        /// <param name="categoryId">The ID of the category.</param>
+        /// <param name="platformId">The ID of the platform.</param>
+        /// <param name="levelId">Optional. If included, dictates the ID of the level.</param>
+        /// <param name="date">Optional. If included, dictates the date of the run.</param>
+        /// <param name="regionId">Optional. If included, dictates the ID of the region.</param>
+        /// <param name="realTime">Optional. If included, dictates real time.</param>
+        /// <param name="realTimeWithoutLoads">Optional. If included, dictates Real Time without loads.</param>
+        /// <param name="gameTime">Optional. If included, dictates in game time.</param>
+        /// <param name="emulated">Optional. If included, dictates whether the run was performed on emulator.</param>
+        /// <param name="videoUri">Optional. If included, dictates the URI of the video.</param>
+        /// <param name="comment">Optional. If included, dictates the comment of the run.</param>
+        /// <param name="splitsIOUri">Optional. If included, dictates the URI of the Splits.IO page for the run.</param>
+        /// <param name="variables">Optional. If included, dictates the variable values for the run.</param>
+        /// <param name="verify">Optional. If included, dictates whether the run is verified automatically upon submitting.</param>
+        /// <param name="simulateSubmitting">Optional. If included, dictates whether the run submission process is simulated.</param>
+        /// <returns></returns>
         public Run Submit(string categoryId,
             string platformId,
             string levelId = null,

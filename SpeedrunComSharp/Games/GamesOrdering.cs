@@ -2,6 +2,9 @@
 
 namespace SpeedrunComSharp
 {
+    /// <summary>
+    /// Options for ordering Games in responses.
+    /// </summary>
     public enum GamesOrdering : int
     {
         Similarity = 0,

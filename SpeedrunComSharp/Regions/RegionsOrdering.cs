@@ -2,6 +2,9 @@
 
 namespace SpeedrunComSharp
 {
+    /// <summary>
+    /// Options for ordering Regions in responses.
+    /// </summary>
     public enum RegionsOrdering : int
     {
         Name = 0,

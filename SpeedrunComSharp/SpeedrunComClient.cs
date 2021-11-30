@@ -39,17 +39,53 @@ namespace SpeedrunComSharp
 
         public TimeSpan Timeout { get; private set; }
 
+        /// <summary>
+        /// Methods for interacting with Categories.
+        /// </summary>
         public CategoriesClient Categories { get; private set; }
+        /// <summary>
+        /// Methods for interacting with Games.
+        /// </summary>
         public GamesClient Games { get; private set; }
+        /// <summary>
+        /// Methods for interacting with Guest users.
+        /// </summary>
         public GuestsClient Guests { get; private set; }
+        /// <summary>
+        /// Methods for interacting with Leaderboards.
+        /// </summary>
         public LeaderboardsClient Leaderboards { get; private set; }
+        /// <summary>
+        /// Methods for interacting with Levels.
+        /// </summary>
         public LevelsClient Levels { get; private set; }
+        /// <summary>
+        /// Methods for interacting with Notifications.
+        /// </summary>
         public NotificationsClient Notifications { get; private set; }
+        /// <summary>
+        /// Methods for interacting with Platforms.
+        /// </summary>
         public PlatformsClient Platforms { get; private set; }
+        /// <summary>
+        /// Methods for interacting with Regions.
+        /// </summary>
         public RegionsClient Regions { get; private set; }
+        /// <summary>
+        /// Methods for interacting with Runs.
+        /// </summary>
         public RunsClient Runs { get; private set; }
+        /// <summary>
+        /// Methods for interacting with Series.
+        /// </summary>
         public SeriesClient Series { get; private set; }
+        /// <summary>
+        /// Methods for interacting with Users.
+        /// </summary>
         public UsersClient Users { get; private set; }
+        /// <summary>
+        /// Methods for interacting with Variables.
+        /// </summary>
         public VariablesClient Variables { get; private set; }
 
         public User Profile

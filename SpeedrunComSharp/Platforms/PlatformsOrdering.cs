@@ -2,6 +2,9 @@
 
 namespace SpeedrunComSharp
 {
+    /// <summary>
+    /// Options for ordering Platforms in responses.
+    /// </summary>
     public enum PlatformsOrdering : int
     {
         Name = 0,

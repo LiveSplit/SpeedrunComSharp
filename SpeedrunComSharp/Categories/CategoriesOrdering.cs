@@ -2,6 +2,9 @@
 
 namespace SpeedrunComSharp
 {
+    /// <summary>
+    /// Options for ordering Categories in responses.
+    /// </summary>
     public enum CategoriesOrdering : int
     {
         Position = 0,

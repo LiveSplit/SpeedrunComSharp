@@ -2,6 +2,9 @@
 
 namespace SpeedrunComSharp
 {
+    /// <summary>
+    /// Options for ordering Notifications in responses.
+    /// </summary>
     public enum NotificationsOrdering : int
     {
         NewestToOldest = 0,

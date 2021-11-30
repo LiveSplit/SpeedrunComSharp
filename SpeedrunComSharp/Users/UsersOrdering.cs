@@ -2,6 +2,9 @@
 
 namespace SpeedrunComSharp
 {
+    /// <summary>
+    /// Options for ordering Users in responses.
+    /// </summary>
     public enum UsersOrdering : int
     {
         Name = 0,

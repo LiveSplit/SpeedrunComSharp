@@ -19,6 +19,11 @@ namespace SpeedrunComSharp
             return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
         }
 
+        /// <summary>
+        /// Fetch a Platform object identified by its URI.
+        /// </summary>
+        /// <param name="siteUri">The site URI for the platform.</param>
+        /// <returns></returns>
         public Platform GetPlatformFromSiteUri(string siteUri)
         {
             var id = GetPlatformIDFromSiteUri(siteUri);
@@ -29,6 +34,11 @@ namespace SpeedrunComSharp
             return GetPlatform(id);
         }
 
+        /// <summary>
+        /// Fetch a Platform ID identified by its URI.
+        /// </summary>
+        /// <param name="siteUri">The site URI for the platform.</param>
+        /// <returns></returns>
         public string GetPlatformIDFromSiteUri(string siteUri)
         {
             var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
@@ -40,6 +50,12 @@ namespace SpeedrunComSharp
             return elementDescription.ID;
         }
 
+        /// <summary>
+        /// Fetch a Collection of Platform objects.
+        /// </summary>
+        /// <param name="elementsPerPage">Optional. If included, will dictate the amount of elements included in each pagination.</param>
+        /// <param name="orderBy">Optional. If omitted, platforms will be in the same order as the API.</param>
+        /// <returns></returns>
         public IEnumerable<Platform> GetPlatforms(int? elementsPerPage = null,
             PlatformsOrdering orderBy = default(PlatformsOrdering))
         {
@@ -56,6 +72,11 @@ namespace SpeedrunComSharp
                 x => Platform.Parse(baseClient, x) as Platform);
         }
 
+        /// <summary>
+        /// Fetch a Platform object identified by its ID.
+        /// </summary>
+        /// <param name="platformId">The ID for the platform.</param>
+        /// <returns></returns>
         public Platform GetPlatform(string platformId)
         {
             var uri = GetPlatformsUri(string.Format("/{0}", Uri.EscapeDataString(platformId)));

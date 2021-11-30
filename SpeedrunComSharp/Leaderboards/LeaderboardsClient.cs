@@ -73,6 +73,21 @@ namespace SpeedrunComSharp
             return Leaderboard.Parse(baseClient, result.data);
         }
 
+        /// <summary>
+        /// Fetch a Leaderboard object identified by the game ID and category ID.
+        /// </summary>
+        /// <param name="gameId">The ID for the game.</param>
+        /// <param name="categoryId">The ID for the category.</param>
+        /// <param name="top">Optional. If included, will dictate the amount of top runs included in the response.</param>
+        /// <param name="platformId">Optional. If included, will filter runs by their platform.</param>
+        /// <param name="regionId">Optional. If included, will filter runs by their region.</param>
+        /// <param name="emulatorsFilter">Optional. If included, will filter runs by their use of emulator.</param>
+        /// <param name="filterOutRunsWithoutVideo">Optional. If included, will dictate whether runs without video are included in the response.</param>
+        /// <param name="orderBy">Optional. If omitted, runs will be in the same order as the API.</param>
+        /// <param name="filterOutRunsAfter">Optional. If included, will filter out runs performed after the specified DateTime.</param>
+        /// <param name="variableFilters">Optional. If included, will filter runs by the values present in specific variables.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <returns></returns>
         public Leaderboard GetLeaderboardForFullGameCategory(
             string gameId, string categoryId,
             int? top = null,
@@ -95,6 +110,22 @@ namespace SpeedrunComSharp
                 embeds);
         }
 
+        /// <summary>
+        /// Fetch a Leaderboard object identified by the game ID, level ID, and category ID.
+        /// </summary>
+        /// <param name="gameId">The ID for the game.</param>
+        /// <param name="levelId">The ID for the level.</param>
+        /// <param name="categoryId">The ID for the category.</param>
+        /// <param name="top">Optional. If included, will dictate the amount of top runs included in the response.</param>
+        /// <param name="platformId">Optional. If included, will filter runs by their platform.</param>
+        /// <param name="regionId">Optional. If included, will filter runs by their region.</param>
+        /// <param name="emulatorsFilter">Optional. If included, will filter runs by their use of emulator.</param>
+        /// <param name="filterOutRunsWithoutVideo">Optional. If included, will dictate whether runs without video are included in the response.</param>
+        /// <param name="orderBy">Optional. If omitted, runs will be in the same order as the API.</param>
+        /// <param name="filterOutRunsAfter">Optional. If included, will filter out runs performed after the specified DateTime.</param>
+        /// <param name="variableFilters">Optional. If included, will filter runs by the values present in specific variables.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <returns></returns>
         public Leaderboard GetLeaderboardForLevel(
             string gameId, string levelId, string categoryId,
             int? top = null,

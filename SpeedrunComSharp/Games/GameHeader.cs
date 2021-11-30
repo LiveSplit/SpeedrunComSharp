@@ -2,6 +2,9 @@
 
 namespace SpeedrunComSharp
 {
+    /// <summary>
+    /// An optimized class for simple data for games.
+    /// </summary>
     public class GameHeader : IElementWithID
     {
         public string ID { get; private set; }

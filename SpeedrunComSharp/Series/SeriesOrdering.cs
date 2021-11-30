@@ -2,6 +2,9 @@
 
 namespace SpeedrunComSharp
 {
+    /// <summary>
+    /// Options for ordering Series in responses.
+    /// </summary>
     public enum SeriesOrdering : int
     {
         Name = 0,
