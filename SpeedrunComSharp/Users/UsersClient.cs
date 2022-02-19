@@ -20,6 +20,11 @@ namespace SpeedrunComSharp
             return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
         }
 
+        /// <summary>
+        /// Fetch a User object identified by its URI.
+        /// </summary>
+        /// <param name="siteUri">The site URI for the user.</param>
+        /// <returns></returns>
         public User GetUserFromSiteUri(string siteUri)
         {
             var id = GetUserIDFromSiteUri(siteUri);
@@ -30,6 +35,11 @@ namespace SpeedrunComSharp
             return GetUser(id);
         }
 
+        /// <summary>
+        /// Fetch a User ID identified by its URI.
+        /// </summary>
+        /// <param name="siteUri">The site URI for the user.</param>
+        /// <returns></returns>
         public string GetUserIDFromSiteUri(string siteUri)
         {
             var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
@@ -41,6 +51,17 @@ namespace SpeedrunComSharp
             return elementDescription.ID;
         }
 
+        /// <summary>
+        /// Fetch a Collection of User objects identified by the parameters provided.
+        /// </summary>
+        /// <param name="name">Optional. If included, will filter users by their name.</param>
+        /// <param name="twitch">Optional. If included, will filter users by their linked Twitch account username.</param>
+        /// <param name="hitbox">Optional. If included, will filter users by their linked Hitbox account username.</param>
+        /// <param name="twitter">Optional. If included, will filter users by their linked Twitter account username.></param>
+        /// <param name="speedrunslive">Optional. If included, will filter users by their linked SpeedrunsLive account username.</param>
+        /// <param name="elementsPerPage">Optional. If included, will dictate the amount of elements included in each pagination.</param>
+        /// <param name="orderBy">Optional. If omitted, users will be in the same order as the API.</param>
+        /// <returns></returns>
         public IEnumerable<User> GetUsers(
             string name = null, 
             string twitch = null, string hitbox = null, 
@@ -80,6 +101,13 @@ namespace SpeedrunComSharp
                 x => User.Parse(baseClient, x) as User);
         }
 
+        /// <summary>
+        /// Fetch a Collection of User objects identified by their fuzzy (vague) username.
+        /// </summary>
+        /// <param name="fuzzyName">Optional. If included, dictates the fuzzy name of the user.</param>
+        /// <param name="elementsPerPage">Optional. If included, will dictate the amount of elements included in each pagination.</param>
+        /// <param name="orderBy">Optional. If omitted, users will be in the same order as the API.</param>
+        /// <returns></returns>
         public IEnumerable<User> GetUsersFuzzy(
             string fuzzyName = null,
             int? elementsPerPage = null,
@@ -101,6 +129,11 @@ namespace SpeedrunComSharp
                 x => User.Parse(baseClient, x) as User);
         }
 
+        /// <summary>
+        /// Fetch a User object identified by its ID.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns></returns>
         public User GetUser(string userId)
         {
             var uri = GetUsersUri(string.Format("/{0}",
@@ -111,6 +144,15 @@ namespace SpeedrunComSharp
             return User.Parse(baseClient, result.data);
         }
 
+        /// <summary>
+        /// Fetch a Collection of Record objects of a user's personal bests identified by their ID.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <param name="top">Optional. If included, will dictate the amount of top runs included in the response.</param>
+        /// <param name="seriesId">Optional. If included, will filter runs by their targetted game's series ID.</param>
+        /// <param name="gameId">Optional. If included, will filter runs by their targetted game's ID.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <returns></returns>
         public ReadOnlyCollection<Record> GetPersonalBests(
             string userId, int? top = null,
             string seriesId = null, string gameId = null,

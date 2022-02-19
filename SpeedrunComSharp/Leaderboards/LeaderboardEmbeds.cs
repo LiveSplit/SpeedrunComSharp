@@ -47,6 +47,16 @@
             set { embeds["variables"] = value; }
         }
 
+        /// <summary>
+        /// Options for embedding resources in Leaderboard responses.
+        /// </summary>
+        /// <param name="embedGame">Dictates whether a Game object is included in the response.</param>
+        /// <param name="embedCategory">Dictates whether a Category object is included in the response.</param>
+        /// <param name="embedLevel">Dictates whether a Level object is included in the response.</param>
+        /// <param name="embedPlayers">Dictates whether a Collection of Player objects is included in the response.</param>
+        /// <param name="embedRegions">Dictates whether a Collection of Region objects is included in the response.</param>
+        /// <param name="embedPlatforms">Dictates whether a Collection of Platform objects is included in the response.</param>
+        /// <param name="embedVariables">Dictates whether a Collection of Variable objects is included in the response.</param>
         public LeaderboardEmbeds(
             bool embedGame = false,
             bool embedCategory = false,

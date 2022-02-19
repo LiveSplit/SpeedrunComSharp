@@ -21,6 +21,12 @@ namespace SpeedrunComSharp
             return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
         }
 
+        /// <summary>
+        /// Fetch a Game object identified by its URI.
+        /// </summary>
+        /// <param name="siteUri">The site URI for the game.</param>
+        /// <param name="embeds">Optional. If included, will dictate the embedded resources included in the response.</param>
+        /// <returns></returns>
         public Game GetGameFromSiteUri(string siteUri, GameEmbeds embeds = default(GameEmbeds))
         {
             var id = GetGameIDFromSiteUri(siteUri);
@@ -31,6 +37,11 @@ namespace SpeedrunComSharp
             return GetGame(id, embeds);
         }
 
+        /// <summary>
+        /// Fetch a Game ID identified by its URI.
+        /// </summary>
+        /// <param name="siteUri">The site URI for the game.</param>
+        /// <returns></returns>
         public string GetGameIDFromSiteUri(string siteUri)
         {
             var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
@@ -42,6 +53,18 @@ namespace SpeedrunComSharp
             return elementDescription.ID;
         }
 
+        /// <summary>
+        /// Fetch a Collection of Game objects identified by the parameters provided.
+        /// </summary>
+        /// <param name="name">Optional. If included, will filter games by their name.</param>
+        /// <param name="yearOfRelease">Optional. If included, will filter games by their release year.</param>
+        /// <param name="platformId">Optional. If included, will filter games by their platform.</param>
+        /// <param name="regionId">Optional. If included, will filter games by their region.</param>
+        /// <param name="moderatorId">Optional. If included, will filter games by their moderators.</param>
+        /// <param name="elementsPerPage">Optional. If included, will dictate the amount of elements included in each pagination.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <param name="orderBy">Optional. If omitted, games will be in the same order as the API.</param>
+        /// <returns></returns>
         public IEnumerable<Game> GetGames(
             string name = null, int? yearOfRelease = null, 
             string platformId = null, string regionId = null, 
@@ -76,6 +99,12 @@ namespace SpeedrunComSharp
                 x => Game.Parse(baseClient, x) as Game);
         }
 
+        /// <summary>
+        /// Fetch a Collection of GameHeader objects.
+        /// </summary>
+        /// <param name="elementsPerPage">Optional. If included, will dictate the amount of elements included in each pagination.</param>
+        /// <param name="orderBy">Optional. If omitted, gameheaders will be in the same order as the API.</param>
+        /// <returns></returns>
         public IEnumerable<GameHeader> GetGameHeaders(int elementsPerPage = 1000,
             GamesOrdering orderBy = default(GamesOrdering))
         {
@@ -90,6 +119,12 @@ namespace SpeedrunComSharp
                 x => GameHeader.Parse(baseClient, x) as GameHeader);
         }
 
+        /// <summary>
+        /// Fetch a Game object identified by its ID.
+        /// </summary>
+        /// <param name="gameId">The ID for the game.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <returns></returns>
         public Game GetGame(string gameId, GameEmbeds embeds = default(GameEmbeds))
         {
             var parameters = new List<string>() { embeds.ToString() };
@@ -103,6 +138,12 @@ namespace SpeedrunComSharp
             return Game.Parse(baseClient, result.data);
         }
         
+        /// <summary>
+        /// Fetch a Game object identified by its name.
+        /// </summary>
+        /// <param name="name">The name of the game.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <returns></returns>
         public Game SearchGame(string name, GameEmbeds embeds = default(GameEmbeds))
         {
             var game = GetGames(name: name, embeds: embeds, elementsPerPage: 1).FirstOrDefault();
@@ -110,6 +151,12 @@ namespace SpeedrunComSharp
             return game;
         }
 
+        /// <summary>
+        /// Fetch a Game object identified by its name with an exact match.
+        /// </summary>
+        /// <param name="name">The name of the game.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <returns></returns>
         public Game SearchGameExact(string name, GameEmbeds embeds = default(GameEmbeds))
         {
             var game = GetGames(name: name, embeds: embeds, elementsPerPage: 1).Take(1).FirstOrDefault(x => x.Name == name);
@@ -117,6 +164,14 @@ namespace SpeedrunComSharp
             return game;
         }
 
+        /// <summary>
+        /// Fetch a Collection of Category objects from a game's ID.
+        /// </summary>
+        /// <param name="gameId">The ID for the game.</param>
+        /// <param name="miscellaneous">Optional. If included, will dictate whether miscellaneous categories are included.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <param name="orderBy">Optional. If omitted, categories will be in the same order as the API.</param>
+        /// <returns></returns>
         public ReadOnlyCollection<Category> GetCategories(
             string gameId, bool miscellaneous = true,
             CategoryEmbeds embeds = default(CategoryEmbeds),
@@ -137,6 +192,13 @@ namespace SpeedrunComSharp
                 x => Category.Parse(baseClient, x) as Category);
         }
 
+        /// <summary>
+        /// Fetch a Collection of Level objects from a game's ID.
+        /// </summary>
+        /// <param name="gameId">The ID for the game.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <param name="orderBy">Optional. If omitted, levels will be in the same order as the API.</param>
+        /// <returns></returns>
         public ReadOnlyCollection<Level> GetLevels(string gameId,
             LevelEmbeds embeds = default(LevelEmbeds),
             LevelsOrdering orderBy = default(LevelsOrdering))
@@ -153,6 +215,12 @@ namespace SpeedrunComSharp
                  x => Level.Parse(baseClient, x) as Level);
         }
 
+        /// <summary>
+        /// Fetch a Collection of Variable objects from a game's ID.
+        /// </summary>
+        /// <param name="gameId">The ID for the category.</param>
+        /// <param name="orderBy">Optional. If omitted, variables will be in the same order as the API.</param>
+        /// <returns></returns>
         public ReadOnlyCollection<Variable> GetVariables(string gameId,
             VariablesOrdering orderBy = default(VariablesOrdering))
         {
@@ -166,6 +234,13 @@ namespace SpeedrunComSharp
                 x => Variable.Parse(baseClient, x) as Variable);
         }
 
+        /// <summary>
+        /// Fetch a Collection of Game objects derived from a game's ID.
+        /// </summary>
+        /// <param name="gameId">The ID for the game.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <param name="orderBy">Optional. If omitted, games will be in the same order as the API.</param>
+        /// <returns></returns>
         public ReadOnlyCollection<Game> GetRomHacks(string gameId,
             GameEmbeds embeds = default(GameEmbeds),
             GamesOrdering orderBy = default(GamesOrdering))
@@ -182,6 +257,17 @@ namespace SpeedrunComSharp
                 x => Game.Parse(baseClient, x) as Game);
         }
 
+        /// <summary>
+        /// Fetch a Leaderboard object from a game's ID.
+        /// </summary>
+        /// <param name="gameId">The ID for the game.</param>
+        /// <param name="top">Optional. If included, will dictate the amount of top runs included in the response.</param>
+        /// <param name="scope">Optional. If included, will dictate the scope of the Leaderboard included in the response.</param>
+        /// <param name="includeMiscellaneousCategories">Optional. If included, will dictate whether miscellaneous categories are included.</param>
+        /// <param name="skipEmptyLeaderboards">Optional. If included, will dictate whether or not empty leaderboards are included in the response.</param>
+        /// <param name="elementsPerPage">Optional. If included, will dictate the amount of elements included in each pagination.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <returns></returns>
         public IEnumerable<Leaderboard> GetRecords(string gameId,
             int? top = null, LeaderboardScope scope = LeaderboardScope.All,
             bool includeMiscellaneousCategories = true, bool skipEmptyLeaderboards = false,

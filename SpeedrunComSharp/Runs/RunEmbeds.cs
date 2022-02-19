@@ -40,6 +40,15 @@
             set { embeds["platform"] = value; }
         }
 
+        /// <summary>
+        /// Options for embedding resources in Run responses.
+        /// </summary>
+        /// <param name="embedGame">Dictates whether a Game object is included in the response.</param>
+        /// <param name="embedCategory">Dictates whether a Category object is included in the response.</param>
+        /// <param name="embedLevel">Dictates whether a Level object is included in the response.</param>
+        /// <param name="embedPlayers">Dictates whether a Collection of Runner objects containing each runner is included in the response.</param>
+        /// <param name="embedRegion">Dictates whether a Region object is included in the response.</param>
+        /// <param name="embedPlatform">Dictates whether a Platform object is included in the response.</param>
         public RunEmbeds(
             bool embedGame = false,
             bool embedCategory = false,

@@ -2,6 +2,9 @@
 
 namespace SpeedrunComSharp
 {
+    /// <summary>
+    /// Options for ordering Runs in responses.
+    /// </summary>
     public enum RunsOrdering : int
     {
         Game = 0,

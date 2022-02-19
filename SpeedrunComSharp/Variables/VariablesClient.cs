@@ -18,6 +18,11 @@ namespace SpeedrunComSharp
             return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
         }
 
+        /// <summary>
+        /// Fetch a Variable object identified by its URI.
+        /// </summary>
+        /// <param name="siteUri">The site URI of the variable.</param>
+        /// <returns></returns>
         public Variable GetVariableFromSiteUri(string siteUri)
         {
             var id = GetVariableIDFromSiteUri(siteUri);
@@ -28,6 +33,11 @@ namespace SpeedrunComSharp
             return GetVariable(id);
         }
 
+        /// <summary>
+        /// Fetch a Variable ID identified by its URI.
+        /// </summary>
+        /// <param name="siteUri">The site URI of the variable.</param>
+        /// <returns></returns>
         public string GetVariableIDFromSiteUri(string siteUri)
         {
             var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
@@ -39,6 +49,11 @@ namespace SpeedrunComSharp
             return elementDescription.ID;
         }
 
+        /// <summary>
+        /// Fetch a Variable object identified by its ID.
+        /// </summary>
+        /// <param name="variableId">The ID of the variable.</param>
+        /// <returns></returns>
         public Variable GetVariable(string variableId)
         {
             var uri = GetVariablesUri(string.Format("/{0}",

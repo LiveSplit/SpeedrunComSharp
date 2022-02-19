@@ -2,6 +2,9 @@
 
 namespace SpeedrunComSharp
 {
+    /// <summary>
+    /// Options for ordering Levels in responses.
+    /// </summary>
     public enum LevelsOrdering : int
     {
         Position = 0,

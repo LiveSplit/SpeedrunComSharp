@@ -35,6 +35,15 @@
             set { embeds["variables"] = value; }
         }
 
+        /// <summary>
+        /// Options for embedding resources in Game responses.
+        /// </summary>
+        /// <param name="embedLevels">Dictates whether a Collection of Level objects is included in the response.</param>
+        /// <param name="embedCategories">Dictates whether a Collection of Category objects is included in the response.</param>
+        /// <param name="embedModerators">Dictates whether a Collection of User objects containing each moderator is included in the response.</param>
+        /// <param name="embedPlatforms">Dictates whether a Collection of Platform objects is included in the response.</param>
+        /// <param name="embedRegions">Dictates whether a Collection of Region objects is included in the response.</param>
+        /// <param name="embedVariables">Dictates whether a Collection of Variable objects is included in the response.</param>
         public GameEmbeds(
             bool embedLevels = false,
             bool embedCategories = false,

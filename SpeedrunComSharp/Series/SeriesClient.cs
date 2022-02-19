@@ -19,6 +19,12 @@ namespace SpeedrunComSharp
             return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
         }
 
+        /// <summary>
+        /// Fetch a Series object identified by its URI.
+        /// </summary>
+        /// <param name="siteUri">The site URI for the series.</param>
+        /// <param name="embeds">Optional. If included, will dictate the embedded resources included in the response.</param>
+        /// <returns></returns>
         public Series GetSeriesFromSiteUri(string siteUri, SeriesEmbeds embeds = default(SeriesEmbeds))
         {
             var id = GetSeriesIDFromSiteUri(siteUri);
@@ -29,6 +35,11 @@ namespace SpeedrunComSharp
             return GetSingleSeries(id, embeds);
         }
 
+        /// <summary>
+        /// Fetch a Series ID identified by its URI.
+        /// </summary>
+        /// <param name="siteUri">The site URI for the series.</param>
+        /// <returns></returns>
         public string GetSeriesIDFromSiteUri(string siteUri)
         {
             var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
@@ -40,6 +51,16 @@ namespace SpeedrunComSharp
             return elementDescription.ID;
         }
 
+        /// <summary>
+        /// Fetch a Collection of Series objects identified by the parameters provided.
+        /// </summary>
+        /// <param name="name">Optional. If included, will filter series by their name.</param>
+        /// <param name="abbreviation">Optional. If included, will filter series by their abbreviation.</param>
+        /// <param name="moderatorId">Optional. If included, will filter series by their moderators.</param>
+        /// <param name="elementsPerPage">Optional. If included, will dictate the amount of elements included in each pagination.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <param name="orderBy">Optional. If omitted, series will be in the same order as the API.</param>
+        /// <returns></returns>
         public IEnumerable<Series> GetMultipleSeries(
            string name = null, string abbreviation = null,
            string moderatorId = null, int? elementsPerPage = null,
@@ -67,6 +88,12 @@ namespace SpeedrunComSharp
                 x => Series.Parse(baseClient, x) as Series);
         }
 
+        /// <summary>
+        /// Fetch a Series object identified by its ID.
+        /// </summary>
+        /// <param name="seriesId">The ID of the series.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <returns></returns>
         public Series GetSingleSeries(string seriesId, SeriesEmbeds embeds = default(SeriesEmbeds))
         {
             var parameters = new List<string>() { embeds.ToString() };
@@ -80,6 +107,19 @@ namespace SpeedrunComSharp
             return Series.Parse(baseClient, result.data);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="seriesId">The ID of the series.</param>
+        /// <param name="name">Optional. If included, will filter series by their name.</param>
+        /// <param name="yearOfRelease">Optional. If included, will filter series by their release year.</param>
+        /// <param name="platformId">Optional. If included, will filter series by their platform.</param>
+        /// <param name="regionId">Optional. If included, will filter series by their region.</param>
+        /// <param name="moderatorId">Optional. If included, will filter series by their moderators.</param>
+        /// <param name="elementsPerPage">Optional. If included, will dictate the amount of elements included in each pagination.</param>
+        /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
+        /// <param name="orderBy">Optional. If omitted, series will be in the same order as the API.</param>
+        /// <returns></returns>
         public IEnumerable<Game> GetGames(
             string seriesId,
             string name = null, int? yearOfRelease = null,

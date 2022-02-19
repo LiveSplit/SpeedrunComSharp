@@ -2,6 +2,9 @@
 
 namespace SpeedrunComSharp
 {
+    /// <summary>
+    /// Options for ordering Variables in responses.
+    /// </summary>
     public enum VariablesOrdering : int
     {
         Position = 0,
