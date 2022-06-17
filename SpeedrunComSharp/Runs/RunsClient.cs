@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SpeedrunComSharp
 {
@@ -44,13 +45,16 @@ namespace SpeedrunComSharp
         /// <returns></returns>
         public string GetRunIDFromSiteUri(string siteUri)
         {
-            var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
+            try
+            {
+                var match = Regex.Match(siteUri, "^(?:(?:https?://)?(?:www\\.)?speedrun\\.com/(?:\\w+/)?run/)?(\\w+)$");
 
-            if (elementDescription == null 
-                || elementDescription.Type != ElementType.Run)
+                return match.Groups[1].Value;
+            }
+            catch
+            {
                 return null;
-
-            return elementDescription.ID;
+            }
         }
 
         /// <summary>
