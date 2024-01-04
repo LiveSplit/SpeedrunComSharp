@@ -47,7 +47,7 @@ namespace SpeedrunComSharp
         {
             try
             {
-                var match = Regex.Match(siteUri, "^(?:(?:https?://)?(?:www\\.)?speedrun\\.com/(?:\\w+/)?run/)?(\\w+)$");
+                var match = Regex.Match(siteUri, "^(?:(?:https?://)?(?:www\\.)?speedrun\\.com/(?:\\w+/)?runs?/)?(\\w+)$");
 
                 return match.Groups[1].Value;
             }
