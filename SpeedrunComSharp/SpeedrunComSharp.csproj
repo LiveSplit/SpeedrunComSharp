@@ -4,7 +4,6 @@
     <OutDir>bin\$(Configuration)</OutDir>
     <TargetFramework>net4.6.1</TargetFramework>
 
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
