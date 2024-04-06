@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -227,16 +228,16 @@ namespace SpeedrunComSharp
 
                 if (Cache.ContainsKey(uri))
                 {
-#if DEBUG_WITH_API_CALLS
-                Console.WriteLine("Cached API Call: {0}", uri.AbsoluteUri);
+#if DEBUG
+                    Debug.WriteLine($"Cached API Call: {uri.AbsoluteUri}");
 #endif
                     result = Cache[uri];
                     Cache.Remove(uri);
                 }
                 else
                 {
-#if DEBUG_WITH_API_CALLS
-                Console.WriteLine("Uncached API Call: {0}", uri.AbsoluteUri);
+#if DEBUG
+                    Debug.WriteLine($"Uncached API Call: {uri.AbsoluteUri}");
 #endif
                     try
                     {
