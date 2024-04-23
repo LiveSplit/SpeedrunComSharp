@@ -8,6 +8,9 @@
 
   <PropertyGroup Label="Common Directories">
     <RootPath>$(MSBuildThisFileDirectory)</RootPath>
+
+    <SrcPath>$(RootPath)\src</SrcPath>
+    <TestPath>$(RootPath)\test</TestPath>
   </PropertyGroup>
 
   <PropertyGroup Label="Output Settings">
