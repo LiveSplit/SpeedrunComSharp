@@ -1,0 +1,20 @@
+<Project>
+
+  <PropertyGroup Label="Project Settings">
+    <TargetFramework>net4.6.1</TargetFramework>
+
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Common Directories">
+    <RootPath>$(MSBuildThisFileDirectory)</RootPath>
+
+    <SrcPath>$(RootPath)\src</SrcPath>
+    <TestPath>$(RootPath)\test</TestPath>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Output Settings">
+    <UseArtifactsOutput>true</UseArtifactsOutput>
+  </PropertyGroup>
+
+</Project>
