@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <OutDir>bin\$(Configuration)</OutDir>
+    <TargetFramework>net4.8.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
