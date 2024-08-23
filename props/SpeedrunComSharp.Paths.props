@@ -1,0 +1,10 @@
+<Project>
+
+  <PropertyGroup>
+    <RootPath>$(MSBuildThisFileDirectory)..</RootPath>
+
+    <SrcPath>$(RootPath)\src</SrcPath>
+    <TestPath>$(RootPath)\test</TestPath>
+  </PropertyGroup>
+
+</Project>
