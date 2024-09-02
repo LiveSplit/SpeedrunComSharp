@@ -30,7 +30,7 @@ public class Player
 
         if (properties.ContainsKey("uri"))
         {
-            if (playerElement.rel as string == "user")
+            if ((playerElement.rel as string) == "user")
             {
                 player.UserID = playerElement.id as string;
                 player.user = new Lazy<User>(() => client.Users.GetUser(player.UserID));
@@ -45,7 +45,7 @@ public class Player
         }
         else
         {
-            if (playerElement.rel as string == "user")
+            if ((playerElement.rel as string) == "user")
             {
                 var user = User.Parse(client, playerElement) as User;
                 player.user = new Lazy<User>(() => user);
@@ -75,7 +75,9 @@ public class Player
         var player = obj as Player;
 
         if (player == null)
+        {
             return false;
+        }
 
         return UserID == player.UserID
             && GuestName == player.GuestName;

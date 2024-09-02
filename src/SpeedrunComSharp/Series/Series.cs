@@ -51,7 +51,9 @@ public class Series : IElementWithID
 
         var created = seriesElement.created as string;
         if (!string.IsNullOrEmpty(created))
+        {
             series.CreationDate = DateTime.Parse(created, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+        }
 
         series.Assets = Assets.Parse(client, seriesElement.assets);
 
@@ -125,7 +127,9 @@ public class Series : IElementWithID
         var other = obj as Series;
 
         if (other == null)
+        {
             return false;
+        }
 
         return ID == other.ID;
     }

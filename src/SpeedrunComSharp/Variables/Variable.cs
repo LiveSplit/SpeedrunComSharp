@@ -39,7 +39,9 @@ public class Variable : IElementWithID
     public VariableValue CreateCustomValue(string customValue)
     {
         if (!IsUserDefined)
+        {
             throw new NotSupportedException("This variable doesn't support custom values.");
+        }
 
         return VariableValue.CreateCustomValue(client, ID, customValue);
     }
@@ -75,7 +77,9 @@ public class Variable : IElementWithID
         var valuesProperties = variableElement.values.Properties as IDictionary<string, dynamic>;
         var defaultValue = valuesProperties["default"] as string;
         if (!string.IsNullOrEmpty(defaultValue))
+        {
             variable.DefaultValue = variable.Values.FirstOrDefault(x => x.ID == defaultValue);
+        }
 
         variable.IsSubcategory = (bool)(properties["is-subcategory"] ?? false);
 
@@ -125,7 +129,9 @@ public class Variable : IElementWithID
         var other = obj as Variable;
 
         if (other == null)
+        {
             return false;
+        }
 
         return ID == other.ID;
     }

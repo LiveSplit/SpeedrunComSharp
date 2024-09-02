@@ -37,7 +37,9 @@ public class Region : IElementWithID
     public static Region Parse(SpeedrunComClient client, dynamic regionElement)
     {
         if (regionElement is ArrayList)
+        {
             return null;
+        }
 
         var region = new Region();
 
@@ -64,7 +66,9 @@ public class Region : IElementWithID
         var region = obj as Region;
 
         if (region == null)
+        {
             return false;
+        }
 
         return ID == region.ID;
     }

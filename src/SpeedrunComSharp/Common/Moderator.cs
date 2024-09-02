@@ -24,7 +24,7 @@ public class Moderator
         var moderator = new Moderator();
 
         moderator.UserID = moderatorElement.Key;
-        moderator.Type = moderatorElement.Value as string == "moderator"
+        moderator.Type = (moderatorElement.Value as string) == "moderator"
             ? ModeratorType.Moderator
             : ModeratorType.SuperModerator;
 

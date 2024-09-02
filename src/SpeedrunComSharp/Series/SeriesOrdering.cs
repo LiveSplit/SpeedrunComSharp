@@ -23,7 +23,9 @@ internal static class SeriesOrderingHelpers
     {
         var isDescending = ((int)ordering & 1) == 1;
         if (isDescending)
+        {
             ordering = (SeriesOrdering)((int)ordering - 1);
+        }
 
         var str = "";
 
@@ -40,9 +42,14 @@ internal static class SeriesOrderingHelpers
         var list = new List<string>();
 
         if (!string.IsNullOrEmpty(str))
+        {
             list.Add(string.Format("orderby={0}", str));
+        }
+
         if (isDescending)
+        {
             list.Add("direction=desc");
+        }
 
         return list;
     }

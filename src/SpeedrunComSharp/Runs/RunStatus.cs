@@ -54,7 +54,9 @@ public class RunStatus
             {
                 var date = properties["verify-date"] as string;
                 if (!string.IsNullOrEmpty(date))
+                {
                     status.VerifyDate = DateTime.Parse(date, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+                }
             }
         }
         else
@@ -73,8 +75,12 @@ public class RunStatus
     public override string ToString()
     {
         if (Type == RunStatusType.Rejected)
+        {
             return "Rejected:" + Reason;
+        }
         else
+        {
             return Type.ToString();
+        }
     }
 }

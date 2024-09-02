@@ -32,7 +32,9 @@ public class Level : IElementWithID
     public static Level Parse(SpeedrunComClient client, dynamic levelElement)
     {
         if (levelElement is ArrayList)
+        {
             return null;
+        }
 
         var level = new Level();
 
@@ -97,7 +99,9 @@ public class Level : IElementWithID
         var other = obj as Level;
 
         if (other == null)
+        {
             return false;
+        }
 
         return ID == other.ID;
     }

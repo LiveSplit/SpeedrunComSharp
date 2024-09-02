@@ -79,7 +79,9 @@ public class VariableValue : IElementWithID
         var other = obj as VariableValue;
 
         if (other == null)
+        {
             return false;
+        }
 
         return ID == other.ID;
     }

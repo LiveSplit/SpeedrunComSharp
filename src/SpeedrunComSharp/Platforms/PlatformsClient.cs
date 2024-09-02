@@ -29,7 +29,9 @@ public class PlatformsClient
         var id = GetPlatformIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
+        {
             return null;
+        }
 
         return GetPlatform(id);
     }
@@ -45,7 +47,9 @@ public class PlatformsClient
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Platform)
+        {
             return null;
+        }
 
         return elementDescription.ID;
     }
@@ -64,7 +68,9 @@ public class PlatformsClient
         parameters.AddRange(orderBy.ToParameters());
 
         if (elementsPerPage.HasValue)
+        {
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
+        }
 
         var uri = GetPlatformsUri(parameters.ToParameters());
 

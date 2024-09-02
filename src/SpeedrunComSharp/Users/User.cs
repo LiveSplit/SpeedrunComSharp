@@ -76,7 +76,9 @@ public class User : IElementWithID
 
         var pronounsTemp = userElement.pronouns as string;
         if (!string.IsNullOrWhiteSpace(pronounsTemp))
+        {
             user.Pronouns = pronounsTemp.Split(new string[] { ", " }, StringSplitOptions.None);
+        }
 
         user.WebLink = new Uri(userElement.weblink as string);
         user.NameStyle = UserNameStyle.Parse(client, properties["name-style"]) as UserNameStyle;
@@ -84,37 +86,53 @@ public class User : IElementWithID
 
         var signUpDate = userElement.signup as string;
         if (!string.IsNullOrEmpty(signUpDate))
+        {
             user.SignUpDate = DateTime.Parse(signUpDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+        }
 
         user.Location = Location.Parse(client, userElement.location) as Location;
 
         var twitchLink = userElement.twitch;
         if (twitchLink != null)
+        {
             user.TwitchProfile = new Uri(twitchLink.uri as string);
+        }
 
         var hitboxLink = userElement.hitbox;
         if (hitboxLink != null)
+        {
             user.HitboxProfile = new Uri(hitboxLink.uri as string);
+        }
 
         var youtubeLink = userElement.youtube;
         if (youtubeLink != null)
+        {
             user.YoutubeProfile = new Uri(youtubeLink.uri as string);
+        }
 
         var twitterLink = userElement.twitter;
         if (twitterLink != null)
+        {
             user.TwitterProfile = new Uri(twitterLink.uri as string);
+        }
 
         var speedRunsLiveLink = userElement.speedrunslive;
         if (speedRunsLiveLink != null)
+        {
             user.SpeedRunsLiveProfile = new Uri(speedRunsLiveLink.uri as string);
+        }
 
         var iconTemp = userElement.assets.icon.uri;
         if (iconTemp != null)
+        {
             user.Icon = new Uri(iconTemp as string);
+        }
 
         var imageTemp = userElement.assets.image.uri;
         if (imageTemp != null)
+        {
             user.Image = new Uri(imageTemp as string);
+        }
 
         //Parse Links
 
@@ -150,7 +168,9 @@ public class User : IElementWithID
         var other = obj as User;
 
         if (other == null)
+        {
             return false;
+        }
 
         return ID == other.ID;
     }

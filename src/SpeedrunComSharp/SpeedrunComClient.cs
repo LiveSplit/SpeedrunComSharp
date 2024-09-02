@@ -21,7 +21,9 @@ public class SpeedrunComClient
         get
         {
             if (AccessToken == null)
+            {
                 return false;
+            }
 
             try
             {
@@ -150,7 +152,9 @@ public class SpeedrunComClient
             var link = links.FirstOrDefault(x => x.Relation == APIHttpHeaderRelation);
 
             if (link == null)
+            {
                 return null;
+            }
 
             var uri = link.Uri;
             var elementDescription = ElementDescription.ParseUri(uri);
@@ -167,7 +171,9 @@ public class SpeedrunComClient
     {
         var enumerable = collection as IEnumerable<dynamic>;
         if (enumerable == null)
+        {
             return new List<T>(new T[0]).AsReadOnly();
+        }
 
         return enumerable.Select(parser).ToList().AsReadOnly();
     }
@@ -176,7 +182,9 @@ public class SpeedrunComClient
     {
         var enumerable = collection as IEnumerable<dynamic>;
         if (enumerable == null)
+        {
             return new List<T>(new T[0]).AsReadOnly();
+        }
 
         return enumerable.OfType<T>().ToList().AsReadOnly();
     }
@@ -191,7 +199,9 @@ public class SpeedrunComClient
             return new APIException(json.message as string, errors.Select(x => x as string));
         }
         else
+        {
             return new APIException(json.message as string);
+        }
     }
 
     internal dynamic DoPostRequest(Uri uri, string postBody)
@@ -266,7 +276,9 @@ public class SpeedrunComClient
             Cache.Add(uri, result);
 
             while (Cache.Count > MaxCacheElements)
+            {
                 Cache.Remove(Cache.Keys.First());
+            }
 
             return result;
         }
@@ -277,7 +289,9 @@ public class SpeedrunComClient
         var result = DoRequest(uri);
         var elements = result.data as IEnumerable<dynamic>;
         if (elements == null)
+        {
             return new ReadOnlyCollection<T>(new T[0]);
+        }
 
         return elements.Select(parser).ToList().AsReadOnly();
     }

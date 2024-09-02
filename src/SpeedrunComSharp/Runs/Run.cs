@@ -74,11 +74,15 @@ public class Run : IElementWithID
 
         var runDate = runElement.date;
         if (!string.IsNullOrEmpty(runDate))
+        {
             run.Date = DateTime.Parse(runDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+        }
 
         var dateSubmitted = runElement.submitted;
         if (!string.IsNullOrEmpty(dateSubmitted))
+        {
             run.DateSubmitted = DateTime.Parse(dateSubmitted, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+        }
 
         run.Times = RunTimes.Parse(client, runElement.times) as RunTimes;
         run.System = RunSystem.Parse(client, runElement.system) as RunSystem;
@@ -129,7 +133,9 @@ public class Run : IElementWithID
             var category = Category.Parse(client, properties["category"].data) as Category;
             run.category = new Lazy<Category>(() => category);
             if (category != null)
+            {
                 run.CategoryID = category.ID;
+            }
         }
 
         if (properties["level"] == null)
@@ -146,7 +152,9 @@ public class Run : IElementWithID
             var level = Level.Parse(client, properties["level"].data) as Level;
             run.level = new Lazy<Level>(() => level);
             if (level != null)
+            {
                 run.LevelID = level.ID;
+            }
         }
 
         if (properties.ContainsKey("platform"))
@@ -190,7 +198,9 @@ public class Run : IElementWithID
         var other = obj as Run;
 
         if (other == null)
+        {
             return false;
+        }
 
         return ID == other.ID;
     }

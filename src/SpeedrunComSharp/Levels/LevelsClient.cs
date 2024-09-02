@@ -31,7 +31,9 @@ public class LevelsClient
         var id = GetLevelIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
+        {
             return null;
+        }
 
         return GetLevel(id, embeds);
     }
@@ -47,7 +49,9 @@ public class LevelsClient
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Level)
+        {
             return null;
+        }
 
         return elementDescription.ID;
     }
@@ -90,7 +94,9 @@ public class LevelsClient
         parameters.AddRange(orderBy.ToParameters());
 
         if (!miscellaneous)
+        {
             parameters.Add("miscellaneous=no");
+        }
 
         var uri = GetLevelsUri(string.Format("/{0}/categories{1}",
             Uri.EscapeDataString(levelId),
@@ -136,11 +142,19 @@ public class LevelsClient
         var parameters = new List<string>() { embeds.ToString() };
 
         if (top.HasValue)
+        {
             parameters.Add(string.Format("top={0}", top.Value));
+        }
+
         if (skipEmptyLeaderboards)
+        {
             parameters.Add("skip-empty=true");
+        }
+
         if (elementsPerPage.HasValue)
+        {
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
+        }
 
         var uri = GetLevelsUri(string.Format("/{0}/records{1}",
             Uri.EscapeDataString(levelId),

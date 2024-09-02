@@ -16,7 +16,9 @@ public class Location
             location.Country = Country.Parse(client, locationElement.country) as Country;
 
             if (locationElement.region != null)
+            {
                 location.Region = CountryRegion.Parse(client, locationElement.region) as CountryRegion;
+            }
         }
 
         return location;
@@ -25,8 +27,12 @@ public class Location
     public override string ToString()
     {
         if (Region == null)
+        {
             return Country.Name;
+        }
         else
+        {
             return Country.Name + " " + Region.Name;
+        }
     }
 }

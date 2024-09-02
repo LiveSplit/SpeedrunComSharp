@@ -43,15 +43,29 @@ public class Ruleset
     {
         var list = new List<string>();
         if (ShowMilliseconds)
+        {
             list.Add("Show Milliseconds");
+        }
+
         if (RequiresVerification)
+        {
             list.Add("Requires Verification");
+        }
+
         if (RequiresVideo)
+        {
             list.Add("Requires Video");
+        }
+
         if (EmulatorsAllowed)
+        {
             list.Add("Emulators Allowed");
+        }
+
         if (!list.Any())
+        {
             list.Add("No Rules");
+        }
 
         return list.Aggregate(", ");
     }

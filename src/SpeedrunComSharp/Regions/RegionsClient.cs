@@ -28,7 +28,9 @@ public class RegionsClient
         var id = GetRegionIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
+        {
             return null;
+        }
 
         return GetRegion(id);
     }
@@ -44,7 +46,9 @@ public class RegionsClient
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Region)
+        {
             return null;
+        }
 
         return elementDescription.ID;
     }
@@ -63,7 +67,9 @@ public class RegionsClient
         parameters.AddRange(orderBy.ToParameters());
 
         if (elementsPerPage.HasValue)
+        {
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
+        }
 
         var uri = GetRegionsUri(parameters.ToParameters());
 

@@ -19,17 +19,34 @@ public class Record : Run
         var properties = recordElement.Properties as IDictionary<string, dynamic>;
 
         if (properties.ContainsKey("game"))
+        {
             recordElement.run.game = recordElement.game;
+        }
+
         if (properties.ContainsKey("category"))
+        {
             recordElement.run.category = recordElement.category;
+        }
+
         if (properties.ContainsKey("level"))
+        {
             recordElement.run.level = recordElement.level;
+        }
+
         if (properties.ContainsKey("players"))
+        {
             recordElement.run.players = recordElement.players;
+        }
+
         if (properties.ContainsKey("region"))
+        {
             recordElement.run.region = recordElement.region;
+        }
+
         if (properties.ContainsKey("platform"))
+        {
             recordElement.run.platform = recordElement.platform;
+        }
 
         Run.Parse(record, client, recordElement.run);
 
@@ -46,7 +63,9 @@ public class Record : Run
         var other = obj as Record;
 
         if (other == null)
+        {
             return false;
+        }
 
         return ID == other.ID;
     }

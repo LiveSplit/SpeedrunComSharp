@@ -28,7 +28,9 @@ public class VariablesClient
         var id = GetVariableIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
+        {
             return null;
+        }
 
         return GetVariable(id);
     }
@@ -44,7 +46,9 @@ public class VariablesClient
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Variable)
+        {
             return null;
+        }
 
         return elementDescription.ID;
     }

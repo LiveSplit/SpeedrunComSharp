@@ -56,8 +56,12 @@ public class VariableScope
     public override string ToString()
     {
         if (Type == VariableScopeType.SingleLevel)
+        {
             return "Single Level: " + (Level.Name ?? "");
+        }
         else
+        {
             return Type.ToString();
+        }
     }
 }

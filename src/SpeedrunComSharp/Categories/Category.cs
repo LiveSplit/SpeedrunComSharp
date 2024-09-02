@@ -37,7 +37,9 @@ public class Category : IElementWithID
     public static Category Parse(SpeedrunComClient client, dynamic categoryElement)
     {
         if (categoryElement is ArrayList)
+        {
             return null;
+        }
 
         var category = new Category();
 
@@ -109,7 +111,9 @@ public class Category : IElementWithID
             category.worldRecord = new Lazy<Record>(() =>
                 {
                     if (category.leaderboard.IsValueCreated)
+                    {
                         return category.Leaderboard.Records.FirstOrDefault();
+                    }
 
                     var leaderboard = client.Leaderboards
                                     .GetLeaderboardForFullGameCategory(category.GameID, category.ID, top: 1);
@@ -145,7 +149,9 @@ public class Category : IElementWithID
         var other = obj as Category;
 
         if (other == null)
+        {
             return false;
+        }
 
         return ID == other.ID;
     }

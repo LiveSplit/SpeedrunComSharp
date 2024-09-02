@@ -79,7 +79,9 @@ public class Game : IElementWithID
 
         var releaseDate = gProperties["release-date"];
         if (!string.IsNullOrEmpty(releaseDate))
+        {
             game.ReleaseDate = DateTime.Parse(releaseDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+        }
 
         game.YearOfRelease = gameElement.released;
         game.Ruleset = Ruleset.Parse(client, gameElement.ruleset);
@@ -88,7 +90,9 @@ public class Game : IElementWithID
 
         var created = gameElement.created as string;
         if (!string.IsNullOrEmpty(created))
+        {
             game.CreationDate = DateTime.Parse(created, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+        }
 
         game.Assets = Assets.Parse(client, gameElement.assets);
 
@@ -315,7 +319,9 @@ public class Game : IElementWithID
         var other = obj as Game;
 
         if (other == null)
+        {
             return false;
+        }
 
         return ID == other.ID;
     }

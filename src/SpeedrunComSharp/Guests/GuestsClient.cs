@@ -28,7 +28,9 @@ public class GuestsClient
         var id = GetGuestIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
+        {
             return null;
+        }
 
         return GetGuest(id);
     }
@@ -44,7 +46,9 @@ public class GuestsClient
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Guest)
+        {
             return null;
+        }
 
         return elementDescription.ID;
     }

@@ -18,7 +18,9 @@ internal static class NotificationsOrderingHelpers
         var list = new List<string>();
 
         if (ordering == NotificationsOrdering.OldestToNewest)
+        {
             list.Add("direction=asc");
+        }
 
         return list;
     }

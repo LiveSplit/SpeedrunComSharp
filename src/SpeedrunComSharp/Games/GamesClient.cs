@@ -32,7 +32,9 @@ public class GamesClient
         var id = GetGameIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
+        {
             return null;
+        }
 
         return GetGame(id, embeds);
     }
@@ -48,7 +50,9 @@ public class GamesClient
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Game)
+        {
             return null;
+        }
 
         return elementDescription.ID;
     }
@@ -77,22 +81,34 @@ public class GamesClient
         parameters.AddRange(orderBy.ToParameters());
 
         if (!string.IsNullOrEmpty(name))
+        {
             parameters.Add(string.Format("name={0}", Uri.EscapeDataString(name)));
+        }
 
         if (yearOfRelease.HasValue)
+        {
             parameters.Add(string.Format("released={0}", yearOfRelease.Value));
+        }
 
         if (!string.IsNullOrEmpty(platformId))
+        {
             parameters.Add(string.Format("platform={0}", Uri.EscapeDataString(platformId)));
+        }
 
         if (!string.IsNullOrEmpty(regionId))
+        {
             parameters.Add(string.Format("region={0}", Uri.EscapeDataString(regionId)));
+        }
 
         if (!string.IsNullOrEmpty(moderatorId))
+        {
             parameters.Add(string.Format("moderator={0}", Uri.EscapeDataString(moderatorId)));
+        }
 
         if (elementsPerPage.HasValue)
+        {
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
+        }
 
         var uri = GetGamesUri(parameters.ToParameters());
         return baseClient.DoPaginatedRequest(uri,
@@ -182,7 +198,9 @@ public class GamesClient
         parameters.AddRange(orderBy.ToParameters());
 
         if (!miscellaneous)
+        {
             parameters.Add("miscellaneous=no");
+        }
 
         var uri = GetGamesUri(string.Format("/{0}/categories{1}",
             Uri.EscapeDataString(gameId),
@@ -277,15 +295,29 @@ public class GamesClient
         var parameters = new List<string>() { embeds.ToString() };
 
         if (top.HasValue)
+        {
             parameters.Add(string.Format("top={0}", top.Value));
+        }
+
         if (scope != LeaderboardScope.All)
+        {
             parameters.Add(scope.ToParameter());
+        }
+
         if (!includeMiscellaneousCategories)
+        {
             parameters.Add("miscellaneous=false");
+        }
+
         if (skipEmptyLeaderboards)
+        {
             parameters.Add("skip-empty=true");
+        }
+
         if (elementsPerPage.HasValue)
+        {
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
+        }
 
         var uri = GetGamesUri(string.Format("/{0}/records{1}",
             Uri.EscapeDataString(gameId),

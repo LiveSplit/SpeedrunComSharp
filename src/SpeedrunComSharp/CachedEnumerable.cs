@@ -25,10 +25,14 @@ internal class CachedEnumerable<T> : IEnumerable<T>
     public IEnumerator<T> GetEnumerator()
     {
         foreach (var element in cachedElements)
+        {
             yield return element;
+        }
 
         if (baseEnumerator == null)
+        {
             baseEnumerator = baseEnumerable.GetEnumerator();
+        }
 
         while (baseEnumerator.MoveNext())
         {

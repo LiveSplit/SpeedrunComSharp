@@ -31,7 +31,9 @@ public class CategoriesClient
         var id = GetCategoryIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
+        {
             return null;
+        }
 
         return GetCategory(id, embeds);
     }
@@ -47,7 +49,9 @@ public class CategoriesClient
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Category)
+        {
             return null;
+        }
 
         return elementDescription.ID;
     }
@@ -102,11 +106,19 @@ public class CategoriesClient
         var parameters = new List<string>() { embeds.ToString() };
 
         if (top.HasValue)
+        {
             parameters.Add(string.Format("top={0}", top.Value));
+        }
+
         if (skipEmptyLeaderboards)
+        {
             parameters.Add("skip-empty=true");
+        }
+
         if (elementsPerPage.HasValue)
+        {
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
+        }
 
         var uri = GetCategoriesUri(string.Format("/{0}/records{1}",
             Uri.EscapeDataString(categoryId),

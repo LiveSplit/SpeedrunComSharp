@@ -32,7 +32,9 @@ public class NotificationsClient
         var parameters = new List<string>();
 
         if (elementsPerPage.HasValue)
+        {
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
+        }
 
         parameters.AddRange(ordering.ToParameters());
 

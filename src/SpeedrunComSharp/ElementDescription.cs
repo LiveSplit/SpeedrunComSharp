@@ -40,6 +40,7 @@ public class ElementDescription
             case VariablesClient.Name:
                 return ElementType.Variable;
         }
+
         throw new ArgumentException("type");
     }
 
@@ -48,7 +49,9 @@ public class ElementDescription
         var splits = uri.Split('/');
 
         if (splits.Length < 2)
+        {
             return null;
+        }
 
         var id = splits[splits.Length - 1];
         var uriTypeString = splits[splits.Length - 2];

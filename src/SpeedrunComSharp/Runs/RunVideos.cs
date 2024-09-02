@@ -16,10 +16,14 @@ public class RunVideos
         if (!string.IsNullOrEmpty(videoUri))
         {
             if (!videoUri.StartsWith("http"))
+            {
                 videoUri = "http://" + videoUri;
+            }
 
             if (Uri.IsWellFormedUriString(videoUri, UriKind.Absolute))
+            {
                 return new Uri(videoUri);
+            }
         }
 
         return null;
@@ -28,7 +32,9 @@ public class RunVideos
     public static RunVideos Parse(SpeedrunComClient client, dynamic videosElement)
     {
         if (videosElement == null)
+        {
             return null;
+        }
 
         var videos = new RunVideos();
 

@@ -84,7 +84,6 @@ public class Notification : IElementWithID
             notification.game = new Lazy<Game>(() => null);
         }
 
-
         return notification;
     }
 }

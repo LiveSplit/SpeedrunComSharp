@@ -30,7 +30,9 @@ public class SeriesClient
         var id = GetSeriesIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
+        {
             return null;
+        }
 
         return GetSingleSeries(id, embeds);
     }
@@ -46,7 +48,9 @@ public class SeriesClient
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Series)
+        {
             return null;
+        }
 
         return elementDescription.ID;
     }
@@ -72,16 +76,24 @@ public class SeriesClient
         parameters.AddRange(orderBy.ToParameters());
 
         if (!string.IsNullOrEmpty(name))
+        {
             parameters.Add(string.Format("name={0}", Uri.EscapeDataString(name)));
+        }
 
         if (!string.IsNullOrEmpty(abbreviation))
+        {
             parameters.Add(string.Format("abbreviation={0}", Uri.EscapeDataString(abbreviation)));
+        }
 
         if (!string.IsNullOrEmpty(moderatorId))
+        {
             parameters.Add(string.Format("moderator={0}", Uri.EscapeDataString(moderatorId)));
+        }
 
         if (elementsPerPage.HasValue)
+        {
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
+        }
 
         var uri = GetSeriesUri(parameters.ToParameters());
         return baseClient.DoPaginatedRequest(uri,
@@ -133,22 +145,34 @@ public class SeriesClient
         parameters.AddRange(orderBy.ToParameters());
 
         if (!string.IsNullOrEmpty(name))
+        {
             parameters.Add(string.Format("name={0}", Uri.EscapeDataString(name)));
+        }
 
         if (yearOfRelease.HasValue)
+        {
             parameters.Add(string.Format("released={0}", yearOfRelease.Value));
+        }
 
         if (!string.IsNullOrEmpty(platformId))
+        {
             parameters.Add(string.Format("platform={0}", Uri.EscapeDataString(platformId)));
+        }
 
         if (!string.IsNullOrEmpty(regionId))
+        {
             parameters.Add(string.Format("region={0}", Uri.EscapeDataString(regionId)));
+        }
 
         if (!string.IsNullOrEmpty(moderatorId))
+        {
             parameters.Add(string.Format("moderator={0}", Uri.EscapeDataString(moderatorId)));
+        }
 
         if (elementsPerPage.HasValue)
+        {
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
+        }
 
         var uri = GetSeriesUri(string.Format("/{0}/games{1}",
             Uri.EscapeDataString(seriesId),

@@ -29,7 +29,9 @@ internal class PotentialEmbed<T>
             var parsedObject = objectParser(element.data);
             potentialEmbed.Object = new Lazy<G>(() => parsedObject);
             if (parsedObject != null)
+            {
                 potentialEmbed.ID = parsedObject.ID;
+            }
         }
 
         return potentialEmbed;

@@ -64,17 +64,25 @@ public class Leaderboard
 
         var emulators = leaderboardElement.emulators as string;
         if (emulators == "true")
+        {
             leaderboard.EmulatorFilter = EmulatorsFilter.OnlyEmulators;
+        }
         else if (emulators == "false")
+        {
             leaderboard.EmulatorFilter = EmulatorsFilter.NoEmulators;
+        }
         else
+        {
             leaderboard.EmulatorFilter = EmulatorsFilter.NotSet;
+        }
 
         leaderboard.AreRunsWithoutVideoFilteredOut = properties["video-only"];
 
         //TODO Not actually optional
         if (leaderboardElement.timing != null)
+        {
             leaderboard.OrderedBy = TimingMethodHelpers.FromString(leaderboardElement.timing as string);
+        }
 
         if (leaderboardElement.values is DynamicJsonObject)
         {
@@ -117,7 +125,9 @@ public class Leaderboard
             var category = Category.Parse(client, properties["category"].data) as Category;
             leaderboard.category = new Lazy<Category>(() => category);
             if (category != null)
+            {
                 leaderboard.CategoryID = category.ID;
+            }
         }
 
         if (properties["level"] == null)
@@ -134,7 +144,9 @@ public class Leaderboard
             var level = Level.Parse(client, properties["level"].data) as Level;
             leaderboard.level = new Lazy<Level>(() => level);
             if (level != null)
+            {
                 leaderboard.LevelID = level.ID;
+            }
         }
 
         if (properties["platform"] == null)
@@ -151,7 +163,9 @@ public class Leaderboard
             var platform = Platform.Parse(client, properties["platform"].data) as Platform;
             leaderboard.platformFilter = new Lazy<Platform>(() => platform);
             if (platform != null)
+            {
                 leaderboard.PlatformIDOfFilter = platform.ID;
+            }
         }
 
         if (properties["region"] == null)
@@ -168,7 +182,9 @@ public class Leaderboard
             var region = Region.Parse(client, properties["region"].data) as Region;
             leaderboard.regionFilter = new Lazy<Region>(() => region);
             if (region != null)
+            {
                 leaderboard.RegionIDOfFilter = region.ID;
+            }
         }
 
         //Parse Embeds

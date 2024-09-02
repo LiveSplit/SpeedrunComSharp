@@ -21,7 +21,9 @@ public class Platform : IElementWithID
     public static Platform Parse(SpeedrunComClient client, dynamic platformElement)
     {
         if (platformElement is ArrayList)
+        {
             return null;
+        }
 
         var platform = new Platform();
 
@@ -49,7 +51,9 @@ public class Platform : IElementWithID
         var other = obj as Platform;
 
         if (other == null)
+        {
             return false;
+        }
 
         return ID == other.ID;
     }

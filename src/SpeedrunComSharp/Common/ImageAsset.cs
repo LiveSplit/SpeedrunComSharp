@@ -11,7 +11,9 @@ public class ImageAsset
     public static ImageAsset Parse(SpeedrunComClient client, dynamic imageElement)
     {
         if (imageElement == null || imageElement.uri == null)
+        {
             return null;
+        }
 
         var image = new ImageAsset();
 

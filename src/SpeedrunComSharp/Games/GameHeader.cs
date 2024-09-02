@@ -40,7 +40,9 @@ public class GameHeader : IElementWithID
         var other = obj as GameHeader;
 
         if (other == null)
+        {
             return false;
+        }
 
         return ID == other.ID;
     }
