@@ -72,8 +72,8 @@ public class Category : IElementWithID
 
         if (properties.ContainsKey("variables"))
         {
-            Func<dynamic, Variable> parser = x => Variable.Parse(client, x) as Variable;
-            var variables = client.ParseCollection(properties["variables"].data, parser);
+            Variable parser(dynamic x) => Variable.Parse(client, x) as Variable;
+            var variables = client.ParseCollection(properties["variables"].data, (Func<dynamic, Variable>)parser);
             category.variables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
         }
         else

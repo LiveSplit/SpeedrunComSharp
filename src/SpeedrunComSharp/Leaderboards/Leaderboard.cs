@@ -86,8 +86,8 @@ public class Leaderboard
             leaderboard.VariableFilters = new List<VariableValue>().AsReadOnly();
         }
 
-        Func<dynamic, Record> recordParser = x => Record.Parse(client, x) as Record;
-        leaderboard.Records = client.ParseCollection(leaderboardElement.runs, recordParser);
+        Record recordParser(dynamic x) => Record.Parse(client, x) as Record;
+        leaderboard.Records = client.ParseCollection(leaderboardElement.runs, (Func<dynamic, Record>)recordParser);
 
         //Parse Links
 
@@ -171,8 +171,8 @@ public class Leaderboard
 
         if (properties.ContainsKey("players"))
         {
-            Func<dynamic, Player> playerParser = x => Player.Parse(client, x) as Player;
-            var players = client.ParseCollection(leaderboardElement.players.data, playerParser) as ReadOnlyCollection<Player>;
+            Player playerParser(dynamic x) => Player.Parse(client, x) as Player;
+            var players = client.ParseCollection(leaderboardElement.players.data, (Func<dynamic, Player>)playerParser) as ReadOnlyCollection<Player>;
 
             foreach (var record in leaderboard.Records)
             {
@@ -188,8 +188,8 @@ public class Leaderboard
 
         if (properties.ContainsKey("regions"))
         {
-            Func<dynamic, Region> regionParser = x => Region.Parse(client, x) as Region;
-            var regions = client.ParseCollection(leaderboardElement.regions.data, regionParser) as ReadOnlyCollection<Region>;
+            Region regionParser(dynamic x) => Region.Parse(client, x) as Region;
+            var regions = client.ParseCollection(leaderboardElement.regions.data, (Func<dynamic, Region>)regionParser) as ReadOnlyCollection<Region>;
 
             foreach (var record in leaderboard.Records)
             {
@@ -205,8 +205,8 @@ public class Leaderboard
 
         if (properties.ContainsKey("platforms"))
         {
-            Func<dynamic, Platform> platformParser = x => Platform.Parse(client, x) as Platform;
-            var platforms = client.ParseCollection(leaderboardElement.platforms.data, platformParser) as ReadOnlyCollection<Platform>;
+            Platform platformParser(dynamic x) => Platform.Parse(client, x) as Platform;
+            var platforms = client.ParseCollection(leaderboardElement.platforms.data, (Func<dynamic, Platform>)platformParser) as ReadOnlyCollection<Platform>;
 
             foreach (var record in leaderboard.Records)
             {
@@ -220,21 +220,21 @@ public class Leaderboard
             leaderboard.usedPlatforms = new Lazy<ReadOnlyCollection<Platform>>(() => leaderboard.Records.Select(x => x.Platform).Distinct().Where(x => x != null).ToList().AsReadOnly());
         }
 
-        Action<ReadOnlyCollection<Variable>> patchVariablesOfRecords = variables =>
+        void patchVariablesOfRecords(ReadOnlyCollection<Variable> variables)
+        {
+            foreach (var record in leaderboard.Records)
             {
-                foreach (var record in leaderboard.Records)
+                foreach (var value in record.VariableValues)
                 {
-                    foreach (var value in record.VariableValues)
-                    {
-                        value.variable = new Lazy<Variable>(() => variables.FirstOrDefault(x => x.ID == value.VariableID));
-                    }
+                    value.variable = new Lazy<Variable>(() => variables.FirstOrDefault(x => x.ID == value.VariableID));
                 }
-            };
+            }
+        }
 
         if (properties.ContainsKey("variables"))
         {
-            Func<dynamic, Variable> variableParser = x => Variable.Parse(client, x) as Variable;
-            var variables = client.ParseCollection(leaderboardElement.variables.data, variableParser) as ReadOnlyCollection<Variable>;
+            Variable variableParser(dynamic x) => Variable.Parse(client, x) as Variable;
+            var variables = client.ParseCollection(leaderboardElement.variables.data, (Func<dynamic, Variable>)variableParser) as ReadOnlyCollection<Variable>;
 
             patchVariablesOfRecords(variables);
 

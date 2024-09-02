@@ -59,8 +59,8 @@ public class Series : IElementWithID
 
         if (seriesElement.moderators is DynamicJsonObject && seriesElement.moderators.Properties.ContainsKey("data"))
         {
-            Func<dynamic, User> userParser = x => User.Parse(client, x) as User;
-            ReadOnlyCollection<User> users = client.ParseCollection(seriesElement.moderators.data, userParser);
+            User userParser(dynamic x) => User.Parse(client, x) as User;
+            ReadOnlyCollection<User> users = client.ParseCollection(seriesElement.moderators.data, (Func<dynamic, User>)userParser);
             series.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(() => users);
         }
         else if (seriesElement.moderators is DynamicJsonObject)

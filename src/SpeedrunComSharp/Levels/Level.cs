@@ -54,8 +54,8 @@ public class Level : IElementWithID
 
         if (properties.ContainsKey("categories"))
         {
-            Func<dynamic, Category> categoryParser = x => Category.Parse(client, x) as Category;
-            ReadOnlyCollection<Category> categories = client.ParseCollection(levelElement.categories.data, categoryParser);
+            Category categoryParser(dynamic x) => Category.Parse(client, x) as Category;
+            ReadOnlyCollection<Category> categories = client.ParseCollection(levelElement.categories.data, (Func<dynamic, Category>)categoryParser);
             level.categories = new Lazy<ReadOnlyCollection<Category>>(() => categories);
         }
         else
@@ -65,8 +65,8 @@ public class Level : IElementWithID
 
         if (properties.ContainsKey("variables"))
         {
-            Func<dynamic, Variable> variableParser = x => Variable.Parse(client, x) as Variable;
-            ReadOnlyCollection<Variable> variables = client.ParseCollection(levelElement.variables.data, variableParser);
+            Variable variableParser(dynamic x) => Variable.Parse(client, x) as Variable;
+            ReadOnlyCollection<Variable> variables = client.ParseCollection(levelElement.variables.data, (Func<dynamic, Variable>)variableParser);
             level.variables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
         }
         else

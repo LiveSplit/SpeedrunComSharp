@@ -54,11 +54,11 @@ public class Run : IElementWithID
         run.Comment = runElement.comment as string;
         run.Status = RunStatus.Parse(client, runElement.status) as RunStatus;
 
-        Func<dynamic, Player> parsePlayer = x => Player.Parse(client, x) as Player;
+        Player parsePlayer(dynamic x) => Player.Parse(client, x) as Player;
 
         if (runElement.players is IEnumerable<dynamic>)
         {
-            run.Players = client.ParseCollection(runElement.players, parsePlayer);
+            run.Players = client.ParseCollection(runElement.players, (Func<dynamic, Player>)parsePlayer);
         }
         else if (runElement.players is System.Collections.ArrayList && runElement.players.Count == 0)
         {
@@ -66,7 +66,7 @@ public class Run : IElementWithID
         }
         else
         {
-            run.Players = client.ParseCollection(runElement.players.data, parsePlayer);
+            run.Players = client.ParseCollection(runElement.players.data, (Func<dynamic, Player>)parsePlayer);
         }
 
         var runDate = runElement.date;

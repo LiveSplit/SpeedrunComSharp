@@ -98,8 +98,8 @@ public class Game : IElementWithID
 
         if (gameElement.moderators is DynamicJsonObject && gameElement.moderators.Properties.ContainsKey("data"))
         {
-            Func<dynamic, User> userParser = x => User.Parse(client, x) as User;
-            ReadOnlyCollection<User> users = client.ParseCollection(gameElement.moderators.data, userParser);
+            User userParser(dynamic x) => User.Parse(client, x) as User;
+            ReadOnlyCollection<User> users = client.ParseCollection(gameElement.moderators.data, (Func<dynamic, User>)userParser);
             game.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(() => users);
         }
         else if (gameElement.moderators is DynamicJsonObject)
@@ -156,8 +156,8 @@ public class Game : IElementWithID
         }
         else
         {
-            Func<dynamic, Platform> platformParser = x => Platform.Parse(client, x) as Platform;
-            ReadOnlyCollection<Platform> platforms = client.ParseCollection(gameElement.platforms.data, platformParser);
+            Platform platformParser(dynamic x) => Platform.Parse(client, x) as Platform;
+            ReadOnlyCollection<Platform> platforms = client.ParseCollection(gameElement.platforms.data, (Func<dynamic, Platform>)platformParser);
             game.platforms = new Lazy<ReadOnlyCollection<Platform>>(() => platforms);
             game.PlatformIDs = platforms.Select(x => x.ID).ToList().AsReadOnly();
         }
@@ -179,8 +179,8 @@ public class Game : IElementWithID
         }
         else
         {
-            Func<dynamic, Region> regionParser = x => Region.Parse(client, x) as Region;
-            ReadOnlyCollection<Region> regions = client.ParseCollection(gameElement.regions.data, regionParser);
+            Region regionParser(dynamic x) => Region.Parse(client, x) as Region;
+            ReadOnlyCollection<Region> regions = client.ParseCollection(gameElement.regions.data, (Func<dynamic, Region>)regionParser);
             game.regions = new Lazy<ReadOnlyCollection<Region>>(() => regions);
             game.RegionIDs = regions.Select(x => x.ID).ToList().AsReadOnly();
         }
@@ -191,8 +191,8 @@ public class Game : IElementWithID
 
         if (properties.ContainsKey("levels"))
         {
-            Func<dynamic, Level> levelParser = x => Level.Parse(client, x) as Level;
-            ReadOnlyCollection<Level> levels = client.ParseCollection(gameElement.levels.data, levelParser);
+            Level levelParser(dynamic x) => Level.Parse(client, x) as Level;
+            ReadOnlyCollection<Level> levels = client.ParseCollection(gameElement.levels.data, (Func<dynamic, Level>)levelParser);
             game.levels = new Lazy<ReadOnlyCollection<Level>>(() => levels);
         }
         else
@@ -202,8 +202,8 @@ public class Game : IElementWithID
 
         if (properties.ContainsKey("categories"))
         {
-            Func<dynamic, Category> categoryParser = x => Category.Parse(client, x) as Category;
-            ReadOnlyCollection<Category> categories = client.ParseCollection(gameElement.categories.data, categoryParser);
+            Category categoryParser(dynamic x) => Category.Parse(client, x) as Category;
+            ReadOnlyCollection<Category> categories = client.ParseCollection(gameElement.categories.data, (Func<dynamic, Category>)categoryParser);
 
             foreach (var category in categories)
             {
@@ -229,8 +229,8 @@ public class Game : IElementWithID
 
         if (properties.ContainsKey("variables"))
         {
-            Func<dynamic, Variable> variableParser = x => Variable.Parse(client, x) as Variable;
-            ReadOnlyCollection<Variable> variables = client.ParseCollection(gameElement.variables.data, variableParser);
+            Variable variableParser(dynamic x) => Variable.Parse(client, x) as Variable;
+            ReadOnlyCollection<Variable> variables = client.ParseCollection(gameElement.variables.data, (Func<dynamic, Variable>)variableParser);
             game.variables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
         }
         else

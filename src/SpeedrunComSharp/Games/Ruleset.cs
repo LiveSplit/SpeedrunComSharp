@@ -26,8 +26,8 @@ public class Ruleset
         ruleset.RequiresVerification = properties["require-verification"];
         ruleset.RequiresVideo = properties["require-video"];
 
-        Func<dynamic, TimingMethod> timingMethodParser = x => TimingMethodHelpers.FromString(x as string);
-        ruleset.TimingMethods = client.ParseCollection(properties["run-times"], timingMethodParser);
+        static TimingMethod timingMethodParser(dynamic x) => TimingMethodHelpers.FromString(x as string);
+        ruleset.TimingMethods = client.ParseCollection(properties["run-times"], (Func<dynamic, TimingMethod>)timingMethodParser);
         ruleset.DefaultTimingMethod = TimingMethodHelpers.FromString(properties["default-time"]);
 
         ruleset.EmulatorsAllowed = properties["emulators-allowed"];
