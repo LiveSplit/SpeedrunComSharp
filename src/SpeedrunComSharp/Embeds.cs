@@ -42,7 +42,7 @@ internal struct Embeds
     {
         if (embedDictionary == null)
         {
-            embedDictionary = new Dictionary<string, bool>();
+            embedDictionary = [];
         }
     }
 

@@ -21,12 +21,13 @@ public class Moderator
 
     public static Moderator Parse(SpeedrunComClient client, KeyValuePair<string, dynamic> moderatorElement)
     {
-        var moderator = new Moderator();
-
-        moderator.UserID = moderatorElement.Key;
-        moderator.Type = (moderatorElement.Value as string) == "moderator"
+        var moderator = new Moderator
+        {
+            UserID = moderatorElement.Key,
+            Type = (moderatorElement.Value as string) == "moderator"
             ? ModeratorType.Moderator
-            : ModeratorType.SuperModerator;
+            : ModeratorType.SuperModerator
+        };
 
         moderator.user = new Lazy<User>(() => client.Users.GetUser(moderator.UserID));
 

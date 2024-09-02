@@ -44,7 +44,7 @@ internal class HttpWebLink
 
         foreach (var parameter in parameters)
         {
-            var splits = parameter.Split(new[] { '=' }, 2);
+            var splits = parameter.Split(['='], 2);
             if (splits.Length == 2)
             {
                 var parameterType = splits[0];

@@ -36,14 +36,15 @@ public class Level : IElementWithID
             return null;
         }
 
-        var level = new Level();
+        var level = new Level
+        {
+            //Parse Attributes
 
-        //Parse Attributes
-
-        level.ID = levelElement.id as string;
-        level.Name = levelElement.name as string;
-        level.WebLink = new Uri(levelElement.weblink as string);
-        level.Rules = levelElement.rules;
+            ID = levelElement.id as string,
+            Name = levelElement.name as string,
+            WebLink = new Uri(levelElement.weblink as string),
+            Rules = levelElement.rules
+        };
 
         //Parse Links
 

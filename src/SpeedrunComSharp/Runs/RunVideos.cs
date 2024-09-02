@@ -36,11 +36,12 @@ public class RunVideos
             return null;
         }
 
-        var videos = new RunVideos();
+        var videos = new RunVideos
+        {
+            Text = videosElement.text as string,
 
-        videos.Text = videosElement.text as string;
-
-        videos.Links = client.ParseCollection(videosElement.links, new Func<dynamic, Uri>(parseVideoLink));
+            Links = client.ParseCollection(videosElement.links, new Func<dynamic, Uri>(parseVideoLink))
+        };
 
         return videos;
     }

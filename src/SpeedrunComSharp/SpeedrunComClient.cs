@@ -110,7 +110,7 @@ public class SpeedrunComClient
         UserAgent = userAgent;
         MaxCacheElements = maxCacheElements;
         AccessToken = accessToken;
-        Cache = new Dictionary<Uri, dynamic>();
+        Cache = [];
         Categories = new CategoriesClient(this);
         Games = new GamesClient(this);
         Guests = new GuestsClient(this);

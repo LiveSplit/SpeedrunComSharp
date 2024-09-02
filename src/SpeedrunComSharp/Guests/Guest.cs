@@ -16,9 +16,10 @@ public class Guest
 
     public static Guest Parse(SpeedrunComClient client, dynamic guestElement)
     {
-        var guest = new Guest();
-
-        guest.Name = guestElement.name;
+        var guest = new Guest
+        {
+            Name = guestElement.name
+        };
         guest.Runs = client.Runs.GetRuns(guestName: guest.Name);
 
         return guest;

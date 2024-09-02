@@ -41,12 +41,13 @@ public class Region : IElementWithID
             return null;
         }
 
-        var region = new Region();
+        var region = new Region
+        {
+            //Parse Attributes
 
-        //Parse Attributes
-
-        region.ID = regionElement.id as string;
-        region.Name = regionElement.name as string;
+            ID = regionElement.id as string,
+            Name = regionElement.name as string
+        };
 
         //Parse Links
 

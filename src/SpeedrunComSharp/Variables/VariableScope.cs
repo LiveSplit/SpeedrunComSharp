@@ -36,9 +36,10 @@ public class VariableScope
 
     public static VariableScope Parse(SpeedrunComClient client, dynamic scopeElement)
     {
-        var scope = new VariableScope();
-
-        scope.Type = parseType(scopeElement.type as string);
+        var scope = new VariableScope
+        {
+            Type = parseType(scopeElement.type as string)
+        };
 
         if (scope.Type == VariableScopeType.SingleLevel)
         {

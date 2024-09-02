@@ -10,9 +10,10 @@ public class Record : Run
 
     public static new Record Parse(SpeedrunComClient client, dynamic recordElement)
     {
-        var record = new Record();
-
-        record.Rank = recordElement.place;
+        var record = new Record
+        {
+            Rank = recordElement.place
+        };
 
         //Parse potential embeds
 

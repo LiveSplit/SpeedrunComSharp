@@ -19,7 +19,7 @@ internal class CachedEnumerable<T> : IEnumerable<T>
     public CachedEnumerable(IEnumerable<T> baseEnumerable)
     {
         this.baseEnumerable = baseEnumerable;
-        cachedElements = new List<T>();
+        cachedElements = [];
     }
 
     public IEnumerator<T> GetEnumerator()

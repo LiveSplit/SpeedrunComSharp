@@ -25,13 +25,14 @@ public class Platform : IElementWithID
             return null;
         }
 
-        var platform = new Platform();
+        var platform = new Platform
+        {
+            //Parse Attributes
 
-        //Parse Attributes
-
-        platform.ID = platformElement.id as string;
-        platform.Name = platformElement.name as string;
-        platform.YearOfRelease = (int)platformElement.released;
+            ID = platformElement.id as string,
+            Name = platformElement.name as string,
+            YearOfRelease = (int)platformElement.released
+        };
 
         //Parse Links
 

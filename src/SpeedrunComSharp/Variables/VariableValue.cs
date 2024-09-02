@@ -27,9 +27,10 @@ public class VariableValue : IElementWithID
 
     public static VariableValue CreateCustomValue(SpeedrunComClient client, string variableId, string customValue)
     {
-        var value = new VariableValue();
-
-        value.VariableID = variableId;
+        var value = new VariableValue
+        {
+            VariableID = variableId
+        };
 
         value.variable = new Lazy<Variable>(() => client.Variables.GetVariable(value.VariableID));
         value.value = new Lazy<string>(() => customValue);
@@ -39,10 +40,11 @@ public class VariableValue : IElementWithID
 
     public static VariableValue ParseValueDescriptor(SpeedrunComClient client, KeyValuePair<string, dynamic> valueElement)
     {
-        var value = new VariableValue();
-
-        value.VariableID = valueElement.Key;
-        value.ID = valueElement.Value as string;
+        var value = new VariableValue
+        {
+            VariableID = valueElement.Key,
+            ID = valueElement.Value as string
+        };
 
         //Parse Links
 
@@ -54,14 +56,15 @@ public class VariableValue : IElementWithID
 
     public static VariableValue ParseIDPair(SpeedrunComClient client, Variable variable, KeyValuePair<string, dynamic> valueElement)
     {
-        var value = new VariableValue();
+        var value = new VariableValue
+        {
+            VariableID = variable.ID,
+            ID = valueElement.Key as string,
 
-        value.VariableID = variable.ID;
-        value.ID = valueElement.Key as string;
+            //Parse Links
 
-        //Parse Links
-
-        value.variable = new Lazy<Variable>(() => variable);
+            variable = new Lazy<Variable>(() => variable)
+        };
 
         var valueName = valueElement.Value as string;
         value.value = new Lazy<string>(() => valueName);

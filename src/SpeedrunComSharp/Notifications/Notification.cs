@@ -32,16 +32,17 @@ public class Notification : IElementWithID
 
     public static Notification Parse(SpeedrunComClient client, dynamic notificationElement)
     {
-        var notification = new Notification();
+        var notification = new Notification
+        {
+            //Parse Attributes
 
-        //Parse Attributes
-
-        notification.ID = notificationElement.id as string;
-        notification.TimeCreated = DateTime.Parse(notificationElement.created as string, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
-        notification.Status = NotificationStatusHelpers.Parse(notificationElement.status as string);
-        notification.Text = notificationElement.text as string;
-        notification.Type = NotificationTypeHelpers.Parse(notificationElement.item.rel as string);
-        notification.WebLink = new Uri(notificationElement.item.uri as string);
+            ID = notificationElement.id as string,
+            TimeCreated = DateTime.Parse(notificationElement.created as string, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
+            Status = NotificationStatusHelpers.Parse(notificationElement.status as string),
+            Text = notificationElement.text as string,
+            Type = NotificationTypeHelpers.Parse(notificationElement.item.rel as string),
+            WebLink = new Uri(notificationElement.item.uri as string)
+        };
 
         //Parse Links
 

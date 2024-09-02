@@ -41,17 +41,18 @@ public class Category : IElementWithID
             return null;
         }
 
-        var category = new Category();
+        var category = new Category
+        {
+            //Parse Attributes
 
-        //Parse Attributes
-
-        category.ID = categoryElement.id as string;
-        category.Name = categoryElement.name as string;
-        category.WebLink = new Uri(categoryElement.weblink as string);
-        category.Type = categoryElement.type == "per-game" ? CategoryType.PerGame : CategoryType.PerLevel;
-        category.Rules = categoryElement.rules as string;
-        category.Players = Players.Parse(client, categoryElement.players);
-        category.IsMiscellaneous = categoryElement.miscellaneous;
+            ID = categoryElement.id as string,
+            Name = categoryElement.name as string,
+            WebLink = new Uri(categoryElement.weblink as string),
+            Type = categoryElement.type == "per-game" ? CategoryType.PerGame : CategoryType.PerLevel,
+            Rules = categoryElement.rules as string,
+            Players = Players.Parse(client, categoryElement.players),
+            IsMiscellaneous = categoryElement.miscellaneous
+        };
 
         //Parse Links
 

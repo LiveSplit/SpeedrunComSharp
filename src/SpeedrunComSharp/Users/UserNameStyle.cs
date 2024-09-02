@@ -24,9 +24,10 @@ public class UserNameStyle
 
     public static UserNameStyle Parse(SpeedrunComClient client, dynamic styleElement)
     {
-        var style = new UserNameStyle();
-
-        style.IsGradient = styleElement.style == "gradient";
+        var style = new UserNameStyle
+        {
+            IsGradient = styleElement.style == "gradient"
+        };
 
         if (style.IsGradient)
         {

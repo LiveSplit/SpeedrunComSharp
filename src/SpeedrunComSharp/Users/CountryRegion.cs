@@ -10,11 +10,12 @@ public class CountryRegion
 
     public static CountryRegion Parse(SpeedrunComClient client, dynamic regionElement)
     {
-        var region = new CountryRegion();
-
-        region.Code = regionElement.code as string;
-        region.Name = regionElement.names.international as string;
-        region.JapaneseName = regionElement.names.japanese as string;
+        var region = new CountryRegion
+        {
+            Code = regionElement.code as string,
+            Name = regionElement.names.international as string,
+            JapaneseName = regionElement.names.japanese as string
+        };
 
         return region;
     }

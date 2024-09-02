@@ -22,9 +22,10 @@ public class RunSystem
 
     public static RunSystem Parse(SpeedrunComClient client, dynamic systemElement)
     {
-        var system = new RunSystem();
-
-        system.IsEmulated = (bool)systemElement.emulated;
+        var system = new RunSystem
+        {
+            IsEmulated = (bool)systemElement.emulated
+        };
 
         if (!string.IsNullOrEmpty(systemElement.platform as string))
         {
