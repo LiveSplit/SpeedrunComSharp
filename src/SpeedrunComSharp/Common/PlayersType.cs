@@ -1,7 +1,6 @@
-﻿namespace SpeedrunComSharp
+﻿namespace SpeedrunComSharp;
+
+public enum PlayersType
 {
-    public enum PlayersType
-    {
-        Exactly, UpTo
-    }
+    Exactly, UpTo
 }

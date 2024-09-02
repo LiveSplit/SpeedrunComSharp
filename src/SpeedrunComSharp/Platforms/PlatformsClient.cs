@@ -1,88 +1,87 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SpeedrunComSharp
+namespace SpeedrunComSharp;
+
+public class PlatformsClient
 {
-    public class PlatformsClient
+    public const string Name = "platforms";
+
+    private SpeedrunComClient baseClient;
+
+    public PlatformsClient(SpeedrunComClient baseClient)
     {
-        public const string Name = "platforms";
+        this.baseClient = baseClient;
+    }
 
-        private SpeedrunComClient baseClient;
+    public static Uri GetPlatformsUri(string subUri)
+    {
+        return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
+    }
 
-        public PlatformsClient(SpeedrunComClient baseClient)
-        {
-            this.baseClient = baseClient;
-        }
+    /// <summary>
+    /// Fetch a Platform object identified by its URI.
+    /// </summary>
+    /// <param name="siteUri">The site URI for the platform.</param>
+    /// <returns></returns>
+    public Platform GetPlatformFromSiteUri(string siteUri)
+    {
+        var id = GetPlatformIDFromSiteUri(siteUri);
 
-        public static Uri GetPlatformsUri(string subUri)
-        {
-            return SpeedrunComClient.GetAPIUri(string.Format("{0}{1}", Name, subUri));
-        }
+        if (string.IsNullOrEmpty(id))
+            return null;
 
-        /// <summary>
-        /// Fetch a Platform object identified by its URI.
-        /// </summary>
-        /// <param name="siteUri">The site URI for the platform.</param>
-        /// <returns></returns>
-        public Platform GetPlatformFromSiteUri(string siteUri)
-        {
-            var id = GetPlatformIDFromSiteUri(siteUri);
+        return GetPlatform(id);
+    }
 
-            if (string.IsNullOrEmpty(id))
-                return null;
+    /// <summary>
+    /// Fetch a Platform ID identified by its URI.
+    /// </summary>
+    /// <param name="siteUri">The site URI for the platform.</param>
+    /// <returns></returns>
+    public string GetPlatformIDFromSiteUri(string siteUri)
+    {
+        var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
 
-            return GetPlatform(id);
-        }
+        if (elementDescription == null
+            || elementDescription.Type != ElementType.Platform)
+            return null;
 
-        /// <summary>
-        /// Fetch a Platform ID identified by its URI.
-        /// </summary>
-        /// <param name="siteUri">The site URI for the platform.</param>
-        /// <returns></returns>
-        public string GetPlatformIDFromSiteUri(string siteUri)
-        {
-            var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
+        return elementDescription.ID;
+    }
 
-            if (elementDescription == null
-                || elementDescription.Type != ElementType.Platform)
-                return null;
+    /// <summary>
+    /// Fetch a Collection of Platform objects.
+    /// </summary>
+    /// <param name="elementsPerPage">Optional. If included, will dictate the amount of elements included in each pagination.</param>
+    /// <param name="orderBy">Optional. If omitted, platforms will be in the same order as the API.</param>
+    /// <returns></returns>
+    public IEnumerable<Platform> GetPlatforms(int? elementsPerPage = null,
+        PlatformsOrdering orderBy = default(PlatformsOrdering))
+    {
+        var parameters = new List<string>();
 
-            return elementDescription.ID;
-        }
+        parameters.AddRange(orderBy.ToParameters());
 
-        /// <summary>
-        /// Fetch a Collection of Platform objects.
-        /// </summary>
-        /// <param name="elementsPerPage">Optional. If included, will dictate the amount of elements included in each pagination.</param>
-        /// <param name="orderBy">Optional. If omitted, platforms will be in the same order as the API.</param>
-        /// <returns></returns>
-        public IEnumerable<Platform> GetPlatforms(int? elementsPerPage = null,
-            PlatformsOrdering orderBy = default(PlatformsOrdering))
-        {
-            var parameters = new List<string>();
+        if (elementsPerPage.HasValue)
+            parameters.Add(string.Format("max={0}", elementsPerPage.Value));
 
-            parameters.AddRange(orderBy.ToParameters());
+        var uri = GetPlatformsUri(parameters.ToParameters());
 
-            if (elementsPerPage.HasValue)
-                parameters.Add(string.Format("max={0}", elementsPerPage.Value));
+        return baseClient.DoPaginatedRequest(uri,
+            x => Platform.Parse(baseClient, x) as Platform);
+    }
 
-            var uri = GetPlatformsUri(parameters.ToParameters());
+    /// <summary>
+    /// Fetch a Platform object identified by its ID.
+    /// </summary>
+    /// <param name="platformId">The ID for the platform.</param>
+    /// <returns></returns>
+    public Platform GetPlatform(string platformId)
+    {
+        var uri = GetPlatformsUri(string.Format("/{0}", Uri.EscapeDataString(platformId)));
+        var result = baseClient.DoRequest(uri);
 
-            return baseClient.DoPaginatedRequest(uri,
-                x => Platform.Parse(baseClient, x) as Platform);
-        }
-
-        /// <summary>
-        /// Fetch a Platform object identified by its ID.
-        /// </summary>
-        /// <param name="platformId">The ID for the platform.</param>
-        /// <returns></returns>
-        public Platform GetPlatform(string platformId)
-        {
-            var uri = GetPlatformsUri(string.Format("/{0}", Uri.EscapeDataString(platformId)));
-            var result = baseClient.DoRequest(uri);
-
-            return Platform.Parse(baseClient, result.data);
-        }
+        return Platform.Parse(baseClient, result.data);
     }
 }

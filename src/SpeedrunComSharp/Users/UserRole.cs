@@ -1,7 +1,6 @@
-﻿namespace SpeedrunComSharp
+﻿namespace SpeedrunComSharp;
+
+public enum UserRole
 {
-    public enum UserRole
-    {
-        Banned, User, Trusted, Moderator, Admin, Programmer, ContentModerator
-    }
+    Banned, User, Trusted, Moderator, Admin, Programmer, ContentModerator
 }

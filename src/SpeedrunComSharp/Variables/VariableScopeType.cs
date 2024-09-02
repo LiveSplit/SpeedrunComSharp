@@ -1,7 +1,6 @@
-﻿namespace SpeedrunComSharp
+﻿namespace SpeedrunComSharp;
+
+public enum VariableScopeType
 {
-    public enum VariableScopeType
-    {
-        Global, FullGame, AllLevels, SingleLevel
-    }
+    Global, FullGame, AllLevels, SingleLevel
 }

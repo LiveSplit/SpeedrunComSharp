@@ -2,91 +2,90 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SpeedrunComSharp
+namespace SpeedrunComSharp;
+
+public class VariableValue : IElementWithID
 {
-    public class VariableValue : IElementWithID
+    public string ID { get; private set; }
+
+    public string VariableID { get; private set; }
+
+    #region Links
+
+    internal Lazy<Variable> variable;
+    internal Lazy<string> value;
+
+    public Variable Variable { get { return variable.Value; } }
+    public string Value { get { return value.Value; } }
+    public string Name { get { return Variable.Name; } }
+
+    public bool IsCustomValue { get { return string.IsNullOrEmpty(ID); } }
+
+    #endregion
+
+    private VariableValue() { }
+
+    public static VariableValue CreateCustomValue(SpeedrunComClient client, string variableId, string customValue)
     {
-        public string ID { get; private set; }
+        var value = new VariableValue();
 
-        public string VariableID { get; private set; }        
+        value.VariableID = variableId;
 
-        #region Links
+        value.variable = new Lazy<Variable>(() => client.Variables.GetVariable(value.VariableID));
+        value.value = new Lazy<string>(() => customValue);
 
-        internal Lazy<Variable> variable;
-        internal Lazy<string> value;
+        return value;
+    }
 
-        public Variable Variable { get { return variable.Value; } }
-        public string Value { get { return value.Value; } }
-        public string Name { get { return Variable.Name; } }
+    public static VariableValue ParseValueDescriptor(SpeedrunComClient client, KeyValuePair<string, dynamic> valueElement)
+    {
+        var value = new VariableValue();
 
-        public bool IsCustomValue { get { return string.IsNullOrEmpty(ID); } }
+        value.VariableID = valueElement.Key;
+        value.ID = valueElement.Value as string;
 
-        #endregion
+        //Parse Links
 
-        private VariableValue() { }
+        value.variable = new Lazy<Variable>(() => client.Variables.GetVariable(value.VariableID));
+        value.value = new Lazy<string>(() => value.Variable.Values.FirstOrDefault(x => x.ID == value.ID).Value);
 
-        public static VariableValue CreateCustomValue(SpeedrunComClient client, string variableId, string customValue)
-        {
-            var value = new VariableValue();
+        return value;
+    }
 
-            value.VariableID = variableId;
+    public static VariableValue ParseIDPair(SpeedrunComClient client, Variable variable, KeyValuePair<string, dynamic> valueElement)
+    {
+        var value = new VariableValue();
 
-            value.variable = new Lazy<Variable>(() => client.Variables.GetVariable(value.VariableID));
-            value.value = new Lazy<string>(() => customValue);
+        value.VariableID = variable.ID;
+        value.ID = valueElement.Key as string;
 
-            return value;
-        }
+        //Parse Links
 
-        public static VariableValue ParseValueDescriptor(SpeedrunComClient client, KeyValuePair<string, dynamic> valueElement)
-        {
-            var value = new VariableValue();
+        value.variable = new Lazy<Variable>(() => variable);
 
-            value.VariableID = valueElement.Key;
-            value.ID = valueElement.Value as string;
+        var valueName = valueElement.Value as string;
+        value.value = new Lazy<string>(() => valueName);
 
-            //Parse Links
+        return value;
+    }
 
-            value.variable = new Lazy<Variable>(() => client.Variables.GetVariable(value.VariableID));
-            value.value = new Lazy<string>(() => value.Variable.Values.FirstOrDefault(x => x.ID == value.ID).Value);
+    public override int GetHashCode()
+    {
+        return (ID ?? string.Empty).GetHashCode();
+    }
 
-            return value;
-        }
+    public override bool Equals(object obj)
+    {
+        var other = obj as VariableValue;
 
-        public static VariableValue ParseIDPair(SpeedrunComClient client, Variable variable, KeyValuePair<string, dynamic> valueElement)
-        {
-            var value = new VariableValue();
+        if (other == null)
+            return false;
 
-            value.VariableID = variable.ID;
-            value.ID = valueElement.Key as string;
+        return ID == other.ID;
+    }
 
-            //Parse Links
-
-            value.variable = new Lazy<Variable>(() => variable);
-
-            var valueName = valueElement.Value as string;
-            value.value = new Lazy<string>(() => valueName);
-
-            return value;
-        }
-
-        public override int GetHashCode()
-        {
-            return (ID ?? string.Empty).GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            var other = obj as VariableValue;
-
-            if (other == null)
-                return false;
-
-            return ID == other.ID;
-        }
-
-        public override string ToString()
-        {
-            return Value;
-        }
+    public override string ToString()
+    {
+        return Value;
     }
 }

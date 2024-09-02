@@ -1,24 +1,23 @@
 ﻿using System;
 
-namespace SpeedrunComSharp
+namespace SpeedrunComSharp;
+
+public class ImageAsset
 {
-    public class ImageAsset
+    public Uri Uri { get; private set; }
+
+    private ImageAsset() { }
+
+    public static ImageAsset Parse(SpeedrunComClient client, dynamic imageElement)
     {
-        public Uri Uri { get; private set; }
+        if (imageElement == null || imageElement.uri == null)
+            return null;
 
-        private ImageAsset() { }
+        var image = new ImageAsset();
 
-        public static ImageAsset Parse(SpeedrunComClient client, dynamic imageElement)
-        {
-            if (imageElement == null || imageElement.uri == null)
-                return null;
+        var uri = imageElement.uri as string;
+        image.Uri = new Uri(uri);
 
-            var image = new ImageAsset();
-
-            var uri = imageElement.uri as string;
-            image.Uri = new Uri(uri);
-
-            return image;
-        }
+        return image;
     }
 }

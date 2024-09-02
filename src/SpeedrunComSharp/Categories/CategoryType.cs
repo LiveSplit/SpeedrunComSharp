@@ -1,7 +1,6 @@
-﻿namespace SpeedrunComSharp
+﻿namespace SpeedrunComSharp;
+
+public enum CategoryType
 {
-    public enum CategoryType
-    {
-        PerGame, PerLevel
-    }
+    PerGame, PerLevel
 }

@@ -4,151 +4,150 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace SpeedrunComSharp
+namespace SpeedrunComSharp;
+
+public class Category : IElementWithID
 {
-    public class Category : IElementWithID
+    public string ID { get; private set; }
+    public string Name { get; private set; }
+    public Uri WebLink { get; private set; }
+    public CategoryType Type { get; private set; }
+    public string Rules { get; private set; }
+    public Players Players { get; private set; }
+    public bool IsMiscellaneous { get; private set; }
+
+    #region Links
+
+    internal Lazy<Game> game;
+    private Lazy<ReadOnlyCollection<Variable>> variables;
+    private Lazy<Leaderboard> leaderboard;
+    private Lazy<Record> worldRecord;
+
+    public string GameID { get; private set; }
+    public Game Game { get { return game.Value; } }
+    public ReadOnlyCollection<Variable> Variables { get { return variables.Value; } }
+    public IEnumerable<Run> Runs { get; private set; }
+    public Leaderboard Leaderboard { get { return leaderboard.Value; } }
+    public Record WorldRecord { get { return worldRecord.Value; } }
+
+    #endregion
+
+    private Category() { }
+
+    public static Category Parse(SpeedrunComClient client, dynamic categoryElement)
     {
-        public string ID { get; private set; }
-        public string Name { get; private set; }
-        public Uri WebLink { get; private set; }
-        public CategoryType Type { get; private set; }
-        public string Rules { get; private set; }
-        public Players Players { get; private set; }
-        public bool IsMiscellaneous { get; private set; }
+        if (categoryElement is ArrayList)
+            return null;
 
-        #region Links
+        var category = new Category();
 
-        internal Lazy<Game> game;
-        private Lazy<ReadOnlyCollection<Variable>> variables;
-        private Lazy<Leaderboard> leaderboard;
-        private Lazy<Record> worldRecord;
+        //Parse Attributes
 
-        public string GameID { get; private set; }
-        public Game Game { get { return game.Value; } }
-        public ReadOnlyCollection<Variable> Variables { get { return variables.Value; } }
-        public IEnumerable<Run> Runs { get; private set; }
-        public Leaderboard Leaderboard { get { return leaderboard.Value; } }
-        public Record WorldRecord { get { return worldRecord.Value; }}
+        category.ID = categoryElement.id as string;
+        category.Name = categoryElement.name as string;
+        category.WebLink = new Uri(categoryElement.weblink as string);
+        category.Type = categoryElement.type == "per-game" ? CategoryType.PerGame : CategoryType.PerLevel;
+        category.Rules = categoryElement.rules as string;
+        category.Players = Players.Parse(client, categoryElement.players);
+        category.IsMiscellaneous = categoryElement.miscellaneous;
 
-        #endregion
+        //Parse Links
 
-        private Category() { }
+        var properties = categoryElement.Properties as IDictionary<string, dynamic>;
+        var links = properties["links"] as IEnumerable<dynamic>;
 
-        public static Category Parse(SpeedrunComClient client, dynamic categoryElement)
+        var gameUri = links.First(x => x.rel == "game").uri as string;
+        category.GameID = gameUri.Substring(gameUri.LastIndexOf('/') + 1);
+
+        if (properties.ContainsKey("game"))
         {
-            if (categoryElement is ArrayList)
-                return null;
+            var gameElement = properties["game"].data;
+            var game = Game.Parse(client, gameElement) as Game;
+            category.game = new Lazy<Game>(() => game);
+        }
+        else
+        {
+            category.game = new Lazy<Game>(() => client.Games.GetGame(category.GameID));
+        }
 
-            var category = new Category();
+        if (properties.ContainsKey("variables"))
+        {
+            Func<dynamic, Variable> parser = x => Variable.Parse(client, x) as Variable;
+            var variables = client.ParseCollection(properties["variables"].data, parser);
+            category.variables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
+        }
+        else
+        {
+            category.variables = new Lazy<ReadOnlyCollection<Variable>>(() => client.Categories.GetVariables(category.ID));
+        }
 
-            //Parse Attributes
+        category.Runs = client.Runs.GetRuns(categoryId: category.ID);
 
-            category.ID = categoryElement.id as string;
-            category.Name = categoryElement.name as string;
-            category.WebLink = new Uri(categoryElement.weblink as string);
-            category.Type = categoryElement.type == "per-game" ? CategoryType.PerGame : CategoryType.PerLevel;
-            category.Rules = categoryElement.rules as string;
-            category.Players = Players.Parse(client, categoryElement.players);
-            category.IsMiscellaneous = categoryElement.miscellaneous;
+        if (category.Type == CategoryType.PerGame)
+        {
 
-            //Parse Links
+            category.leaderboard = new Lazy<Leaderboard>(() =>
+                {
+                    var leaderboard = client.Leaderboards
+                                    .GetLeaderboardForFullGameCategory(category.GameID, category.ID);
 
-            var properties = categoryElement.Properties as IDictionary<string, dynamic>;
-            var links = properties["links"] as IEnumerable<dynamic>;
+                    leaderboard.game = new Lazy<Game>(() => category.Game);
+                    leaderboard.category = new Lazy<Category>(() => category);
 
-            var gameUri = links.First(x => x.rel == "game").uri as string;
-            category.GameID = gameUri.Substring(gameUri.LastIndexOf('/') + 1);
-
-            if (properties.ContainsKey("game"))
-            {
-                var gameElement = properties["game"].data;
-                var game = Game.Parse(client, gameElement) as Game;
-                category.game = new Lazy<Game>(() => game);
-            }
-            else
-            {
-                category.game = new Lazy<Game>(() => client.Games.GetGame(category.GameID));
-            }
-
-            if (properties.ContainsKey("variables"))
-            {
-                Func<dynamic, Variable> parser = x => Variable.Parse(client, x) as Variable;
-                var variables = client.ParseCollection(properties["variables"].data, parser);
-                category.variables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
-            }
-            else
-            {
-                category.variables = new Lazy<ReadOnlyCollection<Variable>>(() => client.Categories.GetVariables(category.ID));
-            }
-
-            category.Runs = client.Runs.GetRuns(categoryId: category.ID);
-
-            if (category.Type == CategoryType.PerGame)
-            {
-
-                category.leaderboard = new Lazy<Leaderboard>(() =>
+                    foreach (var record in leaderboard.Records)
                     {
-                        var leaderboard = client.Leaderboards
-                                        .GetLeaderboardForFullGameCategory(category.GameID, category.ID);
+                        record.game = leaderboard.game;
+                        record.category = leaderboard.category;
+                    }
 
-                        leaderboard.game = new Lazy<Game>(() => category.Game);
-                        leaderboard.category = new Lazy<Category>(() => category);
+                    return leaderboard;
+                });
+            category.worldRecord = new Lazy<Record>(() =>
+                {
+                    if (category.leaderboard.IsValueCreated)
+                        return category.Leaderboard.Records.FirstOrDefault();
 
-                        foreach (var record in leaderboard.Records)
-                        {
-                            record.game = leaderboard.game;
-                            record.category = leaderboard.category;
-                        }
+                    var leaderboard = client.Leaderboards
+                                    .GetLeaderboardForFullGameCategory(category.GameID, category.ID, top: 1);
 
-                        return leaderboard;
-                    });
-                category.worldRecord = new Lazy<Record>(() =>
+                    leaderboard.game = new Lazy<Game>(() => category.Game);
+                    leaderboard.category = new Lazy<Category>(() => category);
+
+                    foreach (var record in leaderboard.Records)
                     {
-                        if (category.leaderboard.IsValueCreated)
-                            return category.Leaderboard.Records.FirstOrDefault();
+                        record.game = leaderboard.game;
+                        record.category = leaderboard.category;
+                    }
 
-                        var leaderboard = client.Leaderboards
-                                        .GetLeaderboardForFullGameCategory(category.GameID, category.ID, top: 1);
-
-                        leaderboard.game = new Lazy<Game>(() => category.Game);
-                        leaderboard.category = new Lazy<Category>(() => category);
-
-                        foreach (var record in leaderboard.Records)
-                        {
-                            record.game = leaderboard.game;
-                            record.category = leaderboard.category;
-                        }
-
-                        return leaderboard.Records.FirstOrDefault();
-                    });
-            }
-            else
-            {
-                category.leaderboard = new Lazy<Leaderboard>(() => null);
-                category.worldRecord = new Lazy<Record>(() => null);
-            }
-
-            return category;
+                    return leaderboard.Records.FirstOrDefault();
+                });
         }
-
-        public override int GetHashCode()
+        else
         {
-            return (ID ?? string.Empty).GetHashCode();
+            category.leaderboard = new Lazy<Leaderboard>(() => null);
+            category.worldRecord = new Lazy<Record>(() => null);
         }
 
-        public override bool Equals(object obj)
-        {
-            var other = obj as Category;
+        return category;
+    }
 
-            if (other == null)
-                return false;
+    public override int GetHashCode()
+    {
+        return (ID ?? string.Empty).GetHashCode();
+    }
 
-            return ID == other.ID;
-        }
+    public override bool Equals(object obj)
+    {
+        var other = obj as Category;
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        if (other == null)
+            return false;
+
+        return ID == other.ID;
+    }
+
+    public override string ToString()
+    {
+        return Name;
     }
 }

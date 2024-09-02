@@ -1,27 +1,26 @@
-﻿namespace SpeedrunComSharp
+﻿namespace SpeedrunComSharp;
+
+public class Country
 {
-    public class Country
+    public string Code { get; private set; }
+    public string Name { get; private set; }
+    public string JapaneseName { get; private set; }
+
+    private Country() { }
+
+    public static Country Parse(SpeedrunComClient client, dynamic countryElement)
     {
-        public string Code { get; private set; }
-        public string Name { get; private set; }
-        public string JapaneseName { get; private set; }
+        var country = new Country();
 
-        private Country() { }
+        country.Code = countryElement.code as string;
+        country.Name = countryElement.names.international as string;
+        country.JapaneseName = countryElement.names.japanese as string;
 
-        public static Country Parse(SpeedrunComClient client, dynamic countryElement)
-        {
-            var country = new Country();
+        return country;
+    }
 
-            country.Code = countryElement.code as string;
-            country.Name = countryElement.names.international as string;
-            country.JapaneseName = countryElement.names.japanese as string;
-
-            return country;
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
+    public override string ToString()
+    {
+        return Name;
     }
 }
