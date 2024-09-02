@@ -68,7 +68,7 @@ public class Variable : IElementWithID
         if (variableElement.values.choices is not ArrayList)
         {
             var choiceElements = variableElement.values.choices.Properties as IDictionary<string, dynamic>;
-            variable.Values = choiceElements.Select(x => VariableValue.ParseIDPair(client, variable, x) as VariableValue).ToList().AsReadOnly();
+            variable.Values = choiceElements.Select(x => VariableValue.ParseIDPair(client, variable, x)).ToList().AsReadOnly();
         }
         else
         {

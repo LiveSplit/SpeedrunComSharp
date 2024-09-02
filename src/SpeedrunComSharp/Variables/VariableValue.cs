@@ -59,7 +59,7 @@ public class VariableValue : IElementWithID
         var value = new VariableValue
         {
             VariableID = variable.ID,
-            ID = valueElement.Key as string,
+            ID = valueElement.Key,
 
             //Parse Links
 

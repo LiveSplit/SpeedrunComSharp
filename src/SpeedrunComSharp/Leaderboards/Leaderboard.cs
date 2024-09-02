@@ -87,7 +87,7 @@ public class Leaderboard
         if (leaderboardElement.values is DynamicJsonObject)
         {
             var valueProperties = leaderboardElement.values.Properties as IDictionary<string, dynamic>;
-            leaderboard.VariableFilters = valueProperties.Select(x => VariableValue.ParseValueDescriptor(client, x) as VariableValue).ToList().AsReadOnly();
+            leaderboard.VariableFilters = valueProperties.Select(x => VariableValue.ParseValueDescriptor(client, x)).ToList().AsReadOnly();
         }
         else
         {
