@@ -9,7 +9,7 @@ public class GamesClient
 {
     public const string Name = "games";
 
-    private SpeedrunComClient baseClient;
+    private readonly SpeedrunComClient baseClient;
 
     public GamesClient(SpeedrunComClient baseClient)
     {

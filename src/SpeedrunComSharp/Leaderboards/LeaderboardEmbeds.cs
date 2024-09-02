@@ -3,7 +3,7 @@
 public struct LeaderboardEmbeds
 {
     private Embeds embeds;
-    private bool isConstructed;
+    private readonly bool isConstructed;
 
     public bool EmbedGame
     {

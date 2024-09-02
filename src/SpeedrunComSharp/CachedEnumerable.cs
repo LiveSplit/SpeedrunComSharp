@@ -12,9 +12,9 @@ internal static class CacheExtensions
 
 internal class CachedEnumerable<T> : IEnumerable<T>
 {
-    IEnumerable<T> baseEnumerable;
-    IEnumerator<T> baseEnumerator;
-    List<T> cachedElements;
+    private readonly IEnumerable<T> baseEnumerable;
+    private IEnumerator<T> baseEnumerator;
+    private readonly List<T> cachedElements;
 
     public CachedEnumerable(IEnumerable<T> baseEnumerable)
     {

@@ -7,7 +7,7 @@ public class PlatformsClient
 {
     public const string Name = "platforms";
 
-    private SpeedrunComClient baseClient;
+    private readonly SpeedrunComClient baseClient;
 
     public PlatformsClient(SpeedrunComClient baseClient)
     {

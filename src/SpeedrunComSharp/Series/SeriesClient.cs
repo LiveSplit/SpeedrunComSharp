@@ -7,7 +7,7 @@ public class SeriesClient
 {
     public const string Name = "series";
 
-    private SpeedrunComClient baseClient;
+    private readonly SpeedrunComClient baseClient;
 
     public SeriesClient(SpeedrunComClient baseClient)
     {

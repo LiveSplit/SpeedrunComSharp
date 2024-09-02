@@ -8,7 +8,7 @@ public class UsersClient
 {
     public const string Name = "users";
 
-    private SpeedrunComClient baseClient;
+    private readonly SpeedrunComClient baseClient;
 
     public UsersClient(SpeedrunComClient baseClient)
     {

@@ -8,7 +8,7 @@ public class LeaderboardsClient
 {
     public const string Name = "leaderboards";
 
-    private SpeedrunComClient baseClient;
+    private readonly SpeedrunComClient baseClient;
 
     public LeaderboardsClient(SpeedrunComClient baseClient)
     {

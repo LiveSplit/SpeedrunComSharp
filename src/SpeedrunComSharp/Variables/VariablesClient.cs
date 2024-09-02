@@ -6,7 +6,7 @@ public class VariablesClient
 {
     public const string Name = "variables";
 
-    private SpeedrunComClient baseClient;
+    private readonly SpeedrunComClient baseClient;
 
     public VariablesClient(SpeedrunComClient baseClient)
     {

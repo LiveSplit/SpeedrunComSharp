@@ -8,7 +8,7 @@ public class LevelsClient
 {
     public const string Name = "levels";
 
-    private SpeedrunComClient baseClient;
+    private readonly SpeedrunComClient baseClient;
 
     public LevelsClient(SpeedrunComClient baseClient)
     {

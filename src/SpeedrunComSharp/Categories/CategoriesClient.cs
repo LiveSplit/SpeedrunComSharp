@@ -8,7 +8,7 @@ public class CategoriesClient
 {
     public const string Name = "categories";
 
-    private SpeedrunComClient baseClient;
+    private readonly SpeedrunComClient baseClient;
 
     public CategoriesClient(SpeedrunComClient baseClient)
     {

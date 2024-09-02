@@ -7,7 +7,7 @@ public class NotificationsClient
 {
     public const string Name = "notifications";
 
-    private SpeedrunComClient baseClient;
+    private readonly SpeedrunComClient baseClient;
 
     public NotificationsClient(SpeedrunComClient baseClient)
     {

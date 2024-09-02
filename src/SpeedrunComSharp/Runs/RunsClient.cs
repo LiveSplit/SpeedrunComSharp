@@ -10,7 +10,7 @@ public class RunsClient
 {
     public const string Name = "runs";
 
-    private SpeedrunComClient baseClient;
+    private readonly SpeedrunComClient baseClient;
 
     public RunsClient(SpeedrunComClient baseClient)
     {

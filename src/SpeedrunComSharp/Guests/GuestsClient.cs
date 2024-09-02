@@ -6,7 +6,7 @@ public class GuestsClient
 {
     public const string Name = "guests";
 
-    private SpeedrunComClient baseClient;
+    private readonly SpeedrunComClient baseClient;
 
     public GuestsClient(SpeedrunComClient baseClient)
     {

@@ -6,7 +6,7 @@ public class RegionsClient
 {
     public const string Name = "regions";
 
-    private SpeedrunComClient baseClient;
+    private readonly SpeedrunComClient baseClient;
 
     public RegionsClient(SpeedrunComClient baseClient)
     {
