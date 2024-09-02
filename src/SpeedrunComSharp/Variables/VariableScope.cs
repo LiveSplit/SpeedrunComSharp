@@ -19,19 +19,14 @@ public class VariableScope
 
     private static VariableScopeType parseType(string type)
     {
-        switch (type)
+        return type switch
         {
-            case "global":
-                return VariableScopeType.Global;
-            case "full-game":
-                return VariableScopeType.FullGame;
-            case "all-levels":
-                return VariableScopeType.AllLevels;
-            case "single-level":
-                return VariableScopeType.SingleLevel;
-        }
-
-        throw new ArgumentException("type");
+            "global" => VariableScopeType.Global,
+            "full-game" => VariableScopeType.FullGame,
+            "all-levels" => VariableScopeType.AllLevels,
+            "single-level" => VariableScopeType.SingleLevel,
+            _ => throw new ArgumentException("type"),
+        };
     }
 
     public static VariableScope Parse(SpeedrunComClient client, dynamic scopeElement)

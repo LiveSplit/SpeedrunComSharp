@@ -11,14 +11,11 @@ public static class NotificationStatusHelpers
 {
     public static NotificationStatus Parse(string status)
     {
-        switch (status)
+        return status switch
         {
-            case "read":
-                return NotificationStatus.Read;
-            case "unread":
-                return NotificationStatus.Unread;
-        }
-
-        throw new ArgumentException("status");
+            "read" => NotificationStatus.Read,
+            "unread" => NotificationStatus.Unread,
+            _ => throw new ArgumentException("status"),
+        };
     }
 }

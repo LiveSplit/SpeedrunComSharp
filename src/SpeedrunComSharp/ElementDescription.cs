@@ -15,33 +15,21 @@ public class ElementDescription
 
     private static ElementType parseUriType(string type)
     {
-        switch (type)
+        return type switch
         {
-            case CategoriesClient.Name:
-                return ElementType.Category;
-            case GamesClient.Name:
-                return ElementType.Game;
-            case GuestsClient.Name:
-                return ElementType.Guest;
-            case LevelsClient.Name:
-                return ElementType.Level;
-            case NotificationsClient.Name:
-                return ElementType.Notification;
-            case PlatformsClient.Name:
-                return ElementType.Platform;
-            case RegionsClient.Name:
-                return ElementType.Region;
-            case RunsClient.Name:
-                return ElementType.Run;
-            case SeriesClient.Name:
-                return ElementType.Series;
-            case UsersClient.Name:
-                return ElementType.User;
-            case VariablesClient.Name:
-                return ElementType.Variable;
-        }
-
-        throw new ArgumentException("type");
+            CategoriesClient.Name => ElementType.Category,
+            GamesClient.Name => ElementType.Game,
+            GuestsClient.Name => ElementType.Guest,
+            LevelsClient.Name => ElementType.Level,
+            NotificationsClient.Name => ElementType.Notification,
+            PlatformsClient.Name => ElementType.Platform,
+            RegionsClient.Name => ElementType.Region,
+            RunsClient.Name => ElementType.Run,
+            SeriesClient.Name => ElementType.Series,
+            UsersClient.Name => ElementType.User,
+            VariablesClient.Name => ElementType.Variable,
+            _ => throw new ArgumentException("type"),
+        };
     }
 
     public static ElementDescription ParseUri(string uri)

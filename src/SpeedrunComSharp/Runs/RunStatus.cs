@@ -23,17 +23,13 @@ public class RunStatus
 
     private static RunStatusType ParseType(string type)
     {
-        switch (type)
+        return type switch
         {
-            case "new":
-                return RunStatusType.New;
-            case "verified":
-                return RunStatusType.Verified;
-            case "rejected":
-                return RunStatusType.Rejected;
-        }
-
-        throw new ArgumentException("type");
+            "new" => RunStatusType.New,
+            "verified" => RunStatusType.Verified,
+            "rejected" => RunStatusType.Rejected,
+            _ => throw new ArgumentException("type"),
+        };
     }
 
     public static RunStatus Parse(SpeedrunComClient client, dynamic statusElement)

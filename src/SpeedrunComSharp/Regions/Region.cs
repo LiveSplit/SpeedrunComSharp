@@ -12,16 +12,15 @@ public class Region : IElementWithID
     {
         get
         {
-            switch (Name)
+            return Name switch
             {
-                case "USA / NTSC": return "NTSC-U";
-                case "EUR / PAL": return "PAL";
-                case "JPN / NTSC": return "NTSC-J";
-                case "CHN / iQue": return "CHN";
-                case "KOR / NTSC": return "KOR";
-            }
-
-            return Name;
+                "USA / NTSC" => "NTSC-U",
+                "EUR / PAL" => "PAL",
+                "JPN / NTSC" => "NTSC-J",
+                "CHN / iQue" => "CHN",
+                "KOR / NTSC" => "KOR",
+                _ => Name,
+            };
         }
     }
 

@@ -41,25 +41,17 @@ public class User : IElementWithID
 
     private static UserRole parseUserRole(string role)
     {
-        switch (role)
+        return role switch
         {
-            case "banned":
-                return UserRole.Banned;
-            case "user":
-                return UserRole.User;
-            case "trusted":
-                return UserRole.Trusted;
-            case "moderator":
-                return UserRole.Moderator;
-            case "admin":
-                return UserRole.Admin;
-            case "programmer":
-                return UserRole.Programmer;
-            case "contentmoderator":
-                return UserRole.ContentModerator;
-        }
-
-        throw new ArgumentException("role");
+            "banned" => UserRole.Banned,
+            "user" => UserRole.User,
+            "trusted" => UserRole.Trusted,
+            "moderator" => UserRole.Moderator,
+            "admin" => UserRole.Admin,
+            "programmer" => UserRole.Programmer,
+            "contentmoderator" => UserRole.ContentModerator,
+            _ => throw new ArgumentException("role"),
+        };
     }
 
     public static User Parse(SpeedrunComClient client, dynamic userElement)

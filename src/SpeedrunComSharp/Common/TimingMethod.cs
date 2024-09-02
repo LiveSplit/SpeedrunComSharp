@@ -11,31 +11,23 @@ public static class TimingMethodHelpers
 {
     public static string ToAPIString(this TimingMethod timingMethod)
     {
-        switch (timingMethod)
+        return timingMethod switch
         {
-            case TimingMethod.RealTime:
-                return "realtime";
-            case TimingMethod.RealTimeWithoutLoads:
-                return "realtime_noloads";
-            case TimingMethod.GameTime:
-                return "ingame";
-        }
-
-        throw new ArgumentException("timingMethod");
+            TimingMethod.RealTime => "realtime",
+            TimingMethod.RealTimeWithoutLoads => "realtime_noloads",
+            TimingMethod.GameTime => "ingame",
+            _ => throw new ArgumentException("timingMethod"),
+        };
     }
 
     public static TimingMethod FromString(string element)
     {
-        switch (element)
+        return element switch
         {
-            case "realtime":
-                return TimingMethod.RealTime;
-            case "realtime_noloads":
-                return TimingMethod.RealTimeWithoutLoads;
-            case "ingame":
-                return TimingMethod.GameTime;
-        }
-
-        throw new ArgumentException("element");
+            "realtime" => TimingMethod.RealTime,
+            "realtime_noloads" => TimingMethod.RealTimeWithoutLoads,
+            "ingame" => TimingMethod.GameTime,
+            _ => throw new ArgumentException("element"),
+        };
     }
 }

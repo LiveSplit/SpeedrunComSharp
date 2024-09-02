@@ -11,16 +11,12 @@ public static class LeaderboardScopeHelpers
 {
     public static string ToParameter(this LeaderboardScope scope)
     {
-        switch (scope)
+        return scope switch
         {
-            case LeaderboardScope.All:
-                return "all";
-            case LeaderboardScope.FullGame:
-                return "full-game";
-            case LeaderboardScope.Levels:
-                return "levels";
-        }
-
-        throw new ArgumentException("scope");
+            LeaderboardScope.All => "all",
+            LeaderboardScope.FullGame => "full-game",
+            LeaderboardScope.Levels => "levels",
+            _ => throw new ArgumentException("scope"),
+        };
     }
 }

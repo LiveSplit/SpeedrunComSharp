@@ -11,24 +11,16 @@ public static class NotificationTypeHelpers
 {
     public static NotificationType Parse(string type)
     {
-        switch (type)
+        return type switch
         {
-            case "post":
-                return NotificationType.Post;
-            case "run":
-                return NotificationType.Run;
-            case "game":
-                return NotificationType.Game;
-            case "guide":
-                return NotificationType.Guide;
-            case "thread":
-                return NotificationType.Thread;
-            case "resource":
-                return NotificationType.Resource;
-            case "moderator":
-                return NotificationType.Moderator;
-        }
-
-        throw new ArgumentException("type");
+            "post" => NotificationType.Post,
+            "run" => NotificationType.Run,
+            "game" => NotificationType.Game,
+            "guide" => NotificationType.Guide,
+            "thread" => NotificationType.Thread,
+            "resource" => NotificationType.Resource,
+            "moderator" => NotificationType.Moderator,
+            _ => throw new ArgumentException("type"),
+        };
     }
 }
