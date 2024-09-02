@@ -212,10 +212,8 @@ public class SpeedrunComClient
         {
             try
             {
-                using (var stream = ex.Response.GetResponseStream())
-                {
-                    throw ParseException(stream);
-                }
+                using var stream = ex.Response.GetResponseStream();
+                throw ParseException(stream);
             }
             catch (APIException ex2)
             {
@@ -255,10 +253,8 @@ public class SpeedrunComClient
                 {
                     try
                     {
-                        using (var stream = ex.Response.GetResponseStream())
-                        {
-                            throw ParseException(stream);
-                        }
+                        using var stream = ex.Response.GetResponseStream();
+                        throw ParseException(stream);
                     }
                     catch (APIException ex2)
                     {

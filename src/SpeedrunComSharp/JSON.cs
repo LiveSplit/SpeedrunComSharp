@@ -18,10 +18,8 @@ internal static class JSON
 {
     public static dynamic FromResponse(WebResponse response)
     {
-        using (var stream = response.GetResponseStream())
-        {
-            return FromStream(stream);
-        }
+        using var stream = response.GetResponseStream();
+        return FromStream(stream);
     }
 
     public static dynamic FromStream(Stream stream)
