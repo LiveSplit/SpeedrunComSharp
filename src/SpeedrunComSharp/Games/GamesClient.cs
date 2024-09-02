@@ -29,7 +29,7 @@ public class GamesClient
     /// <returns></returns>
     public Game GetGameFromSiteUri(string siteUri, GameEmbeds embeds = default)
     {
-        var id = GetGameIDFromSiteUri(siteUri);
+        string id = GetGameIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -46,7 +46,7 @@ public class GamesClient
     /// <returns></returns>
     public string GetGameIDFromSiteUri(string siteUri)
     {
-        var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
+        ElementDescription elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Game)
@@ -110,7 +110,7 @@ public class GamesClient
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
         }
 
-        var uri = GetGamesUri(parameters.ToParameters());
+        Uri uri = GetGamesUri(parameters.ToParameters());
         return baseClient.DoPaginatedRequest(uri,
             x => Game.Parse(baseClient, x) as Game);
     }
@@ -129,7 +129,7 @@ public class GamesClient
         parameters.AddRange(orderBy.ToParameters());
         parameters.Add(string.Format("max={0}", elementsPerPage));
 
-        var uri = GetGamesUri(parameters.ToParameters());
+        Uri uri = GetGamesUri(parameters.ToParameters());
 
         return baseClient.DoPaginatedRequest(uri,
             x => GameHeader.Parse(baseClient, x) as GameHeader);
@@ -145,11 +145,11 @@ public class GamesClient
     {
         var parameters = new List<string>() { embeds.ToString() };
 
-        var uri = GetGamesUri(string.Format("/{0}{1}",
+        Uri uri = GetGamesUri(string.Format("/{0}{1}",
             Uri.EscapeDataString(gameId),
             parameters.ToParameters()));
 
-        var result = baseClient.DoRequest(uri);
+        dynamic result = baseClient.DoRequest(uri);
 
         return Game.Parse(baseClient, result.data);
     }
@@ -162,7 +162,7 @@ public class GamesClient
     /// <returns></returns>
     public Game SearchGame(string name, GameEmbeds embeds = default)
     {
-        var game = GetGames(name: name, embeds: embeds, elementsPerPage: 1).FirstOrDefault();
+        Game game = GetGames(name: name, embeds: embeds, elementsPerPage: 1).FirstOrDefault();
 
         return game;
     }
@@ -175,7 +175,7 @@ public class GamesClient
     /// <returns></returns>
     public Game SearchGameExact(string name, GameEmbeds embeds = default)
     {
-        var game = GetGames(name: name, embeds: embeds, elementsPerPage: 1).Take(1).FirstOrDefault(x => x.Name == name);
+        Game game = GetGames(name: name, embeds: embeds, elementsPerPage: 1).Take(1).FirstOrDefault(x => x.Name == name);
 
         return game;
     }
@@ -202,7 +202,7 @@ public class GamesClient
             parameters.Add("miscellaneous=no");
         }
 
-        var uri = GetGamesUri(string.Format("/{0}/categories{1}",
+        Uri uri = GetGamesUri(string.Format("/{0}/categories{1}",
             Uri.EscapeDataString(gameId),
             parameters.ToParameters()));
 
@@ -225,7 +225,7 @@ public class GamesClient
 
         parameters.AddRange(orderBy.ToParameters());
 
-        var uri = GetGamesUri(string.Format("/{0}/levels{1}",
+        Uri uri = GetGamesUri(string.Format("/{0}/levels{1}",
             Uri.EscapeDataString(gameId),
             parameters.ToParameters()));
 
@@ -244,7 +244,7 @@ public class GamesClient
     {
         var parameters = new List<string>(orderBy.ToParameters());
 
-        var uri = GetGamesUri(string.Format("/{0}/variables{1}",
+        Uri uri = GetGamesUri(string.Format("/{0}/variables{1}",
             Uri.EscapeDataString(gameId),
             parameters.ToParameters()));
 
@@ -267,7 +267,7 @@ public class GamesClient
 
         parameters.AddRange(orderBy.ToParameters());
 
-        var uri = GetGamesUri(string.Format("/{0}/romhacks{1}",
+        Uri uri = GetGamesUri(string.Format("/{0}/romhacks{1}",
             Uri.EscapeDataString(gameId),
             parameters.ToParameters()));
 
@@ -319,7 +319,7 @@ public class GamesClient
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
         }
 
-        var uri = GetGamesUri(string.Format("/{0}/records{1}",
+        Uri uri = GetGamesUri(string.Format("/{0}/records{1}",
             Uri.EscapeDataString(gameId),
             parameters.ToParameters()));
 

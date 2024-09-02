@@ -50,7 +50,7 @@ public class Series : IElementWithID
             Abbreviation = seriesElement.abbreviation as string
         };
 
-        var created = seriesElement.created as string;
+        string created = seriesElement.created as string;
         if (!string.IsNullOrEmpty(created))
         {
             series.CreationDate = DateTime.Parse(created, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
@@ -84,9 +84,9 @@ public class Series : IElementWithID
                     {
                         users = client.Games.GetGame(series.ID, embeds: new GameEmbeds(embedModerators: true)).ModeratorUsers;
 
-                        foreach (var user in users)
+                        foreach (User user in users)
                         {
-                            var moderator = series.Moderators.FirstOrDefault(x => x.UserID == user.ID);
+                            Moderator moderator = series.Moderators.FirstOrDefault(x => x.UserID == user.ID);
                             if (moderator != null)
                             {
                                 moderator.user = new Lazy<User>(() => user);

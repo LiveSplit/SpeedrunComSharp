@@ -31,8 +31,8 @@ internal class HttpWebLink
     {
         var link = new HttpWebLink();
 
-        var leftAngledParenthesis = linkString.IndexOf('<');
-        var rightAngledParenthesis = linkString.IndexOf('>');
+        int leftAngledParenthesis = linkString.IndexOf('<');
+        int rightAngledParenthesis = linkString.IndexOf('>');
 
         if (leftAngledParenthesis >= 0 && rightAngledParenthesis >= 0)
         {
@@ -40,15 +40,15 @@ internal class HttpWebLink
         }
 
         linkString = linkString.Substring(rightAngledParenthesis + 1);
-        var parameters = linkString.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
+        string[] parameters = linkString.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
 
-        foreach (var parameter in parameters)
+        foreach (string parameter in parameters)
         {
-            var splits = parameter.Split(['='], 2);
+            string[] splits = parameter.Split(['='], 2);
             if (splits.Length == 2)
             {
-                var parameterType = splits[0];
-                var parameterValue = splits[1].Trim('"');
+                string parameterType = splits[0];
+                string parameterValue = splits[1].Trim('"');
 
                 switch (parameterType)
                 {

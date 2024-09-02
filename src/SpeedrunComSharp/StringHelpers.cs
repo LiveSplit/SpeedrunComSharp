@@ -35,7 +35,7 @@ internal static class StringHelpers
     {
         var builder = new StringBuilder();
 
-        foreach (var element in list)
+        foreach (string element in list)
         {
             builder.Append(element);
             builder.Append(combiner);

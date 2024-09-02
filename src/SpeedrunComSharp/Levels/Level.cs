@@ -51,7 +51,7 @@ public class Level : IElementWithID
         var properties = levelElement.Properties as IDictionary<string, dynamic>;
         var links = properties["links"] as IEnumerable<dynamic>;
 
-        var gameUri = links.First(x => x.rel == "game").uri as string;
+        string gameUri = links.First(x => x.rel == "game").uri as string;
         level.GameID = gameUri.Substring(gameUri.LastIndexOf('/') + 1);
         level.game = new Lazy<Game>(() => client.Games.GetGame(level.GameID));
 

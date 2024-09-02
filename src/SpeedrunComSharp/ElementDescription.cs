@@ -46,19 +46,19 @@ public class ElementDescription
 
     public static ElementDescription ParseUri(string uri)
     {
-        var splits = uri.Split('/');
+        string[] splits = uri.Split('/');
 
         if (splits.Length < 2)
         {
             return null;
         }
 
-        var id = splits[splits.Length - 1];
-        var uriTypeString = splits[splits.Length - 2];
+        string id = splits[splits.Length - 1];
+        string uriTypeString = splits[splits.Length - 2];
 
         try
         {
-            var uriType = parseUriType(uriTypeString);
+            ElementType uriType = parseUriType(uriTypeString);
             return new ElementDescription(id, uriType);
         }
         catch

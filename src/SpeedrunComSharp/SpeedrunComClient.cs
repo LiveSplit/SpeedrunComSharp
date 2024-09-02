@@ -10,8 +10,8 @@ namespace SpeedrunComSharp;
 
 public class SpeedrunComClient
 {
-    public static readonly Uri BaseUri = new Uri("https://www.speedrun.com/");
-    public static readonly Uri APIUri = new Uri(BaseUri, "api/v1/");
+    public static readonly Uri BaseUri = new("https://www.speedrun.com/");
+    public static readonly Uri APIUri = new(BaseUri, "api/v1/");
     public const string APIHttpHeaderRelation = "alternate https://www.speedrun.com/api";
 
     public string AccessToken { internal get; set; }
@@ -27,7 +27,7 @@ public class SpeedrunComClient
 
             try
             {
-                var profile = Profile;
+                User profile = Profile;
                 return true;
             }
             catch { }
@@ -95,8 +95,8 @@ public class SpeedrunComClient
     {
         get
         {
-            var uri = GetProfileUri(string.Empty);
-            var result = DoRequest(uri);
+            Uri uri = GetProfileUri(string.Empty);
+            dynamic result = DoRequest(uri);
             return User.Parse(this, result.data);
         }
     }
@@ -146,17 +146,17 @@ public class SpeedrunComClient
         {
             var request = WebRequest.Create(siteUri);
             request.Timeout = (int)Timeout.TotalMilliseconds;
-            var response = request.GetResponse();
-            var linksString = response.Headers["Link"];
-            var links = HttpWebLink.ParseLinks(linksString);
-            var link = links.FirstOrDefault(x => x.Relation == APIHttpHeaderRelation);
+            WebResponse response = request.GetResponse();
+            string linksString = response.Headers["Link"];
+            ReadOnlyCollection<HttpWebLink> links = HttpWebLink.ParseLinks(linksString);
+            HttpWebLink link = links.FirstOrDefault(x => x.Relation == APIHttpHeaderRelation);
 
             if (link == null)
             {
                 return null;
             }
 
-            var uri = link.Uri;
+            string uri = link.Uri;
             var elementDescription = ElementDescription.ParseUri(uri);
 
             return elementDescription;
@@ -189,7 +189,7 @@ public class SpeedrunComClient
 
     internal APIException ParseException(Stream stream)
     {
-        var json = JSON.FromStream(stream);
+        dynamic json = JSON.FromStream(stream);
         var properties = json.Properties as IDictionary<string, dynamic>;
         if (properties.ContainsKey("errors"))
         {
@@ -212,7 +212,7 @@ public class SpeedrunComClient
         {
             try
             {
-                using var stream = ex.Response.GetResponseStream();
+                using Stream stream = ex.Response.GetResponseStream();
                 throw ParseException(stream);
             }
             catch (APIException ex2)
@@ -253,7 +253,7 @@ public class SpeedrunComClient
                 {
                     try
                     {
-                        using var stream = ex.Response.GetResponseStream();
+                        using Stream stream = ex.Response.GetResponseStream();
                         throw ParseException(stream);
                     }
                     catch (APIException ex2)
@@ -280,7 +280,7 @@ public class SpeedrunComClient
 
     internal ReadOnlyCollection<T> DoDataCollectionRequest<T>(Uri uri, Func<dynamic, T> parser)
     {
-        var result = DoRequest(uri);
+        dynamic result = DoRequest(uri);
         if (result.data is not IEnumerable<dynamic> elements)
         {
             return new ReadOnlyCollection<T>(new T[0]);
@@ -293,7 +293,7 @@ public class SpeedrunComClient
     {
         do
         {
-            var result = DoRequest(uri);
+            dynamic result = DoRequest(uri);
 
             if (result.pagination.size == 0)
             {
@@ -302,7 +302,7 @@ public class SpeedrunComClient
 
             var elements = result.data as IEnumerable<dynamic>;
 
-            foreach (var element in elements)
+            foreach (dynamic element in elements)
             {
                 yield return parser(element);
             }
@@ -313,7 +313,7 @@ public class SpeedrunComClient
                 yield break;
             }
 
-            var paginationLink = links.FirstOrDefault(x => x.rel == "next");
+            dynamic paginationLink = links.FirstOrDefault(x => x.rel == "next");
             if (paginationLink == null)
             {
                 yield break;

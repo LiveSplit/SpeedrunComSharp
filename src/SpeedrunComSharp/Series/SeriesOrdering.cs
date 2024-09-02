@@ -21,13 +21,13 @@ internal static class SeriesOrderingHelpers
 {
     internal static IEnumerable<string> ToParameters(this SeriesOrdering ordering)
     {
-        var isDescending = ((int)ordering & 1) == 1;
+        bool isDescending = ((int)ordering & 1) == 1;
         if (isDescending)
         {
             ordering = (SeriesOrdering)((int)ordering - 1);
         }
 
-        var str = "";
+        string str = "";
 
         switch (ordering)
         {

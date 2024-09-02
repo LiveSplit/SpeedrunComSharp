@@ -24,7 +24,7 @@ internal class CachedEnumerable<T> : IEnumerable<T>
 
     public IEnumerator<T> GetEnumerator()
     {
-        foreach (var element in cachedElements)
+        foreach (T element in cachedElements)
         {
             yield return element;
         }
@@ -33,7 +33,7 @@ internal class CachedEnumerable<T> : IEnumerable<T>
 
         while (baseEnumerator.MoveNext())
         {
-            var current = baseEnumerator.Current;
+            T current = baseEnumerator.Current;
             cachedElements.Add(current);
             yield return current;
         }

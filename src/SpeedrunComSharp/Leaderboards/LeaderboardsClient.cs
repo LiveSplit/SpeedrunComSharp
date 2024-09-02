@@ -58,20 +58,20 @@ public class LeaderboardsClient
 
         if (orderBy.HasValue)
         {
-            var timing = orderBy.Value.ToAPIString();
+            string timing = orderBy.Value.ToAPIString();
             parameters.Add(string.Format("timing={0}", timing));
         }
 
         if (filterOutRunsAfter.HasValue)
         {
-            var date = filterOutRunsAfter.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            string date = filterOutRunsAfter.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
             parameters.Add(string.Format("date={0}",
                 Uri.EscapeDataString(date)));
         }
 
         if (variableFilters != null)
         {
-            foreach (var variableValue in variableFilters)
+            foreach (VariableValue variableValue in variableFilters)
             {
                 if (variableValue != null)
                 {
@@ -82,11 +82,11 @@ public class LeaderboardsClient
             }
         }
 
-        var innerUri = GetLeaderboardsUri(string.Format("{0}{1}",
+        Uri innerUri = GetLeaderboardsUri(string.Format("{0}{1}",
             uri,
             parameters.ToParameters()));
 
-        var result = baseClient.DoRequest(innerUri);
+        dynamic result = baseClient.DoRequest(innerUri);
         return Leaderboard.Parse(baseClient, result.data);
     }
 
@@ -114,7 +114,7 @@ public class LeaderboardsClient
         IEnumerable<VariableValue> variableFilters = null,
         LeaderboardEmbeds embeds = default)
     {
-        var uri = string.Format("/{0}/category/{1}",
+        string uri = string.Format("/{0}/category/{1}",
             Uri.EscapeDataString(gameId),
             Uri.EscapeDataString(categoryId));
 
@@ -152,7 +152,7 @@ public class LeaderboardsClient
         IEnumerable<VariableValue> variableFilters = null,
         LeaderboardEmbeds embeds = default)
     {
-        var uri = string.Format("/{0}/level/{1}/{2}",
+        string uri = string.Format("/{0}/level/{1}/{2}",
             Uri.EscapeDataString(gameId),
             Uri.EscapeDataString(levelId),
             Uri.EscapeDataString(categoryId));

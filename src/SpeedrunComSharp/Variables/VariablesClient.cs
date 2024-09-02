@@ -25,7 +25,7 @@ public class VariablesClient
     /// <returns></returns>
     public Variable GetVariableFromSiteUri(string siteUri)
     {
-        var id = GetVariableIDFromSiteUri(siteUri);
+        string id = GetVariableIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -42,7 +42,7 @@ public class VariablesClient
     /// <returns></returns>
     public string GetVariableIDFromSiteUri(string siteUri)
     {
-        var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
+        ElementDescription elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Variable)
@@ -60,10 +60,10 @@ public class VariablesClient
     /// <returns></returns>
     public Variable GetVariable(string variableId)
     {
-        var uri = GetVariablesUri(string.Format("/{0}",
+        Uri uri = GetVariablesUri(string.Format("/{0}",
             Uri.EscapeDataString(variableId)));
 
-        var result = baseClient.DoRequest(uri);
+        dynamic result = baseClient.DoRequest(uri);
 
         return Variable.Parse(baseClient, result.data);
     }

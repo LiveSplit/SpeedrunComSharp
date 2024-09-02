@@ -50,19 +50,19 @@ public class Notification : IElementWithID
 
         if (links != null)
         {
-            var run = links.FirstOrDefault(x => x.rel == "run");
+            dynamic run = links.FirstOrDefault(x => x.rel == "run");
 
             if (run != null)
             {
-                var runUri = run.uri as string;
+                string runUri = run.uri as string;
                 notification.RunID = runUri.Substring(runUri.LastIndexOf("/") + 1);
             }
 
-            var game = links.FirstOrDefault(x => x.rel == "game");
+            dynamic game = links.FirstOrDefault(x => x.rel == "game");
 
             if (game != null)
             {
-                var gameUri = game.uri as string;
+                string gameUri = game.uri as string;
                 notification.GameID = gameUri.Substring(gameUri.LastIndexOf("/") + 1);
             }
         }

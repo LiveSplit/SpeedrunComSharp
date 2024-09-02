@@ -76,7 +76,7 @@ public class Variable : IElementWithID
         }
 
         var valuesProperties = variableElement.values.Properties as IDictionary<string, dynamic>;
-        var defaultValue = valuesProperties["default"] as string;
+        string defaultValue = valuesProperties["default"] as string;
         if (!string.IsNullOrEmpty(defaultValue))
         {
             variable.DefaultValue = variable.Values.FirstOrDefault(x => x.ID == defaultValue);
@@ -86,10 +86,10 @@ public class Variable : IElementWithID
 
         //Parse Links
 
-        var gameLink = links.FirstOrDefault(x => x.rel == "game");
+        dynamic gameLink = links.FirstOrDefault(x => x.rel == "game");
         if (gameLink != null)
         {
-            var gameUri = gameLink.uri as string;
+            string gameUri = gameLink.uri as string;
             variable.GameID = gameUri.Substring(gameUri.LastIndexOf("/") + 1);
             variable.game = new Lazy<Game>(() => client.Games.GetGame(variable.GameID));
         }

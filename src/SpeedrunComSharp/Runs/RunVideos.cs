@@ -12,7 +12,7 @@ public class RunVideos
 
     private static Uri parseVideoLink(dynamic element)
     {
-        var videoUri = element.uri as string;
+        string videoUri = element.uri as string;
         if (!string.IsNullOrEmpty(videoUri))
         {
             if (!videoUri.StartsWith("http"))

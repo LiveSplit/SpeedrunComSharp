@@ -32,8 +32,8 @@ public class UserNameStyle
         if (style.IsGradient)
         {
             var properties = styleElement.Properties as IDictionary<string, dynamic>;
-            var colorFrom = properties["color-from"];
-            var colorTo = properties["color-to"];
+            dynamic colorFrom = properties["color-from"];
+            dynamic colorTo = properties["color-to"];
 
             style.LightGradientStartColorCode = colorFrom.light as string;
             style.LightGradientEndColorCode = colorTo.light as string;

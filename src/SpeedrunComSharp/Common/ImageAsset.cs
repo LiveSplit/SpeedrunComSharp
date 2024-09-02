@@ -17,7 +17,7 @@ public class ImageAsset
 
         var image = new ImageAsset();
 
-        var uri = imageElement.uri as string;
+        string uri = imageElement.uri as string;
         image.Uri = new Uri(uri);
 
         return image;

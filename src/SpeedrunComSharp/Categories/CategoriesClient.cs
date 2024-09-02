@@ -28,7 +28,7 @@ public class CategoriesClient
     /// <returns></returns>
     public Category GetCategoryFromSiteUri(string siteUri, CategoryEmbeds embeds = default)
     {
-        var id = GetCategoryIDFromSiteUri(siteUri);
+        string id = GetCategoryIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -45,7 +45,7 @@ public class CategoriesClient
     /// <returns></returns>
     public string GetCategoryIDFromSiteUri(string siteUri)
     {
-        var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
+        ElementDescription elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Category)
@@ -64,8 +64,8 @@ public class CategoriesClient
     /// <returns></returns>
     public Category GetCategory(string categoryId, CategoryEmbeds embeds = default)
     {
-        var uri = GetCategoriesUri(string.Format("/{0}{1}", Uri.EscapeDataString(categoryId), embeds.ToString().ToParameters()));
-        var result = baseClient.DoRequest(uri);
+        Uri uri = GetCategoriesUri(string.Format("/{0}{1}", Uri.EscapeDataString(categoryId), embeds.ToString().ToParameters()));
+        dynamic result = baseClient.DoRequest(uri);
 
         return Category.Parse(baseClient, result.data);
     }
@@ -81,7 +81,7 @@ public class CategoriesClient
     {
         var parameters = new List<string>(orderBy.ToParameters());
 
-        var uri = GetCategoriesUri(string.Format("/{0}/variables{1}",
+        Uri uri = GetCategoriesUri(string.Format("/{0}/variables{1}",
             Uri.EscapeDataString(categoryId),
             parameters.ToParameters()));
 
@@ -120,7 +120,7 @@ public class CategoriesClient
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
         }
 
-        var uri = GetCategoriesUri(string.Format("/{0}/records{1}",
+        Uri uri = GetCategoriesUri(string.Format("/{0}/records{1}",
             Uri.EscapeDataString(categoryId),
             parameters.ToParameters()));
 

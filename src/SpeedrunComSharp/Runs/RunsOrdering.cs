@@ -33,13 +33,13 @@ internal static class RunsOrderingHelpers
 {
     internal static IEnumerable<string> ToParameters(this RunsOrdering ordering)
     {
-        var isDescending = ((int)ordering & 1) == 1;
+        bool isDescending = ((int)ordering & 1) == 1;
         if (isDescending)
         {
             ordering = (RunsOrdering)((int)ordering - 1);
         }
 
-        var str = "";
+        string str = "";
 
         switch (ordering)
         {

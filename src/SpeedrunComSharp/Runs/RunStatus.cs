@@ -52,7 +52,7 @@ public class RunStatus
 
             if (status.Type == RunStatusType.Verified)
             {
-                var date = properties["verify-date"] as string;
+                string date = properties["verify-date"] as string;
                 if (!string.IsNullOrEmpty(date))
                 {
                     status.VerifyDate = DateTime.Parse(date, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);

@@ -27,7 +27,7 @@ public class UsersClient
     /// <returns></returns>
     public User GetUserFromSiteUri(string siteUri)
     {
-        var id = GetUserIDFromSiteUri(siteUri);
+        string id = GetUserIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -44,7 +44,7 @@ public class UsersClient
     /// <returns></returns>
     public string GetUserIDFromSiteUri(string siteUri)
     {
-        var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
+        ElementDescription elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.User)
@@ -112,7 +112,7 @@ public class UsersClient
 
         parameters.AddRange(orderBy.ToParameters());
 
-        var uri = GetUsersUri(parameters.ToParameters());
+        Uri uri = GetUsersUri(parameters.ToParameters());
         return baseClient.DoPaginatedRequest(uri,
             x => User.Parse(baseClient, x) as User);
     }
@@ -144,7 +144,7 @@ public class UsersClient
 
         parameters.AddRange(orderBy.ToParameters());
 
-        var uri = GetUsersUri(parameters.ToParameters());
+        Uri uri = GetUsersUri(parameters.ToParameters());
         return baseClient.DoPaginatedRequest(uri,
             x => User.Parse(baseClient, x) as User);
     }
@@ -156,10 +156,10 @@ public class UsersClient
     /// <returns></returns>
     public User GetUser(string userId)
     {
-        var uri = GetUsersUri(string.Format("/{0}",
+        Uri uri = GetUsersUri(string.Format("/{0}",
             Uri.EscapeDataString(userId)));
 
-        var result = baseClient.DoRequest(uri);
+        dynamic result = baseClient.DoRequest(uri);
 
         return User.Parse(baseClient, result.data);
     }
@@ -195,7 +195,7 @@ public class UsersClient
             parameters.Add(string.Format("game={0}", Uri.EscapeDataString(gameId)));
         }
 
-        var uri = GetUsersUri(string.Format("/{0}/personal-bests{1}",
+        Uri uri = GetUsersUri(string.Format("/{0}/personal-bests{1}",
             Uri.EscapeDataString(userId),
             parameters.ToParameters()));
 

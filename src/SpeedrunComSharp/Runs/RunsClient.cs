@@ -30,7 +30,7 @@ public class RunsClient
     /// <returns></returns>
     public Run GetRunFromSiteUri(string siteUri, RunEmbeds embeds = default)
     {
-        var id = GetRunIDFromSiteUri(siteUri);
+        string id = GetRunIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -49,7 +49,7 @@ public class RunsClient
     {
         try
         {
-            var match = Regex.Match(siteUri, "^(?:(?:https?://)?(?:www\\.)?speedrun\\.com/(?:\\w+/)?runs?/)?(\\w+)$");
+            Match match = Regex.Match(siteUri, "^(?:(?:https?://)?(?:www\\.)?speedrun\\.com/(?:\\w+/)?runs?/)?(\\w+)$");
 
             return match.Groups[1].Value;
         }
@@ -153,7 +153,7 @@ public class RunsClient
 
         parameters.AddRange(orderBy.ToParameters());
 
-        var uri = GetRunsUri(parameters.ToParameters());
+        Uri uri = GetRunsUri(parameters.ToParameters());
         return baseClient.DoPaginatedRequest(uri,
             x => Run.Parse(baseClient, x) as Run);
     }
@@ -169,11 +169,11 @@ public class RunsClient
     {
         var parameters = new List<string>() { embeds.ToString() };
 
-        var uri = GetRunsUri(string.Format("/{0}{1}",
+        Uri uri = GetRunsUri(string.Format("/{0}{1}",
             Uri.EscapeDataString(runId),
             parameters.ToParameters()));
 
-        var result = baseClient.DoRequest(uri);
+        dynamic result = baseClient.DoRequest(uri);
 
         return Run.Parse(baseClient, result.data);
     }
@@ -220,7 +220,7 @@ public class RunsClient
             parameters.Add("dry=yes");
         }
 
-        var uri = GetRunsUri(parameters.ToParameters());
+        Uri uri = GetRunsUri(parameters.ToParameters());
 
         dynamic postBody = new DynamicJsonObject();
         dynamic runElement = new DynamicJsonObject();
@@ -302,9 +302,9 @@ public class RunsClient
             {
                 var variablesElement = new Dictionary<string, dynamic>();
 
-                foreach (var variable in variablesList)
+                foreach (VariableValue variable in variablesList)
                 {
-                    var key = variable.VariableID;
+                    string key = variable.VariableID;
                     dynamic value = new DynamicJsonObject();
 
                     if (variable.IsCustomValue)
@@ -327,7 +327,7 @@ public class RunsClient
 
         postBody.run = runElement;
 
-        var result = baseClient.DoPostRequest(uri, postBody.ToString());
+        dynamic result = baseClient.DoPostRequest(uri, postBody.ToString());
 
         return Run.Parse(baseClient, result.data);
     }

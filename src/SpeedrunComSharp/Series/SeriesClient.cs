@@ -27,7 +27,7 @@ public class SeriesClient
     /// <returns></returns>
     public Series GetSeriesFromSiteUri(string siteUri, SeriesEmbeds embeds = default)
     {
-        var id = GetSeriesIDFromSiteUri(siteUri);
+        string id = GetSeriesIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -44,7 +44,7 @@ public class SeriesClient
     /// <returns></returns>
     public string GetSeriesIDFromSiteUri(string siteUri)
     {
-        var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
+        ElementDescription elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Series)
@@ -95,7 +95,7 @@ public class SeriesClient
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
         }
 
-        var uri = GetSeriesUri(parameters.ToParameters());
+        Uri uri = GetSeriesUri(parameters.ToParameters());
         return baseClient.DoPaginatedRequest(uri,
             x => Series.Parse(baseClient, x) as Series);
     }
@@ -110,11 +110,11 @@ public class SeriesClient
     {
         var parameters = new List<string>() { embeds.ToString() };
 
-        var uri = GetSeriesUri(string.Format("/{0}{1}",
+        Uri uri = GetSeriesUri(string.Format("/{0}{1}",
             Uri.EscapeDataString(seriesId),
             parameters.ToParameters()));
 
-        var result = baseClient.DoRequest(uri);
+        dynamic result = baseClient.DoRequest(uri);
 
         return Series.Parse(baseClient, result.data);
     }
@@ -174,7 +174,7 @@ public class SeriesClient
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
         }
 
-        var uri = GetSeriesUri(string.Format("/{0}/games{1}",
+        Uri uri = GetSeriesUri(string.Format("/{0}/games{1}",
             Uri.EscapeDataString(seriesId),
             parameters.ToParameters()));
 

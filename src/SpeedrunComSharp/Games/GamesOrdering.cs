@@ -25,13 +25,13 @@ internal static class GamesOrderingHelpers
 {
     internal static IEnumerable<string> ToParameters(this GamesOrdering ordering)
     {
-        var isDescending = ((int)ordering & 1) == 1;
+        bool isDescending = ((int)ordering & 1) == 1;
         if (isDescending)
         {
             ordering = (GamesOrdering)((int)ordering - 1);
         }
 
-        var str = "";
+        string str = "";
 
         switch (ordering)
         {

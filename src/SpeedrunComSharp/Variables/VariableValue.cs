@@ -66,7 +66,7 @@ public class VariableValue : IElementWithID
             variable = new Lazy<Variable>(() => variable)
         };
 
-        var valueName = valueElement.Value as string;
+        string valueName = valueElement.Value as string;
         value.value = new Lazy<string>(() => valueName);
 
         return value;

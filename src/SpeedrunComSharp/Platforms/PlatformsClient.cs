@@ -26,7 +26,7 @@ public class PlatformsClient
     /// <returns></returns>
     public Platform GetPlatformFromSiteUri(string siteUri)
     {
-        var id = GetPlatformIDFromSiteUri(siteUri);
+        string id = GetPlatformIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -43,7 +43,7 @@ public class PlatformsClient
     /// <returns></returns>
     public string GetPlatformIDFromSiteUri(string siteUri)
     {
-        var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
+        ElementDescription elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Platform)
@@ -72,7 +72,7 @@ public class PlatformsClient
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
         }
 
-        var uri = GetPlatformsUri(parameters.ToParameters());
+        Uri uri = GetPlatformsUri(parameters.ToParameters());
 
         return baseClient.DoPaginatedRequest(uri,
             x => Platform.Parse(baseClient, x) as Platform);
@@ -85,8 +85,8 @@ public class PlatformsClient
     /// <returns></returns>
     public Platform GetPlatform(string platformId)
     {
-        var uri = GetPlatformsUri(string.Format("/{0}", Uri.EscapeDataString(platformId)));
-        var result = baseClient.DoRequest(uri);
+        Uri uri = GetPlatformsUri(string.Format("/{0}", Uri.EscapeDataString(platformId)));
+        dynamic result = baseClient.DoRequest(uri);
 
         return Platform.Parse(baseClient, result.data);
     }

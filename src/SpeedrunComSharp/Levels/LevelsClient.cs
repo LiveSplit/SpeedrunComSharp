@@ -28,7 +28,7 @@ public class LevelsClient
     /// <returns></returns>
     public Level GetLevelFromSiteUri(string siteUri, LevelEmbeds embeds = default)
     {
-        var id = GetLevelIDFromSiteUri(siteUri);
+        string id = GetLevelIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -45,7 +45,7 @@ public class LevelsClient
     /// <returns></returns>
     public string GetLevelIDFromSiteUri(string siteUri)
     {
-        var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
+        ElementDescription elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Level)
@@ -67,11 +67,11 @@ public class LevelsClient
     {
         var parameters = new List<string>() { embeds.ToString() };
 
-        var uri = GetLevelsUri(string.Format("/{0}{1}",
+        Uri uri = GetLevelsUri(string.Format("/{0}{1}",
             Uri.EscapeDataString(levelId),
             parameters.ToParameters()));
 
-        var result = baseClient.DoRequest(uri);
+        dynamic result = baseClient.DoRequest(uri);
 
         return Level.Parse(baseClient, result.data);
     }
@@ -98,7 +98,7 @@ public class LevelsClient
             parameters.Add("miscellaneous=no");
         }
 
-        var uri = GetLevelsUri(string.Format("/{0}/categories{1}",
+        Uri uri = GetLevelsUri(string.Format("/{0}/categories{1}",
             Uri.EscapeDataString(levelId),
             parameters.ToParameters()));
 
@@ -117,7 +117,7 @@ public class LevelsClient
     {
         var parameters = new List<string>(orderBy.ToParameters());
 
-        var uri = GetLevelsUri(string.Format("/{0}/variables{1}",
+        Uri uri = GetLevelsUri(string.Format("/{0}/variables{1}",
             Uri.EscapeDataString(levelId),
             parameters.ToParameters()));
 
@@ -156,7 +156,7 @@ public class LevelsClient
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
         }
 
-        var uri = GetLevelsUri(string.Format("/{0}/records{1}",
+        Uri uri = GetLevelsUri(string.Format("/{0}/records{1}",
             Uri.EscapeDataString(levelId),
             parameters.ToParameters()));
 

@@ -21,13 +21,13 @@ internal static class UsersOrderingHelpers
 {
     internal static IEnumerable<string> ToParameters(this UsersOrdering ordering)
     {
-        var isDescending = ((int)ordering & 1) == 1;
+        bool isDescending = ((int)ordering & 1) == 1;
         if (isDescending)
         {
             ordering = (UsersOrdering)((int)ordering - 1);
         }
 
-        var str = "";
+        string str = "";
 
         switch (ordering)
         {

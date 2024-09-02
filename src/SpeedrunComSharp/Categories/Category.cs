@@ -59,12 +59,12 @@ public class Category : IElementWithID
         var properties = categoryElement.Properties as IDictionary<string, dynamic>;
         var links = properties["links"] as IEnumerable<dynamic>;
 
-        var gameUri = links.First(x => x.rel == "game").uri as string;
+        string gameUri = links.First(x => x.rel == "game").uri as string;
         category.GameID = gameUri.Substring(gameUri.LastIndexOf('/') + 1);
 
         if (properties.ContainsKey("game"))
         {
-            var gameElement = properties["game"].data;
+            dynamic gameElement = properties["game"].data;
             var game = Game.Parse(client, gameElement) as Game;
             category.game = new Lazy<Game>(() => game);
         }
@@ -80,7 +80,7 @@ public class Category : IElementWithID
                 return Variable.Parse(client, x) as Variable;
             }
 
-            var variables = client.ParseCollection(properties["variables"].data, (Func<dynamic, Variable>)parser);
+            dynamic variables = client.ParseCollection(properties["variables"].data, (Func<dynamic, Variable>)parser);
             category.variables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
         }
         else
@@ -95,13 +95,13 @@ public class Category : IElementWithID
 
             category.leaderboard = new Lazy<Leaderboard>(() =>
                 {
-                    var leaderboard = client.Leaderboards
+                    Leaderboard leaderboard = client.Leaderboards
                                     .GetLeaderboardForFullGameCategory(category.GameID, category.ID);
 
                     leaderboard.game = new Lazy<Game>(() => category.Game);
                     leaderboard.category = new Lazy<Category>(() => category);
 
-                    foreach (var record in leaderboard.Records)
+                    foreach (Record record in leaderboard.Records)
                     {
                         record.game = leaderboard.game;
                         record.category = leaderboard.category;
@@ -116,13 +116,13 @@ public class Category : IElementWithID
                         return category.Leaderboard.Records.FirstOrDefault();
                     }
 
-                    var leaderboard = client.Leaderboards
+                    Leaderboard leaderboard = client.Leaderboards
                                     .GetLeaderboardForFullGameCategory(category.GameID, category.ID, top: 1);
 
                     leaderboard.game = new Lazy<Game>(() => category.Game);
                     leaderboard.category = new Lazy<Category>(() => category);
 
-                    foreach (var record in leaderboard.Records)
+                    foreach (Record record in leaderboard.Records)
                     {
                         record.game = leaderboard.game;
                         record.category = leaderboard.category;

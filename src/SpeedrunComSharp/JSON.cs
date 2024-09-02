@@ -18,14 +18,14 @@ internal static class JSON
 {
     public static dynamic FromResponse(WebResponse response)
     {
-        using var stream = response.GetResponseStream();
+        using Stream stream = response.GetResponseStream();
         return FromStream(stream);
     }
 
     public static dynamic FromStream(Stream stream)
     {
         var reader = new StreamReader(stream);
-        var json = "";
+        string json = "";
         try
         {
             json = reader.ReadToEnd();
@@ -56,7 +56,7 @@ internal static class JSON
             request.Headers.Add("X-API-Key", accessToken.ToString());
         }
 
-        var response = request.GetResponse();
+        WebResponse response = request.GetResponse();
         return FromResponse(response);
     }
 
@@ -83,7 +83,7 @@ internal static class JSON
             writer.Write(postBody);
         }
 
-        var response = request.GetResponse();
+        WebResponse response = request.GetResponse();
 
         return FromResponse(response);
     }
@@ -138,8 +138,8 @@ public sealed class DynamicJsonObject : DynamicObject
 
     private void ToString(StringBuilder sb, int depth = 1)
     {
-        var firstInDictionary = true;
-        foreach (var pair in _dictionary)
+        bool firstInDictionary = true;
+        foreach (KeyValuePair<string, object> pair in _dictionary)
         {
             if (!firstInDictionary)
             {
@@ -148,13 +148,13 @@ public sealed class DynamicJsonObject : DynamicObject
 
             sb.Append('\t', depth);
             firstInDictionary = false;
-            var value = pair.Value;
-            var name = pair.Key;
+            object value = pair.Value;
+            string name = pair.Key;
             if (value is IEnumerable<object> array)
             {
                 sb.Append("\"" + HttpUtility.JavaScriptStringEncode(name) + "\": [\r\n");
-                var firstInArray = true;
-                foreach (var arrayValue in array)
+                bool firstInArray = true;
+                foreach (object arrayValue in array)
                 {
                     if (!firstInArray)
                     {
@@ -287,7 +287,7 @@ public sealed class DynamicJsonObject : DynamicObject
     public static string JavaScriptStringDecode(string source)
     {
         // Replace some chars.
-        var decoded = source.Replace(@"\'", "'")
+        string decoded = source.Replace(@"\'", "'")
                     .Replace(@"\""", @"""")
                     .Replace(@"\/", "/")
                     .Replace(@"\t", "\t")

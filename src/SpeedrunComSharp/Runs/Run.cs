@@ -72,13 +72,13 @@ public class Run : IElementWithID
             run.Players = client.ParseCollection(runElement.players.data, (Func<dynamic, Player>)parsePlayer);
         }
 
-        var runDate = runElement.date;
+        dynamic runDate = runElement.date;
         if (!string.IsNullOrEmpty(runDate))
         {
             run.Date = DateTime.Parse(runDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
         }
 
-        var dateSubmitted = runElement.submitted;
+        dynamic dateSubmitted = runElement.submitted;
         if (!string.IsNullOrEmpty(dateSubmitted))
         {
             run.DateSubmitted = DateTime.Parse(dateSubmitted, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
@@ -87,7 +87,7 @@ public class Run : IElementWithID
         run.Times = RunTimes.Parse(client, runElement.times) as RunTimes;
         run.System = RunSystem.Parse(client, runElement.system) as RunSystem;
 
-        var splits = runElement.splits;
+        dynamic splits = runElement.splits;
         if (splits != null)
         {
             run.SplitsUri = new Uri(splits.uri as string);

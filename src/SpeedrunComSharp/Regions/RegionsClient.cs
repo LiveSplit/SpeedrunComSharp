@@ -25,7 +25,7 @@ public class RegionsClient
     /// <returns></returns>
     public Region GetRegionFromSiteUri(string siteUri)
     {
-        var id = GetRegionIDFromSiteUri(siteUri);
+        string id = GetRegionIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -42,7 +42,7 @@ public class RegionsClient
     /// <returns></returns>
     public string GetRegionIDFromSiteUri(string siteUri)
     {
-        var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
+        ElementDescription elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Region)
@@ -71,7 +71,7 @@ public class RegionsClient
             parameters.Add(string.Format("max={0}", elementsPerPage.Value));
         }
 
-        var uri = GetRegionsUri(parameters.ToParameters());
+        Uri uri = GetRegionsUri(parameters.ToParameters());
 
         return baseClient.DoPaginatedRequest(uri,
             x => Region.Parse(baseClient, x) as Region);
@@ -84,8 +84,8 @@ public class RegionsClient
     /// <returns></returns>
     public Region GetRegion(string regionId)
     {
-        var uri = GetRegionsUri(string.Format("/{0}", Uri.EscapeDataString(regionId)));
-        var result = baseClient.DoRequest(uri);
+        Uri uri = GetRegionsUri(string.Format("/{0}", Uri.EscapeDataString(regionId)));
+        dynamic result = baseClient.DoRequest(uri);
 
         return Region.Parse(baseClient, result.data);
     }

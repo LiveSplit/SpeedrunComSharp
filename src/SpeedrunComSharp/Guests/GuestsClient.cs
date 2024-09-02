@@ -25,7 +25,7 @@ public class GuestsClient
     /// <returns></returns>
     public Guest GetGuestFromSiteUri(string siteUri)
     {
-        var id = GetGuestIDFromSiteUri(siteUri);
+        string id = GetGuestIDFromSiteUri(siteUri);
 
         if (string.IsNullOrEmpty(id))
         {
@@ -42,7 +42,7 @@ public class GuestsClient
     /// <returns></returns>
     public string GetGuestIDFromSiteUri(string siteUri)
     {
-        var elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
+        ElementDescription elementDescription = baseClient.GetElementDescriptionFromSiteUri(siteUri);
 
         if (elementDescription == null
             || elementDescription.Type != ElementType.Guest)
@@ -60,8 +60,8 @@ public class GuestsClient
     /// <returns></returns>
     public Guest GetGuest(string guestName)
     {
-        var uri = GetGuestsUri(string.Format("/{0}", Uri.EscapeDataString(guestName)));
-        var result = baseClient.DoRequest(uri);
+        Uri uri = GetGuestsUri(string.Format("/{0}", Uri.EscapeDataString(guestName)));
+        dynamic result = baseClient.DoRequest(uri);
 
         return Guest.Parse(baseClient, result.data);
     }

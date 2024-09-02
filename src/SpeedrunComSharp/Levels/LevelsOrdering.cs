@@ -17,13 +17,13 @@ internal static class LevelsOrderingHelpers
 {
     internal static IEnumerable<string> ToParameters(this LevelsOrdering ordering)
     {
-        var isDescending = ((int)ordering & 1) == 1;
+        bool isDescending = ((int)ordering & 1) == 1;
         if (isDescending)
         {
             ordering = (LevelsOrdering)((int)ordering - 1);
         }
 
-        var str = "";
+        string str = "";
 
         switch (ordering)
         {

@@ -74,7 +74,7 @@ public class User : IElementWithID
         user.Name = userElement.names.international as string;
         user.JapaneseName = userElement.names.japanese as string;
 
-        var pronounsTemp = userElement.pronouns as string;
+        string pronounsTemp = userElement.pronouns as string;
         if (!string.IsNullOrWhiteSpace(pronounsTemp))
         {
             user.Pronouns = pronounsTemp.Split(new string[] { ", " }, StringSplitOptions.None);
@@ -84,7 +84,7 @@ public class User : IElementWithID
         user.NameStyle = UserNameStyle.Parse(client, properties["name-style"]) as UserNameStyle;
         user.Role = parseUserRole(userElement.role as string);
 
-        var signUpDate = userElement.signup as string;
+        string signUpDate = userElement.signup as string;
         if (!string.IsNullOrEmpty(signUpDate))
         {
             user.SignUpDate = DateTime.Parse(signUpDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
@@ -92,43 +92,43 @@ public class User : IElementWithID
 
         user.Location = Location.Parse(client, userElement.location) as Location;
 
-        var twitchLink = userElement.twitch;
+        dynamic twitchLink = userElement.twitch;
         if (twitchLink != null)
         {
             user.TwitchProfile = new Uri(twitchLink.uri as string);
         }
 
-        var hitboxLink = userElement.hitbox;
+        dynamic hitboxLink = userElement.hitbox;
         if (hitboxLink != null)
         {
             user.HitboxProfile = new Uri(hitboxLink.uri as string);
         }
 
-        var youtubeLink = userElement.youtube;
+        dynamic youtubeLink = userElement.youtube;
         if (youtubeLink != null)
         {
             user.YoutubeProfile = new Uri(youtubeLink.uri as string);
         }
 
-        var twitterLink = userElement.twitter;
+        dynamic twitterLink = userElement.twitter;
         if (twitterLink != null)
         {
             user.TwitterProfile = new Uri(twitterLink.uri as string);
         }
 
-        var speedRunsLiveLink = userElement.speedrunslive;
+        dynamic speedRunsLiveLink = userElement.speedrunslive;
         if (speedRunsLiveLink != null)
         {
             user.SpeedRunsLiveProfile = new Uri(speedRunsLiveLink.uri as string);
         }
 
-        var iconTemp = userElement.assets.icon.uri;
+        dynamic iconTemp = userElement.assets.icon.uri;
         if (iconTemp != null)
         {
             user.Icon = new Uri(iconTemp as string);
         }
 
-        var imageTemp = userElement.assets.image.uri;
+        dynamic imageTemp = userElement.assets.image.uri;
         if (imageTemp != null)
         {
             user.Image = new Uri(imageTemp as string);
@@ -140,12 +140,12 @@ public class User : IElementWithID
         user.ModeratedGames = client.Games.GetGames(moderatorId: user.ID);
         user.personalBests = new Lazy<ReadOnlyCollection<Record>>(() =>
             {
-                var records = client.Users.GetPersonalBests(userId: user.ID);
+                ReadOnlyCollection<Record> records = client.Users.GetPersonalBests(userId: user.ID);
                 var lazy = new Lazy<User>(() => user);
 
-                foreach (var record in records)
+                foreach (Record record in records)
                 {
-                    var player = record.Players.FirstOrDefault(x => x.UserID == user.ID);
+                    Player player = record.Players.FirstOrDefault(x => x.UserID == user.ID);
                     if (player != null)
                     {
                         player.user = lazy;

@@ -62,7 +62,7 @@ public class Leaderboard
 
         leaderboard.WebLink = new Uri(leaderboardElement.weblink as string);
 
-        var emulators = leaderboardElement.emulators as string;
+        string emulators = leaderboardElement.emulators as string;
         if (emulators == "true")
         {
             leaderboard.EmulatorFilter = EmulatorsFilter.OnlyEmulators;
@@ -198,7 +198,7 @@ public class Leaderboard
 
             var players = client.ParseCollection(leaderboardElement.players.data, (Func<dynamic, Player>)playerParser) as ReadOnlyCollection<Player>;
 
-            foreach (var record in leaderboard.Records)
+            foreach (Record record in leaderboard.Records)
             {
                 record.Players = record.Players.Select(x => players.FirstOrDefault(y => x.Equals(y))).ToList().AsReadOnly();
             }
@@ -219,7 +219,7 @@ public class Leaderboard
 
             var regions = client.ParseCollection(leaderboardElement.regions.data, (Func<dynamic, Region>)regionParser) as ReadOnlyCollection<Region>;
 
-            foreach (var record in leaderboard.Records)
+            foreach (Record record in leaderboard.Records)
             {
                 record.System.region = new Lazy<Region>(() => regions.FirstOrDefault(x => x.ID == record.System.RegionID));
             }
@@ -240,7 +240,7 @@ public class Leaderboard
 
             var platforms = client.ParseCollection(leaderboardElement.platforms.data, (Func<dynamic, Platform>)platformParser) as ReadOnlyCollection<Platform>;
 
-            foreach (var record in leaderboard.Records)
+            foreach (Record record in leaderboard.Records)
             {
                 record.System.platform = new Lazy<Platform>(() => platforms.FirstOrDefault(x => x.ID == record.System.PlatformID));
             }
@@ -254,9 +254,9 @@ public class Leaderboard
 
         void patchVariablesOfRecords(ReadOnlyCollection<Variable> variables)
         {
-            foreach (var record in leaderboard.Records)
+            foreach (Record record in leaderboard.Records)
             {
-                foreach (var value in record.VariableValues)
+                foreach (VariableValue value in record.VariableValues)
                 {
                     value.variable = new Lazy<Variable>(() => variables.FirstOrDefault(x => x.ID == value.VariableID));
                 }
@@ -280,7 +280,7 @@ public class Leaderboard
         {
             leaderboard.applicableVariables = new Lazy<ReadOnlyCollection<Variable>>(() =>
                 {
-                    var variables = leaderboard.Category.Variables;
+                    ReadOnlyCollection<Variable> variables = leaderboard.Category.Variables;
 
                     patchVariablesOfRecords(variables);
 
@@ -291,7 +291,7 @@ public class Leaderboard
         {
             leaderboard.applicableVariables = new Lazy<ReadOnlyCollection<Variable>>(() =>
                 {
-                    var variables = leaderboard.Category.Variables.Concat(leaderboard.Level.Variables).ToList().Distinct().ToList().AsReadOnly();
+                    ReadOnlyCollection<Variable> variables = leaderboard.Category.Variables.Concat(leaderboard.Level.Variables).ToList().Distinct().ToList().AsReadOnly();
 
                     patchVariablesOfRecords(variables);
 

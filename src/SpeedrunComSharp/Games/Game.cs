@@ -77,7 +77,7 @@ public class Game : IElementWithID
 
         game.Header = GameHeader.Parse(client, gameElement);
 
-        var releaseDate = gProperties["release-date"];
+        dynamic releaseDate = gProperties["release-date"];
         if (!string.IsNullOrEmpty(releaseDate))
         {
             game.ReleaseDate = DateTime.Parse(releaseDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
@@ -88,7 +88,7 @@ public class Game : IElementWithID
 
         game.IsRomHack = gameElement.romhack;
 
-        var created = gameElement.created as string;
+        string created = gameElement.created as string;
         if (!string.IsNullOrEmpty(created))
         {
             game.CreationDate = DateTime.Parse(created, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
@@ -124,9 +124,9 @@ public class Game : IElementWithID
                     {
                         users = client.Games.GetGame(game.ID, embeds: new GameEmbeds(embedModerators: true)).ModeratorUsers;
 
-                        foreach (var user in users)
+                        foreach (User user in users)
                         {
-                            var moderator = game.Moderators.FirstOrDefault(x => x.UserID == user.ID);
+                            Moderator moderator = game.Moderators.FirstOrDefault(x => x.UserID == user.ID);
                             if (moderator != null)
                             {
                                 moderator.user = new Lazy<User>(() => user);
@@ -229,7 +229,7 @@ public class Game : IElementWithID
 
             ReadOnlyCollection<Category> categories = client.ParseCollection(gameElement.categories.data, (Func<dynamic, Category>)categoryParser);
 
-            foreach (var category in categories)
+            foreach (Category category in categories)
             {
                 category.game = new Lazy<Game>(() => game);
             }
@@ -240,9 +240,9 @@ public class Game : IElementWithID
         {
             game.categories = new Lazy<ReadOnlyCollection<Category>>(() =>
                 {
-                    var categories = client.Games.GetCategories(game.ID);
+                    ReadOnlyCollection<Category> categories = client.Games.GetCategories(game.ID);
 
-                    foreach (var category in categories)
+                    foreach (Category category in categories)
                     {
                         category.game = new Lazy<Game>(() => game);
                     }
@@ -267,10 +267,10 @@ public class Game : IElementWithID
         }
 
         var links = properties["links"] as IEnumerable<dynamic>;
-        var seriesLink = links.FirstOrDefault(x => x.rel == "series");
+        dynamic seriesLink = links.FirstOrDefault(x => x.rel == "series");
         if (seriesLink != null)
         {
-            var parentUri = seriesLink.uri as string;
+            string parentUri = seriesLink.uri as string;
             game.SeriesID = parentUri.Substring(parentUri.LastIndexOf('/') + 1);
             game.series = new Lazy<Series>(() => client.Series.GetSingleSeries(game.SeriesID));
         }
@@ -279,10 +279,10 @@ public class Game : IElementWithID
             game.series = new Lazy<Series>(() => null);
         }
 
-        var originalGameLink = links.FirstOrDefault(x => x.rel == "game");
+        dynamic originalGameLink = links.FirstOrDefault(x => x.rel == "game");
         if (originalGameLink != null)
         {
-            var originalGameUri = originalGameLink.uri as string;
+            string originalGameUri = originalGameLink.uri as string;
             game.OriginalGameID = originalGameUri.Substring(originalGameUri.LastIndexOf('/') + 1);
             game.originalGame = new Lazy<Game>(() => client.Games.GetGame(game.OriginalGameID));
         }
@@ -293,11 +293,11 @@ public class Game : IElementWithID
 
         game.romHacks = new Lazy<ReadOnlyCollection<Game>>(() =>
             {
-                var romHacks = client.Games.GetRomHacks(game.ID);
+                ReadOnlyCollection<Game> romHacks = client.Games.GetRomHacks(game.ID);
 
                 if (romHacks != null)
                 {
-                    foreach (var romHack in romHacks)
+                    foreach (Game romHack in romHacks)
                     {
                         romHack.originalGame = new Lazy<Game>(() => game);
                     }

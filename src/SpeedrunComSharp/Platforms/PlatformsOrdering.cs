@@ -17,13 +17,13 @@ internal static class PlatformsOrderingHelpers
 {
     internal static IEnumerable<string> ToParameters(this PlatformsOrdering ordering)
     {
-        var isDescending = ((int)ordering & 1) == 1;
+        bool isDescending = ((int)ordering & 1) == 1;
         if (isDescending)
         {
             ordering = (PlatformsOrdering)((int)ordering - 1);
         }
 
-        var str = "";
+        string str = "";
 
         switch (ordering)
         {

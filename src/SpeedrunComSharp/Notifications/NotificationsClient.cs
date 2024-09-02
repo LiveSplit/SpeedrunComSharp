@@ -38,7 +38,7 @@ public class NotificationsClient
 
         parameters.AddRange(ordering.ToParameters());
 
-        var uri = GetNotificationsUri(string.Format("{0}",
+        Uri uri = GetNotificationsUri(string.Format("{0}",
             parameters.ToParameters()));
 
         return baseClient.DoPaginatedRequest<Notification>(uri,
