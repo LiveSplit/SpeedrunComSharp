@@ -28,7 +28,7 @@ public class RunsClient
     /// <param name="siteUri">The site URI for the run.</param>
     /// <param name="embeds">Optional. If included, will dictate the embedded resources included in the response.</param>
     /// <returns></returns>
-    public Run GetRunFromSiteUri(string siteUri, RunEmbeds embeds = default(RunEmbeds))
+    public Run GetRunFromSiteUri(string siteUri, RunEmbeds embeds = default)
     {
         var id = GetRunIDFromSiteUri(siteUri);
 
@@ -83,8 +83,8 @@ public class RunsClient
         string platformId = null, string regionId = null,
         bool onlyEmulatedRuns = false, RunStatusType? status = null,
         int? elementsPerPage = null,
-        RunEmbeds embeds = default(RunEmbeds),
-        RunsOrdering orderBy = default(RunsOrdering))
+        RunEmbeds embeds = default,
+        RunsOrdering orderBy = default)
     {
         var parameters = new List<string>() { embeds.ToString() };
 
@@ -165,7 +165,7 @@ public class RunsClient
     /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
     /// <returns></returns>
     public Run GetRun(string runId,
-        RunEmbeds embeds = default(RunEmbeds))
+        RunEmbeds embeds = default)
     {
         var parameters = new List<string>() { embeds.ToString() };
 

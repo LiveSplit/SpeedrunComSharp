@@ -26,7 +26,7 @@ public class CategoriesClient
     /// <param name="siteUri">The site URI for the category.</param>
     /// <param name="embeds">Optional. If included, will dictate the embedded resources included in the response.</param>
     /// <returns></returns>
-    public Category GetCategoryFromSiteUri(string siteUri, CategoryEmbeds embeds = default(CategoryEmbeds))
+    public Category GetCategoryFromSiteUri(string siteUri, CategoryEmbeds embeds = default)
     {
         var id = GetCategoryIDFromSiteUri(siteUri);
 
@@ -62,7 +62,7 @@ public class CategoriesClient
     /// <param name="categoryId">The ID for the category.</param>
     /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
     /// <returns></returns>
-    public Category GetCategory(string categoryId, CategoryEmbeds embeds = default(CategoryEmbeds))
+    public Category GetCategory(string categoryId, CategoryEmbeds embeds = default)
     {
         var uri = GetCategoriesUri(string.Format("/{0}{1}", Uri.EscapeDataString(categoryId), embeds.ToString().ToParameters()));
         var result = baseClient.DoRequest(uri);
@@ -77,7 +77,7 @@ public class CategoriesClient
     /// <param name="orderBy">Optional. If omitted, variables will be in the same order as the API.</param>
     /// <returns></returns>
     public ReadOnlyCollection<Variable> GetVariables(string categoryId,
-        VariablesOrdering orderBy = default(VariablesOrdering))
+        VariablesOrdering orderBy = default)
     {
         var parameters = new List<string>(orderBy.ToParameters());
 
@@ -101,7 +101,7 @@ public class CategoriesClient
     public IEnumerable<Leaderboard> GetRecords(string categoryId,
         int? top = null, bool skipEmptyLeaderboards = false,
         int? elementsPerPage = null,
-        LeaderboardEmbeds embeds = default(LeaderboardEmbeds))
+        LeaderboardEmbeds embeds = default)
     {
         var parameters = new List<string>() { embeds.ToString() };
 

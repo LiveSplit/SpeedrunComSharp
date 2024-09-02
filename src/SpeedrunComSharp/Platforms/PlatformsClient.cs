@@ -61,7 +61,7 @@ public class PlatformsClient
     /// <param name="orderBy">Optional. If omitted, platforms will be in the same order as the API.</param>
     /// <returns></returns>
     public IEnumerable<Platform> GetPlatforms(int? elementsPerPage = null,
-        PlatformsOrdering orderBy = default(PlatformsOrdering))
+        PlatformsOrdering orderBy = default)
     {
         var parameters = new List<string>();
 

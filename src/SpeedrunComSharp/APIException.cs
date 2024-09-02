@@ -16,6 +16,6 @@ public class APIException : ArgumentException
     public APIException(string message, IEnumerable<string> errors)
         : base(message)
     {
-        this.Errors = errors.ToList().AsReadOnly();
+        Errors = errors.ToList().AsReadOnly();
     }
 }

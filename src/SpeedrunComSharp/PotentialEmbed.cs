@@ -17,7 +17,7 @@ internal class PotentialEmbed<T>
 
         if (element == null)
         {
-            potentialEmbed.Object = new Lazy<G>(() => default(G));
+            potentialEmbed.Object = new Lazy<G>(() => default);
         }
         else if (element is string)
         {

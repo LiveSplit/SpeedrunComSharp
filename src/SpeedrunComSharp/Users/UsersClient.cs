@@ -71,7 +71,7 @@ public class UsersClient
         string twitch = null, string hitbox = null,
         string twitter = null, string speedrunslive = null,
         int? elementsPerPage = null,
-        UsersOrdering orderBy = default(UsersOrdering))
+        UsersOrdering orderBy = default)
     {
         var parameters = new List<string>();
 
@@ -127,7 +127,7 @@ public class UsersClient
     public IEnumerable<User> GetUsersFuzzy(
         string fuzzyName = null,
         int? elementsPerPage = null,
-        UsersOrdering orderBy = default(UsersOrdering))
+        UsersOrdering orderBy = default)
     {
         var parameters = new List<string>();
 
@@ -176,7 +176,7 @@ public class UsersClient
     public ReadOnlyCollection<Record> GetPersonalBests(
         string userId, int? top = null,
         string seriesId = null, string gameId = null,
-        RunEmbeds embeds = default(RunEmbeds))
+        RunEmbeds embeds = default)
     {
         var parameters = new List<string>() { embeds.ToString() };
 

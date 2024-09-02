@@ -27,7 +27,7 @@ public class NotificationsClient
     /// <returns></returns>
     public IEnumerable<Notification> GetNotifications(
         int? elementsPerPage = null,
-        NotificationsOrdering ordering = default(NotificationsOrdering))
+        NotificationsOrdering ordering = default)
     {
         var parameters = new List<string>();
 

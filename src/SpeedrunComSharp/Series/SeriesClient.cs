@@ -25,7 +25,7 @@ public class SeriesClient
     /// <param name="siteUri">The site URI for the series.</param>
     /// <param name="embeds">Optional. If included, will dictate the embedded resources included in the response.</param>
     /// <returns></returns>
-    public Series GetSeriesFromSiteUri(string siteUri, SeriesEmbeds embeds = default(SeriesEmbeds))
+    public Series GetSeriesFromSiteUri(string siteUri, SeriesEmbeds embeds = default)
     {
         var id = GetSeriesIDFromSiteUri(siteUri);
 
@@ -68,8 +68,8 @@ public class SeriesClient
     public IEnumerable<Series> GetMultipleSeries(
        string name = null, string abbreviation = null,
        string moderatorId = null, int? elementsPerPage = null,
-       SeriesEmbeds embeds = default(SeriesEmbeds),
-       SeriesOrdering orderBy = default(SeriesOrdering))
+       SeriesEmbeds embeds = default,
+       SeriesOrdering orderBy = default)
     {
         var parameters = new List<string>() { embeds.ToString() };
 
@@ -106,7 +106,7 @@ public class SeriesClient
     /// <param name="seriesId">The ID of the series.</param>
     /// <param name="embeds">Optional. If included, will dictate the additional resources embedded in the response.</param>
     /// <returns></returns>
-    public Series GetSingleSeries(string seriesId, SeriesEmbeds embeds = default(SeriesEmbeds))
+    public Series GetSingleSeries(string seriesId, SeriesEmbeds embeds = default)
     {
         var parameters = new List<string>() { embeds.ToString() };
 
@@ -137,8 +137,8 @@ public class SeriesClient
         string name = null, int? yearOfRelease = null,
         string platformId = null, string regionId = null,
         string moderatorId = null, int? elementsPerPage = null,
-        GameEmbeds embeds = default(GameEmbeds),
-        GamesOrdering orderBy = default(GamesOrdering))
+        GameEmbeds embeds = default,
+        GamesOrdering orderBy = default)
     {
         var parameters = new List<string>() { embeds.ToString() };
 

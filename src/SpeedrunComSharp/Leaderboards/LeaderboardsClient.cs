@@ -26,7 +26,7 @@ public class LeaderboardsClient
         EmulatorsFilter emulatorsFilter = EmulatorsFilter.NotSet, bool filterOutRunsWithoutVideo = false,
         TimingMethod? orderBy = null, DateTime? filterOutRunsAfter = null,
         IEnumerable<VariableValue> variableFilters = null,
-        LeaderboardEmbeds embeds = default(LeaderboardEmbeds))
+        LeaderboardEmbeds embeds = default)
     {
         var parameters = new List<string>() { embeds.ToString() };
 
@@ -112,7 +112,7 @@ public class LeaderboardsClient
         EmulatorsFilter emulatorsFilter = EmulatorsFilter.NotSet, bool filterOutRunsWithoutVideo = false,
         TimingMethod? orderBy = null, DateTime? filterOutRunsAfter = null,
         IEnumerable<VariableValue> variableFilters = null,
-        LeaderboardEmbeds embeds = default(LeaderboardEmbeds))
+        LeaderboardEmbeds embeds = default)
     {
         var uri = string.Format("/{0}/category/{1}",
             Uri.EscapeDataString(gameId),
@@ -150,7 +150,7 @@ public class LeaderboardsClient
         EmulatorsFilter emulatorsFilter = EmulatorsFilter.NotSet, bool filterOutRunsWithoutVideo = false,
         TimingMethod? orderBy = null, DateTime? filterOutRunsAfter = null,
         IEnumerable<VariableValue> variableFilters = null,
-        LeaderboardEmbeds embeds = default(LeaderboardEmbeds))
+        LeaderboardEmbeds embeds = default)
     {
         var uri = string.Format("/{0}/level/{1}/{2}",
             Uri.EscapeDataString(gameId),

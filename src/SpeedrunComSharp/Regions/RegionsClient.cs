@@ -60,7 +60,7 @@ public class RegionsClient
     /// <param name="orderBy">Optional. If omitted, regions will be in the same order as the API.</param>
     /// <returns></returns>
     public IEnumerable<Region> GetRegions(int? elementsPerPage = null,
-        RegionsOrdering orderBy = default(RegionsOrdering))
+        RegionsOrdering orderBy = default)
     {
         var parameters = new List<string>();
 

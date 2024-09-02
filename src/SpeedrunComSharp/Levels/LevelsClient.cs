@@ -26,7 +26,7 @@ public class LevelsClient
     /// <param name="siteUri">The site URI for the level.</param>
     /// <param name="embeds">Optional. If included, will dictate the embedded resources included in the response.</param>
     /// <returns></returns>
-    public Level GetLevelFromSiteUri(string siteUri, LevelEmbeds embeds = default(LevelEmbeds))
+    public Level GetLevelFromSiteUri(string siteUri, LevelEmbeds embeds = default)
     {
         var id = GetLevelIDFromSiteUri(siteUri);
 
@@ -63,7 +63,7 @@ public class LevelsClient
     /// <param name="embeds">Optional. If included, will dictate the embedded resources included in the response.</param>
     /// <returns></returns>
     public Level GetLevel(string levelId,
-        LevelEmbeds embeds = default(LevelEmbeds))
+        LevelEmbeds embeds = default)
     {
         var parameters = new List<string>() { embeds.ToString() };
 
@@ -86,8 +86,8 @@ public class LevelsClient
     /// <returns></returns>
     public ReadOnlyCollection<Category> GetCategories(
         string levelId, bool miscellaneous = true,
-        CategoryEmbeds embeds = default(CategoryEmbeds),
-        CategoriesOrdering orderBy = default(CategoriesOrdering))
+        CategoryEmbeds embeds = default,
+        CategoriesOrdering orderBy = default)
     {
         var parameters = new List<string>() { embeds.ToString() };
 
@@ -113,7 +113,7 @@ public class LevelsClient
     /// <param name="orderBy">Optional. If omitted, variables will be in the same order as the API.</param>
     /// <returns></returns>
     public ReadOnlyCollection<Variable> GetVariables(string levelId,
-        VariablesOrdering orderBy = default(VariablesOrdering))
+        VariablesOrdering orderBy = default)
     {
         var parameters = new List<string>(orderBy.ToParameters());
 
@@ -137,7 +137,7 @@ public class LevelsClient
     public IEnumerable<Leaderboard> GetRecords(string levelId,
        int? top = null, bool skipEmptyLeaderboards = false,
        int? elementsPerPage = null,
-       LeaderboardEmbeds embeds = default(LeaderboardEmbeds))
+       LeaderboardEmbeds embeds = default)
     {
         var parameters = new List<string>() { embeds.ToString() };
 
