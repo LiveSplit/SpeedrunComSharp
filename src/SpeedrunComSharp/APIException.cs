@@ -7,9 +7,7 @@ namespace SpeedrunComSharp;
 
 public class APIException : ArgumentException
 {
-    private readonly ReadOnlyCollection<string> errors;
-
-    public ReadOnlyCollection<string> Errors => errors;
+    public ReadOnlyCollection<string> Errors { get; }
 
     public APIException(string message)
         : this(message, new List<string>().AsReadOnly())
@@ -18,6 +16,6 @@ public class APIException : ArgumentException
     public APIException(string message, IEnumerable<string> errors)
         : base(message)
     {
-        this.errors = errors.ToList().AsReadOnly();
+        this.Errors = errors.ToList().AsReadOnly();
     }
 }
