@@ -40,10 +40,7 @@ internal struct Embeds
 
     private void MakeSureInit()
     {
-        if (embedDictionary == null)
-        {
-            embedDictionary = [];
-        }
+        embedDictionary ??= [];
     }
 
     public override string ToString()

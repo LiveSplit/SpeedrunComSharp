@@ -29,10 +29,7 @@ internal class CachedEnumerable<T> : IEnumerable<T>
             yield return element;
         }
 
-        if (baseEnumerator == null)
-        {
-            baseEnumerator = baseEnumerable.GetEnumerator();
-        }
+        baseEnumerator ??= baseEnumerable.GetEnumerator();
 
         while (baseEnumerator.MoveNext())
         {
