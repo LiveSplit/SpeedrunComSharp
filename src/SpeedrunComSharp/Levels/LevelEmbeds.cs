@@ -6,13 +6,13 @@ public struct LevelEmbeds
 
     public bool EmbedCategories
     {
-        get { return embeds["categories"]; }
-        set { embeds["categories"] = value; }
+        get => embeds["categories"];
+        set => embeds["categories"] = value;
     }
     public bool EmbedVariables
     {
-        get { return embeds["variables"]; }
-        set { embeds["variables"] = value; }
+        get => embeds["variables"];
+        set => embeds["variables"] = value;
     }
 
     /// <summary>

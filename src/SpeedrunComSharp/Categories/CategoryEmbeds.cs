@@ -4,8 +4,8 @@ public struct CategoryEmbeds
 {
     private Embeds embeds;
 
-    public bool EmbedGame { get { return embeds["game"]; } set { embeds["game"] = value; } }
-    public bool EmbedVariables { get { return embeds["variables"]; } set { embeds["variables"] = value; } }
+    public bool EmbedGame { get => embeds["game"]; set => embeds["game"] = value; }
+    public bool EmbedVariables { get => embeds["variables"]; set => embeds["variables"] = value; }
 
     /// <summary>
     /// Options for embedding resources in Category responses.

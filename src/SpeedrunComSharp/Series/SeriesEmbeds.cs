@@ -6,8 +6,8 @@ public struct SeriesEmbeds
 
     public bool EmbedModerators
     {
-        get { return embeds["moderators"]; }
-        set { embeds["moderators"] = value; }
+        get => embeds["moderators"];
+        set => embeds["moderators"] = value;
     }
 
     /// <summary>

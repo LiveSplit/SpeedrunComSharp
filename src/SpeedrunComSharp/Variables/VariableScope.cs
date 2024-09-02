@@ -11,7 +11,7 @@ public class VariableScope
 
     private Lazy<Level> level;
 
-    public Level Level { get { return level.Value; } }
+    public Level Level => level.Value;
 
     #endregion
 

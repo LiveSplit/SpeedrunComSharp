@@ -9,7 +9,7 @@ public class APIException : ArgumentException
 {
     private readonly ReadOnlyCollection<string> errors;
 
-    public ReadOnlyCollection<string> Errors { get { return errors; } }
+    public ReadOnlyCollection<string> Errors => errors;
 
     public APIException(string message)
         : this(message, new List<string>().AsReadOnly())

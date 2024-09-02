@@ -15,7 +15,7 @@ public class RunStatus
 
     private Lazy<User> examiner;
 
-    public User Examiner { get { return examiner.Value; } }
+    public User Examiner => examiner.Value;
 
     #endregion
 

@@ -8,15 +8,15 @@ public class UserNameStyle
     public string LightSolidColorCode { get; private set; }
     public string LightGradientStartColorCode
     {
-        get { return LightSolidColorCode; }
-        private set { LightSolidColorCode = value; }
+        get => LightSolidColorCode;
+        private set => LightSolidColorCode = value;
     }
     public string LightGradientEndColorCode { get; private set; }
     public string DarkSolidColorCode { get; private set; }
     public string DarkGradientStartColorCode
     {
-        get { return DarkSolidColorCode; }
-        private set { DarkSolidColorCode = value; }
+        get => DarkSolidColorCode;
+        private set => DarkSolidColorCode = value;
     }
     public string DarkGradientEndColorCode { get; private set; }
 

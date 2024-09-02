@@ -22,10 +22,10 @@ public class Leaderboard
     private Lazy<ReadOnlyCollection<Platform>> usedPlatforms;
     private Lazy<ReadOnlyCollection<Variable>> applicableVariables;
 
-    public ReadOnlyCollection<Player> Players { get { return players.Value; } }
-    public ReadOnlyCollection<Region> UsedRegions { get { return usedRegions.Value; } }
-    public ReadOnlyCollection<Platform> UsedPlatforms { get { return usedPlatforms.Value; } }
-    public ReadOnlyCollection<Variable> ApplicableVariables { get { return applicableVariables.Value; } }
+    public ReadOnlyCollection<Player> Players => players.Value;
+    public ReadOnlyCollection<Region> UsedRegions => usedRegions.Value;
+    public ReadOnlyCollection<Platform> UsedPlatforms => usedPlatforms.Value;
+    public ReadOnlyCollection<Variable> ApplicableVariables => applicableVariables.Value;
 
     #endregion
 
@@ -38,15 +38,15 @@ public class Leaderboard
     private Lazy<Region> regionFilter;
 
     public string GameID { get; private set; }
-    public Game Game { get { return game.Value; } }
+    public Game Game => game.Value;
     public string CategoryID { get; private set; }
-    public Category Category { get { return category.Value; } }
+    public Category Category => category.Value;
     public string LevelID { get; private set; }
-    public Level Level { get { return level.Value; } }
+    public Level Level => level.Value;
     public string PlatformIDOfFilter { get; private set; }
-    public Platform PlatformFilter { get { return platformFilter.Value; } }
+    public Platform PlatformFilter => platformFilter.Value;
     public string RegionIDOfFilter { get; private set; }
-    public Region RegionFilter { get { return regionFilter.Value; } }
+    public Region RegionFilter => regionFilter.Value;
 
     #endregion
 
@@ -86,7 +86,11 @@ public class Leaderboard
             leaderboard.VariableFilters = new List<VariableValue>().AsReadOnly();
         }
 
-        Record recordParser(dynamic x) => Record.Parse(client, x) as Record;
+        Record recordParser(dynamic x)
+        {
+            return Record.Parse(client, x) as Record;
+        }
+
         leaderboard.Records = client.ParseCollection(leaderboardElement.runs, (Func<dynamic, Record>)recordParser);
 
         //Parse Links
@@ -171,7 +175,11 @@ public class Leaderboard
 
         if (properties.ContainsKey("players"))
         {
-            Player playerParser(dynamic x) => Player.Parse(client, x) as Player;
+            Player playerParser(dynamic x)
+            {
+                return Player.Parse(client, x) as Player;
+            }
+
             var players = client.ParseCollection(leaderboardElement.players.data, (Func<dynamic, Player>)playerParser) as ReadOnlyCollection<Player>;
 
             foreach (var record in leaderboard.Records)
@@ -188,7 +196,11 @@ public class Leaderboard
 
         if (properties.ContainsKey("regions"))
         {
-            Region regionParser(dynamic x) => Region.Parse(client, x) as Region;
+            Region regionParser(dynamic x)
+            {
+                return Region.Parse(client, x) as Region;
+            }
+
             var regions = client.ParseCollection(leaderboardElement.regions.data, (Func<dynamic, Region>)regionParser) as ReadOnlyCollection<Region>;
 
             foreach (var record in leaderboard.Records)
@@ -205,7 +217,11 @@ public class Leaderboard
 
         if (properties.ContainsKey("platforms"))
         {
-            Platform platformParser(dynamic x) => Platform.Parse(client, x) as Platform;
+            Platform platformParser(dynamic x)
+            {
+                return Platform.Parse(client, x) as Platform;
+            }
+
             var platforms = client.ParseCollection(leaderboardElement.platforms.data, (Func<dynamic, Platform>)platformParser) as ReadOnlyCollection<Platform>;
 
             foreach (var record in leaderboard.Records)
@@ -233,7 +249,11 @@ public class Leaderboard
 
         if (properties.ContainsKey("variables"))
         {
-            Variable variableParser(dynamic x) => Variable.Parse(client, x) as Variable;
+            Variable variableParser(dynamic x)
+            {
+                return Variable.Parse(client, x) as Variable;
+            }
+
             var variables = client.ParseCollection(leaderboardElement.variables.data, (Func<dynamic, Variable>)variableParser) as ReadOnlyCollection<Variable>;
 
             patchVariablesOfRecords(variables);

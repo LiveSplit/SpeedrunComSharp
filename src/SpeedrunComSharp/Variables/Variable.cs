@@ -25,10 +25,10 @@ public class Variable : IElementWithID
     private Lazy<Level> level;
 
     public string GameID { get; private set; }
-    public Game Game { get { return game.Value; } }
+    public Game Game => game.Value;
     public string CategoryID { get; private set; }
-    public Category Category { get { return category.Value; } }
-    public Level Level { get { return level.Value; } }
+    public Category Category => category.Value;
+    public Level Level => level.Value;
 
     #endregion
 

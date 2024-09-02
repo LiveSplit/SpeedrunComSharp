@@ -5,7 +5,7 @@ namespace SpeedrunComSharp;
 
 public class Player
 {
-    public bool IsUser { get { return string.IsNullOrEmpty(GuestName); } }
+    public bool IsUser => string.IsNullOrEmpty(GuestName);
     public string UserID { get; private set; }
     public string GuestName { get; private set; }
 
@@ -14,9 +14,9 @@ public class Player
     internal Lazy<User> user;
     private Lazy<Guest> guest;
 
-    public User User { get { return user.Value; } }
-    public Guest Guest { get { return guest.Value; } }
-    public string Name { get { return IsUser ? User.Name : GuestName; } }
+    public User User => user.Value;
+    public Guest Guest => guest.Value;
+    public string Name => IsUser ? User.Name : GuestName;
 
     #endregion
 

@@ -33,7 +33,7 @@ public class User : IElementWithID
 
     public IEnumerable<Run> Runs { get; private set; }
     public IEnumerable<Game> ModeratedGames { get; private set; }
-    public ReadOnlyCollection<Record> PersonalBests { get { return personalBests.Value; } }
+    public ReadOnlyCollection<Record> PersonalBests => personalBests.Value;
 
     #endregion
 

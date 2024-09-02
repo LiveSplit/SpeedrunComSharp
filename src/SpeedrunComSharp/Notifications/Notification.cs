@@ -21,10 +21,10 @@ public class Notification : IElementWithID
     private Lazy<Game> game;
 
     public string RunID { get; private set; }
-    public Run Run { get { return run.Value; } }
+    public Run Run => run.Value;
 
     public string GameID { get; private set; }
-    public Game Game { get { return game.Value; } }
+    public Game Game => game.Value;
 
     #endregion
 

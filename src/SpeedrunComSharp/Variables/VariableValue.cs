@@ -15,11 +15,11 @@ public class VariableValue : IElementWithID
     internal Lazy<Variable> variable;
     internal Lazy<string> value;
 
-    public Variable Variable { get { return variable.Value; } }
-    public string Value { get { return value.Value; } }
-    public string Name { get { return Variable.Name; } }
+    public Variable Variable => variable.Value;
+    public string Value => value.Value;
+    public string Name => Variable.Name;
 
-    public bool IsCustomValue { get { return string.IsNullOrEmpty(ID); } }
+    public bool IsCustomValue => string.IsNullOrEmpty(ID);
 
     #endregion
 

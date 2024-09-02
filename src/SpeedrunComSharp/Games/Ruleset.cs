@@ -26,7 +26,11 @@ public class Ruleset
         ruleset.RequiresVerification = properties["require-verification"];
         ruleset.RequiresVideo = properties["require-video"];
 
-        static TimingMethod timingMethodParser(dynamic x) => TimingMethodHelpers.FromString(x as string);
+        static TimingMethod timingMethodParser(dynamic x)
+        {
+            return TimingMethodHelpers.FromString(x as string);
+        }
+
         ruleset.TimingMethods = client.ParseCollection(properties["run-times"], (Func<dynamic, TimingMethod>)timingMethodParser);
         ruleset.DefaultTimingMethod = TimingMethodHelpers.FromString(properties["default-time"]);
 

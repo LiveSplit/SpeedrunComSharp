@@ -6,33 +6,33 @@ public struct GameEmbeds
 
     public bool EmbedLevels
     {
-        get { return embeds["levels"]; }
-        set { embeds["levels"] = value; }
+        get => embeds["levels"];
+        set => embeds["levels"] = value;
     }
     public bool EmbedCategories
     {
-        get { return embeds["categories"]; }
-        set { embeds["categories"] = value; }
+        get => embeds["categories"];
+        set => embeds["categories"] = value;
     }
     public bool EmbedModerators
     {
-        get { return embeds["moderators"]; }
-        set { embeds["moderators"] = value; }
+        get => embeds["moderators"];
+        set => embeds["moderators"] = value;
     }
     public bool EmbedPlatforms
     {
-        get { return embeds["platforms"]; }
-        set { embeds["platforms"] = value; }
+        get => embeds["platforms"];
+        set => embeds["platforms"] = value;
     }
     public bool EmbedRegions
     {
-        get { return embeds["regions"]; }
-        set { embeds["regions"] = value; }
+        get => embeds["regions"];
+        set => embeds["regions"] = value;
     }
     public bool EmbedVariables
     {
-        get { return embeds["variables"]; }
-        set { embeds["variables"] = value; }
+        get => embeds["variables"];
+        set => embeds["variables"] = value;
     }
 
     /// <summary>

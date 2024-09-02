@@ -12,8 +12,8 @@ public class Moderator
 
     internal Lazy<User> user;
 
-    public User User { get { return user.Value; } }
-    public string Name { get { return User.Name; } }
+    public User User => user.Value;
+    public string Name => User.Name;
 
     #endregion
 

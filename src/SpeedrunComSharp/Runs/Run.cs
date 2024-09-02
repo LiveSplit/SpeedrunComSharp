@@ -16,14 +16,14 @@ public class Run : IElementWithID
     public RunVideos Videos { get; private set; }
     public string Comment { get; private set; }
     public RunStatus Status { get; private set; }
-    public Player Player { get { return Players.FirstOrDefault(); } }
+    public Player Player => Players.FirstOrDefault();
     public ReadOnlyCollection<Player> Players { get; internal set; }
     public DateTime? Date { get; private set; }
     public DateTime? DateSubmitted { get; private set; }
     public RunTimes Times { get; private set; }
     public RunSystem System { get; private set; }
     public Uri SplitsUri { get; private set; }
-    public bool SplitsAvailable { get { return SplitsUri != null; } }
+    public bool SplitsAvailable => SplitsUri != null;
     public ReadOnlyCollection<VariableValue> VariableValues { get; private set; }
 
     #region Links
@@ -33,12 +33,12 @@ public class Run : IElementWithID
     private Lazy<Level> level;
     private Lazy<User> examiner;
 
-    public Game Game { get { return game.Value; } }
-    public Category Category { get { return category.Value; } }
-    public Level Level { get { return level.Value; } }
-    public Platform Platform { get { return System.Platform; } }
-    public Region Region { get { return System.Region; } }
-    public User Examiner { get { return examiner.Value; } }
+    public Game Game => game.Value;
+    public Category Category => category.Value;
+    public Level Level => level.Value;
+    public Platform Platform => System.Platform;
+    public Region Region => System.Region;
+    public User Examiner => examiner.Value;
 
     #endregion
 
@@ -54,7 +54,10 @@ public class Run : IElementWithID
         run.Comment = runElement.comment as string;
         run.Status = RunStatus.Parse(client, runElement.status) as RunStatus;
 
-        Player parsePlayer(dynamic x) => Player.Parse(client, x) as Player;
+        Player parsePlayer(dynamic x)
+        {
+            return Player.Parse(client, x) as Player;
+        }
 
         if (runElement.players is IEnumerable<dynamic>)
         {

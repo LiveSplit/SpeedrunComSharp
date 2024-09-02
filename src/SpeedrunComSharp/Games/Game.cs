@@ -10,12 +10,12 @@ namespace SpeedrunComSharp;
 public class Game : IElementWithID
 {
     public GameHeader Header { get; private set; }
-    public string ID { get { return Header.ID; } }
-    public string Name { get { return Header.Name; } }
-    public string JapaneseName { get { return Header.JapaneseName; } }
-    public string TwitchName { get { return Header.TwitchName; } }
-    public string Abbreviation { get { return Header.Abbreviation; } }
-    public Uri WebLink { get { return Header.WebLink; } }
+    public string ID => Header.ID;
+    public string Name => Header.Name;
+    public string JapaneseName => Header.JapaneseName;
+    public string TwitchName => Header.TwitchName;
+    public string Abbreviation => Header.Abbreviation;
+    public Uri WebLink => Header.WebLink;
     public DateTime? ReleaseDate { get; private set; }
     public int? YearOfRelease { get; private set; }
     public Ruleset Ruleset { get; private set; }
@@ -36,9 +36,9 @@ public class Game : IElementWithID
     /// </summary>
     public ReadOnlyCollection<Moderator> Moderators { get; private set; }
 
-    public ReadOnlyCollection<User> ModeratorUsers { get { return moderatorUsers.Value; } }
-    public ReadOnlyCollection<Platform> Platforms { get { return platforms.Value; } }
-    public ReadOnlyCollection<Region> Regions { get { return regions.Value; } }
+    public ReadOnlyCollection<User> ModeratorUsers => moderatorUsers.Value;
+    public ReadOnlyCollection<Platform> Platforms => platforms.Value;
+    public ReadOnlyCollection<Region> Regions => regions.Value;
 
     #endregion
 
@@ -52,18 +52,18 @@ public class Game : IElementWithID
     private Lazy<ReadOnlyCollection<Game>> romHacks;
 
     public IEnumerable<Run> Runs { get; private set; }
-    public ReadOnlyCollection<Level> Levels { get { return levels.Value; } }
-    public ReadOnlyCollection<Category> Categories { get { return categories.Value; } }
-    public IEnumerable<Category> FullGameCategories { get { return Categories.Where(category => category.Type == CategoryType.PerGame); } }
-    public IEnumerable<Category> LevelCategories { get { return Categories.Where(category => category.Type == CategoryType.PerLevel); } }
-    public ReadOnlyCollection<Variable> Variables { get { return variables.Value; } }
-    public IEnumerable<Variable> FullGameVariables { get { return Variables.Where(variable => variable.Scope.Type == VariableScopeType.FullGame || variable.Scope.Type == VariableScopeType.Global); } }
-    public IEnumerable<Variable> LevelVariables { get { return Variables.Where(variable => variable.Scope.Type == VariableScopeType.AllLevels || variable.Scope.Type == VariableScopeType.Global); } }
+    public ReadOnlyCollection<Level> Levels => levels.Value;
+    public ReadOnlyCollection<Category> Categories => categories.Value;
+    public IEnumerable<Category> FullGameCategories => Categories.Where(category => category.Type == CategoryType.PerGame);
+    public IEnumerable<Category> LevelCategories => Categories.Where(category => category.Type == CategoryType.PerLevel);
+    public ReadOnlyCollection<Variable> Variables => variables.Value;
+    public IEnumerable<Variable> FullGameVariables => Variables.Where(variable => variable.Scope.Type == VariableScopeType.FullGame || variable.Scope.Type == VariableScopeType.Global);
+    public IEnumerable<Variable> LevelVariables => Variables.Where(variable => variable.Scope.Type == VariableScopeType.AllLevels || variable.Scope.Type == VariableScopeType.Global);
     public string SeriesID { get; private set; }
-    public Series Series { get { return series.Value; } }
+    public Series Series => series.Value;
     public string OriginalGameID { get; private set; }
-    public Game OriginalGame { get { return originalGame.Value; } }
-    public ReadOnlyCollection<Game> RomHacks { get { return romHacks.Value; } }
+    public Game OriginalGame => originalGame.Value;
+    public ReadOnlyCollection<Game> RomHacks => romHacks.Value;
 
     #endregion
 
@@ -98,7 +98,11 @@ public class Game : IElementWithID
 
         if (gameElement.moderators is DynamicJsonObject && gameElement.moderators.Properties.ContainsKey("data"))
         {
-            User userParser(dynamic x) => User.Parse(client, x) as User;
+            User userParser(dynamic x)
+            {
+                return User.Parse(client, x) as User;
+            }
+
             ReadOnlyCollection<User> users = client.ParseCollection(gameElement.moderators.data, (Func<dynamic, User>)userParser);
             game.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(() => users);
         }
@@ -156,7 +160,11 @@ public class Game : IElementWithID
         }
         else
         {
-            Platform platformParser(dynamic x) => Platform.Parse(client, x) as Platform;
+            Platform platformParser(dynamic x)
+            {
+                return Platform.Parse(client, x) as Platform;
+            }
+
             ReadOnlyCollection<Platform> platforms = client.ParseCollection(gameElement.platforms.data, (Func<dynamic, Platform>)platformParser);
             game.platforms = new Lazy<ReadOnlyCollection<Platform>>(() => platforms);
             game.PlatformIDs = platforms.Select(x => x.ID).ToList().AsReadOnly();
@@ -179,7 +187,11 @@ public class Game : IElementWithID
         }
         else
         {
-            Region regionParser(dynamic x) => Region.Parse(client, x) as Region;
+            Region regionParser(dynamic x)
+            {
+                return Region.Parse(client, x) as Region;
+            }
+
             ReadOnlyCollection<Region> regions = client.ParseCollection(gameElement.regions.data, (Func<dynamic, Region>)regionParser);
             game.regions = new Lazy<ReadOnlyCollection<Region>>(() => regions);
             game.RegionIDs = regions.Select(x => x.ID).ToList().AsReadOnly();
@@ -191,7 +203,11 @@ public class Game : IElementWithID
 
         if (properties.ContainsKey("levels"))
         {
-            Level levelParser(dynamic x) => Level.Parse(client, x) as Level;
+            Level levelParser(dynamic x)
+            {
+                return Level.Parse(client, x) as Level;
+            }
+
             ReadOnlyCollection<Level> levels = client.ParseCollection(gameElement.levels.data, (Func<dynamic, Level>)levelParser);
             game.levels = new Lazy<ReadOnlyCollection<Level>>(() => levels);
         }
@@ -202,7 +218,11 @@ public class Game : IElementWithID
 
         if (properties.ContainsKey("categories"))
         {
-            Category categoryParser(dynamic x) => Category.Parse(client, x) as Category;
+            Category categoryParser(dynamic x)
+            {
+                return Category.Parse(client, x) as Category;
+            }
+
             ReadOnlyCollection<Category> categories = client.ParseCollection(gameElement.categories.data, (Func<dynamic, Category>)categoryParser);
 
             foreach (var category in categories)
@@ -229,7 +249,11 @@ public class Game : IElementWithID
 
         if (properties.ContainsKey("variables"))
         {
-            Variable variableParser(dynamic x) => Variable.Parse(client, x) as Variable;
+            Variable variableParser(dynamic x)
+            {
+                return Variable.Parse(client, x) as Variable;
+            }
+
             ReadOnlyCollection<Variable> variables = client.ParseCollection(gameElement.variables.data, (Func<dynamic, Variable>)variableParser);
             game.variables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
         }

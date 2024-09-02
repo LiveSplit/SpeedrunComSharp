@@ -25,7 +25,7 @@ public class Series : IElementWithID
     /// </summary>
     public ReadOnlyCollection<Moderator> Moderators { get; private set; }
 
-    public ReadOnlyCollection<User> ModeratorUsers { get { return moderatorUsers.Value; } }
+    public ReadOnlyCollection<User> ModeratorUsers => moderatorUsers.Value;
 
     #endregion
 
@@ -59,7 +59,11 @@ public class Series : IElementWithID
 
         if (seriesElement.moderators is DynamicJsonObject && seriesElement.moderators.Properties.ContainsKey("data"))
         {
-            User userParser(dynamic x) => User.Parse(client, x) as User;
+            User userParser(dynamic x)
+            {
+                return User.Parse(client, x) as User;
+            }
+
             ReadOnlyCollection<User> users = client.ParseCollection(seriesElement.moderators.data, (Func<dynamic, User>)userParser);
             series.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(() => users);
         }

@@ -13,8 +13,8 @@ public class RunSystem
     internal Lazy<Platform> platform;
     internal Lazy<Region> region;
 
-    public Platform Platform { get { return platform.Value; } }
-    public Region Region { get { return region.Value; } }
+    public Platform Platform => platform.Value;
+    public Region Region => region.Value;
 
     #endregion
 

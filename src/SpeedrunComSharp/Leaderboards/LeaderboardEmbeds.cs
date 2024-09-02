@@ -7,44 +7,44 @@ public struct LeaderboardEmbeds
 
     public bool EmbedGame
     {
-        get { return embeds["game"]; }
-        set { embeds["game"] = value; }
+        get => embeds["game"];
+        set => embeds["game"] = value;
     }
 
     public bool EmbedCategory
     {
-        get { return embeds["category"]; }
-        set { embeds["category"] = value; }
+        get => embeds["category"];
+        set => embeds["category"] = value;
     }
 
     public bool EmbedLevel
     {
-        get { return embeds["level"]; }
-        set { embeds["level"] = value; }
+        get => embeds["level"];
+        set => embeds["level"] = value;
     }
 
     public bool EmbedPlayers
     {
-        get { return embeds["players"]; }
-        set { embeds["players"] = value; }
+        get => embeds["players"];
+        set => embeds["players"] = value;
     }
 
     public bool EmbedRegions
     {
-        get { return embeds["regions"]; }
-        set { embeds["regions"] = value; }
+        get => embeds["regions"];
+        set => embeds["regions"] = value;
     }
 
     public bool EmbedPlatforms
     {
-        get { return embeds["platforms"]; }
-        set { embeds["platforms"] = value; }
+        get => embeds["platforms"];
+        set => embeds["platforms"] = value;
     }
 
     public bool EmbedVariables
     {
-        get { return embeds["variables"]; }
-        set { embeds["variables"] = value; }
+        get => embeds["variables"];
+        set => embeds["variables"] = value;
     }
 
     /// <summary>

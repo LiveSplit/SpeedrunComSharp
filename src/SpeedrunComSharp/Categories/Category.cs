@@ -24,11 +24,11 @@ public class Category : IElementWithID
     private Lazy<Record> worldRecord;
 
     public string GameID { get; private set; }
-    public Game Game { get { return game.Value; } }
-    public ReadOnlyCollection<Variable> Variables { get { return variables.Value; } }
+    public Game Game => game.Value;
+    public ReadOnlyCollection<Variable> Variables => variables.Value;
     public IEnumerable<Run> Runs { get; private set; }
-    public Leaderboard Leaderboard { get { return leaderboard.Value; } }
-    public Record WorldRecord { get { return worldRecord.Value; } }
+    public Leaderboard Leaderboard => leaderboard.Value;
+    public Record WorldRecord => worldRecord.Value;
 
     #endregion
 
@@ -72,7 +72,11 @@ public class Category : IElementWithID
 
         if (properties.ContainsKey("variables"))
         {
-            Variable parser(dynamic x) => Variable.Parse(client, x) as Variable;
+            Variable parser(dynamic x)
+            {
+                return Variable.Parse(client, x) as Variable;
+            }
+
             var variables = client.ParseCollection(properties["variables"].data, (Func<dynamic, Variable>)parser);
             category.variables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
         }

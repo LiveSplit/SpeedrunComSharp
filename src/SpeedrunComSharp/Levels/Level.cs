@@ -20,9 +20,9 @@ public class Level : IElementWithID
     private Lazy<ReadOnlyCollection<Variable>> variables;
 
     public string GameID { get; private set; }
-    public Game Game { get { return game.Value; } }
-    public ReadOnlyCollection<Category> Categories { get { return categories.Value; } }
-    public ReadOnlyCollection<Variable> Variables { get { return variables.Value; } }
+    public Game Game => game.Value;
+    public ReadOnlyCollection<Category> Categories => categories.Value;
+    public ReadOnlyCollection<Variable> Variables => variables.Value;
     public IEnumerable<Run> Runs { get; private set; }
 
     #endregion
@@ -54,7 +54,11 @@ public class Level : IElementWithID
 
         if (properties.ContainsKey("categories"))
         {
-            Category categoryParser(dynamic x) => Category.Parse(client, x) as Category;
+            Category categoryParser(dynamic x)
+            {
+                return Category.Parse(client, x) as Category;
+            }
+
             ReadOnlyCollection<Category> categories = client.ParseCollection(levelElement.categories.data, (Func<dynamic, Category>)categoryParser);
             level.categories = new Lazy<ReadOnlyCollection<Category>>(() => categories);
         }
@@ -65,7 +69,11 @@ public class Level : IElementWithID
 
         if (properties.ContainsKey("variables"))
         {
-            Variable variableParser(dynamic x) => Variable.Parse(client, x) as Variable;
+            Variable variableParser(dynamic x)
+            {
+                return Variable.Parse(client, x) as Variable;
+            }
+
             ReadOnlyCollection<Variable> variables = client.ParseCollection(levelElement.variables.data, (Func<dynamic, Variable>)variableParser);
             level.variables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
         }
