@@ -60,7 +60,7 @@ public class Category : IElementWithID
         var links = properties["links"] as IEnumerable<dynamic>;
 
         string gameUri = links.First(x => x.rel == "game").uri as string;
-        category.GameID = gameUri.Substring(gameUri.LastIndexOf('/') + 1);
+        category.GameID = gameUri[(gameUri.LastIndexOf('/') + 1)..];
 
         if (properties.ContainsKey("game"))
         {

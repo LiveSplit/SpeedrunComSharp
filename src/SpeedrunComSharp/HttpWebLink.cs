@@ -39,7 +39,7 @@ internal class HttpWebLink
             link.Uri = linkString.Substring(leftAngledParenthesis + 1, rightAngledParenthesis - leftAngledParenthesis - 1);
         }
 
-        linkString = linkString.Substring(rightAngledParenthesis + 1);
+        linkString = linkString[(rightAngledParenthesis + 1)..];
         string[] parameters = linkString.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
 
         foreach (string parameter in parameters)

@@ -41,8 +41,8 @@ public class ElementDescription
             return null;
         }
 
-        string id = splits[splits.Length - 1];
-        string uriTypeString = splits[splits.Length - 2];
+        string id = splits[^1];
+        string uriTypeString = splits[^2];
 
         try
         {

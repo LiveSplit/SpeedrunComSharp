@@ -52,7 +52,7 @@ public class Level : IElementWithID
         var links = properties["links"] as IEnumerable<dynamic>;
 
         string gameUri = links.First(x => x.rel == "game").uri as string;
-        level.GameID = gameUri.Substring(gameUri.LastIndexOf('/') + 1);
+        level.GameID = gameUri[(gameUri.LastIndexOf('/') + 1)..];
         level.game = new Lazy<Game>(() => client.Games.GetGame(level.GameID));
 
         if (properties.ContainsKey("categories"))

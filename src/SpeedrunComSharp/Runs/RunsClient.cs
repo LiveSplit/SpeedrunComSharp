@@ -291,7 +291,7 @@ public class RunsClient
 
         if (splitsIOUri != null)
         {
-            runElement.splitsio = splitsIOUri.PathAndQuery.Substring(splitsIOUri.PathAndQuery.LastIndexOf('/') + 1);
+            runElement.splitsio = splitsIOUri.PathAndQuery[(splitsIOUri.PathAndQuery.LastIndexOf('/') + 1)..];
         }
 
         if (variables != null)

@@ -90,7 +90,7 @@ public class Variable : IElementWithID
         if (gameLink != null)
         {
             string gameUri = gameLink.uri as string;
-            variable.GameID = gameUri.Substring(gameUri.LastIndexOf("/") + 1);
+            variable.GameID = gameUri[(gameUri.LastIndexOf("/") + 1)..];
             variable.game = new Lazy<Game>(() => client.Games.GetGame(variable.GameID));
         }
         else

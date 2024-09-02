@@ -271,7 +271,7 @@ public class Game : IElementWithID
         if (seriesLink != null)
         {
             string parentUri = seriesLink.uri as string;
-            game.SeriesID = parentUri.Substring(parentUri.LastIndexOf('/') + 1);
+            game.SeriesID = parentUri[(parentUri.LastIndexOf('/') + 1)..];
             game.series = new Lazy<Series>(() => client.Series.GetSingleSeries(game.SeriesID));
         }
         else
@@ -283,7 +283,7 @@ public class Game : IElementWithID
         if (originalGameLink != null)
         {
             string originalGameUri = originalGameLink.uri as string;
-            game.OriginalGameID = originalGameUri.Substring(originalGameUri.LastIndexOf('/') + 1);
+            game.OriginalGameID = originalGameUri[(originalGameUri.LastIndexOf('/') + 1)..];
             game.originalGame = new Lazy<Game>(() => client.Games.GetGame(game.OriginalGameID));
         }
         else

@@ -55,7 +55,7 @@ public class Notification : IElementWithID
             if (run != null)
             {
                 string runUri = run.uri as string;
-                notification.RunID = runUri.Substring(runUri.LastIndexOf("/") + 1);
+                notification.RunID = runUri[(runUri.LastIndexOf("/") + 1)..];
             }
 
             dynamic game = links.FirstOrDefault(x => x.rel == "game");
@@ -63,7 +63,7 @@ public class Notification : IElementWithID
             if (game != null)
             {
                 string gameUri = game.uri as string;
-                notification.GameID = gameUri.Substring(gameUri.LastIndexOf("/") + 1);
+                notification.GameID = gameUri[(gameUri.LastIndexOf("/") + 1)..];
             }
         }
 
