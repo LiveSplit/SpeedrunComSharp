@@ -169,8 +169,7 @@ public class SpeedrunComClient
 
     internal ReadOnlyCollection<T> ParseCollection<T>(dynamic collection, Func<dynamic, T> parser)
     {
-        var enumerable = collection as IEnumerable<dynamic>;
-        if (enumerable == null)
+        if (collection is not IEnumerable<dynamic> enumerable)
         {
             return new List<T>(new T[0]).AsReadOnly();
         }
@@ -180,8 +179,7 @@ public class SpeedrunComClient
 
     internal ReadOnlyCollection<T> ParseCollection<T>(dynamic collection)
     {
-        var enumerable = collection as IEnumerable<dynamic>;
-        if (enumerable == null)
+        if (collection is not IEnumerable<dynamic> enumerable)
         {
             return new List<T>(new T[0]).AsReadOnly();
         }
@@ -287,8 +285,7 @@ public class SpeedrunComClient
     internal ReadOnlyCollection<T> DoDataCollectionRequest<T>(Uri uri, Func<dynamic, T> parser)
     {
         var result = DoRequest(uri);
-        var elements = result.data as IEnumerable<dynamic>;
-        if (elements == null)
+        if (result.data is not IEnumerable<dynamic> elements)
         {
             return new ReadOnlyCollection<T>(new T[0]);
         }

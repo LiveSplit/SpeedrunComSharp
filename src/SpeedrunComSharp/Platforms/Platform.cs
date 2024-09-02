@@ -49,9 +49,7 @@ public class Platform : IElementWithID
 
     public override bool Equals(object obj)
     {
-        var other = obj as Platform;
-
-        if (other == null)
+        if (obj is not Platform other)
         {
             return false;
         }

@@ -165,9 +165,7 @@ public class User : IElementWithID
 
     public override bool Equals(object obj)
     {
-        var other = obj as User;
-
-        if (other == null)
+        if (obj is not User other)
         {
             return false;
         }

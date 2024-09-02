@@ -44,8 +44,8 @@ public class RunStatus
 
         status.Type = ParseType(statusElement.status as string);
 
-        if (status.Type == RunStatusType.Rejected
-            || status.Type == RunStatusType.Verified)
+        if (status.Type is RunStatusType.Rejected
+            or RunStatusType.Verified)
         {
             status.ExaminerUserID = statusElement.examiner as string;
             status.examiner = new Lazy<User>(() => client.Users.GetUser(status.ExaminerUserID));

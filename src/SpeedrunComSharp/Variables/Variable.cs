@@ -65,7 +65,7 @@ public class Variable : IElementWithID
         variable.IsUserDefined = (bool)(properties["user-defined"] ?? false);
         variable.IsUsedForObsoletingRuns = (bool)variableElement.obsoletes;
 
-        if (!(variableElement.values.choices is ArrayList))
+        if (variableElement.values.choices is not ArrayList)
         {
             var choiceElements = variableElement.values.choices.Properties as IDictionary<string, dynamic>;
             variable.Values = choiceElements.Select(x => VariableValue.ParseIDPair(client, variable, x) as VariableValue).ToList().AsReadOnly();
@@ -127,9 +127,7 @@ public class Variable : IElementWithID
 
     public override bool Equals(object obj)
     {
-        var other = obj as Variable;
-
-        if (other == null)
+        if (obj is not Variable other)
         {
             return false;
         }

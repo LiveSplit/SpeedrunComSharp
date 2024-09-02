@@ -195,9 +195,7 @@ public class Run : IElementWithID
 
     public override bool Equals(object obj)
     {
-        var other = obj as Run;
-
-        if (other == null)
+        if (obj is not Run other)
         {
             return false;
         }

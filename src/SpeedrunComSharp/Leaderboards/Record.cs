@@ -61,9 +61,7 @@ public class Record : Run
 
     public override bool Equals(object obj)
     {
-        var other = obj as Record;
-
-        if (other == null)
+        if (obj is not Record other)
         {
             return false;
         }

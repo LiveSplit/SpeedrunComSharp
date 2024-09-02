@@ -147,9 +147,7 @@ public class Category : IElementWithID
 
     public override bool Equals(object obj)
     {
-        var other = obj as Category;
-
-        if (other == null)
+        if (obj is not Category other)
         {
             return false;
         }

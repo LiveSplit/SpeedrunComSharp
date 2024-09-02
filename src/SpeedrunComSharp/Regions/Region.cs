@@ -64,9 +64,7 @@ public class Region : IElementWithID
 
     public override bool Equals(object obj)
     {
-        var region = obj as Region;
-
-        if (region == null)
+        if (obj is not Region region)
         {
             return false;
         }

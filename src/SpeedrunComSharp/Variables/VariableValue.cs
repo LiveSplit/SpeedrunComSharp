@@ -79,9 +79,7 @@ public class VariableValue : IElementWithID
 
     public override bool Equals(object obj)
     {
-        var other = obj as VariableValue;
-
-        if (other == null)
+        if (obj is not VariableValue other)
         {
             return false;
         }

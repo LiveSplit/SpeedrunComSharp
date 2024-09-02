@@ -97,9 +97,7 @@ public class Level : IElementWithID
 
     public override bool Equals(object obj)
     {
-        var other = obj as Level;
-
-        if (other == null)
+        if (obj is not Level other)
         {
             return false;
         }

@@ -57,8 +57,8 @@ public class Game : IElementWithID
     public IEnumerable<Category> FullGameCategories => Categories.Where(category => category.Type == CategoryType.PerGame);
     public IEnumerable<Category> LevelCategories => Categories.Where(category => category.Type == CategoryType.PerLevel);
     public ReadOnlyCollection<Variable> Variables => variables.Value;
-    public IEnumerable<Variable> FullGameVariables => Variables.Where(variable => variable.Scope.Type == VariableScopeType.FullGame || variable.Scope.Type == VariableScopeType.Global);
-    public IEnumerable<Variable> LevelVariables => Variables.Where(variable => variable.Scope.Type == VariableScopeType.AllLevels || variable.Scope.Type == VariableScopeType.Global);
+    public IEnumerable<Variable> FullGameVariables => Variables.Where(variable => variable.Scope.Type is VariableScopeType.FullGame or VariableScopeType.Global);
+    public IEnumerable<Variable> LevelVariables => Variables.Where(variable => variable.Scope.Type is VariableScopeType.AllLevels or VariableScopeType.Global);
     public string SeriesID { get; private set; }
     public Series Series => series.Value;
     public string OriginalGameID { get; private set; }
@@ -316,9 +316,7 @@ public class Game : IElementWithID
 
     public override bool Equals(object obj)
     {
-        var other = obj as Game;
-
-        if (other == null)
+        if (obj is not Game other)
         {
             return false;
         }

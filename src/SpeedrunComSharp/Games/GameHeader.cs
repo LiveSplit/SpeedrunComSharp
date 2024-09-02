@@ -38,9 +38,7 @@ public class GameHeader : IElementWithID
 
     public override bool Equals(object obj)
     {
-        var other = obj as GameHeader;
-
-        if (other == null)
+        if (obj is not GameHeader other)
         {
             return false;
         }

@@ -125,9 +125,7 @@ public class Series : IElementWithID
 
     public override bool Equals(object obj)
     {
-        var other = obj as Series;
-
-        if (other == null)
+        if (obj is not Series other)
         {
             return false;
         }

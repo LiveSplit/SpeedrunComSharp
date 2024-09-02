@@ -72,9 +72,7 @@ public class Player
 
     public override bool Equals(object obj)
     {
-        var player = obj as Player;
-
-        if (player == null)
+        if (obj is not Player player)
         {
             return false;
         }
