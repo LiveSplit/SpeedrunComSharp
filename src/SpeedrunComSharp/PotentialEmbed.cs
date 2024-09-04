@@ -10,24 +10,23 @@ internal class PotentialEmbed<T>
 
     private PotentialEmbed() { }
 
-    public static PotentialEmbed<G> Parse<G>(dynamic element, Func<string, G> objectQuery, Func<dynamic, G> objectParser)
-        where G : IElementWithID
+    public static PotentialEmbed<T> Parse(dynamic element, Func<string, T> objectQuery, Func<dynamic, T> objectParser)
     {
-        var potentialEmbed = new PotentialEmbed<G>();
+        var potentialEmbed = new PotentialEmbed<T>();
 
         if (element == null)
         {
-            potentialEmbed.Object = new Lazy<G>(() => default);
+            potentialEmbed.Object = new Lazy<T>(() => default);
         }
         else if (element is string)
         {
             potentialEmbed.ID = element as string;
-            potentialEmbed.Object = new Lazy<G>(() => objectQuery(potentialEmbed.ID));
+            potentialEmbed.Object = new Lazy<T>(() => objectQuery(potentialEmbed.ID));
         }
         else
         {
             dynamic parsedObject = objectParser(element.data);
-            potentialEmbed.Object = new Lazy<G>(() => parsedObject);
+            potentialEmbed.Object = new Lazy<T>(() => parsedObject);
             if (parsedObject != null)
             {
                 potentialEmbed.ID = parsedObject.ID;
