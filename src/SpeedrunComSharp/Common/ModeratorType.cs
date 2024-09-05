@@ -1,8 +1,7 @@
-﻿namespace SpeedrunComSharp
+﻿namespace SpeedrunComSharp;
+
+public enum ModeratorType
 {
-    public enum ModeratorType
-    {
-        Moderator,
-        SuperModerator
-    }
+    Moderator,
+    SuperModerator
 }

@@ -1,27 +1,22 @@
 ﻿using System;
 
-namespace SpeedrunComSharp
+namespace SpeedrunComSharp;
+
+public enum LeaderboardScope
 {
-    public enum LeaderboardScope
-    {
-        All, FullGame, Levels
-    }
+    All, FullGame, Levels
+}
 
-    public static class LeaderboardScopeHelpers
+public static class LeaderboardScopeHelpers
+{
+    public static string ToParameter(this LeaderboardScope scope)
     {
-        public static string ToParameter(this LeaderboardScope scope)
+        return scope switch
         {
-            switch (scope)
-            {
-                case LeaderboardScope.All:
-                    return "all";
-                case LeaderboardScope.FullGame:
-                    return "full-game";
-                case LeaderboardScope.Levels:
-                    return "levels";
-            }
-
-            throw new ArgumentException("scope");
-        }
+            LeaderboardScope.All => "all",
+            LeaderboardScope.FullGame => "full-game",
+            LeaderboardScope.Levels => "levels",
+            _ => throw new ArgumentException("scope"),
+        };
     }
 }

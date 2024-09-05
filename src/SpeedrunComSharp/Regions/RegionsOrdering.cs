@@ -1,38 +1,44 @@
 ﻿using System.Collections.Generic;
 
-namespace SpeedrunComSharp
+namespace SpeedrunComSharp;
+
+/// <summary>
+/// Options for ordering Regions in responses.
+/// </summary>
+public enum RegionsOrdering : int
 {
-    /// <summary>
-    /// Options for ordering Regions in responses.
-    /// </summary>
-    public enum RegionsOrdering : int
-    {
-        Name = 0,
-        NameDescending,
-    }
+    Name = 0,
+    NameDescending,
+}
 
-    internal static class RegionsOrderingHelpers
+internal static class RegionsOrderingHelpers
+{
+    internal static IEnumerable<string> ToParameters(this RegionsOrdering ordering)
     {
-        internal static IEnumerable<string> ToParameters(this RegionsOrdering ordering)
+        bool isDescending = ((int)ordering & 1) == 1;
+        if (isDescending)
         {
-            var isDescending = ((int)ordering & 1) == 1;
-            if (isDescending)
-                ordering = (RegionsOrdering)((int)ordering - 1);
-
-            var str = "";
-
-            /*switch (ordering)
-            {
-            }*/
-
-            var list = new List<string>();
-
-            if (!string.IsNullOrEmpty(str))
-                list.Add(string.Format("orderby={0}", str));
-            if (isDescending)
-                list.Add("direction=desc");
-
-            return list;
+            ordering = (RegionsOrdering)((int)ordering - 1);
         }
+
+        string str = "";
+
+        /*switch (ordering)
+        {
+        }*/
+
+        var list = new List<string>();
+
+        if (!string.IsNullOrEmpty(str))
+        {
+            list.Add(string.Format("orderby={0}", str));
+        }
+
+        if (isDescending)
+        {
+            list.Add("direction=desc");
+        }
+
+        return list;
     }
 }

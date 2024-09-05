@@ -4,131 +4,137 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 
-namespace SpeedrunComSharp
+namespace SpeedrunComSharp;
+
+public class Series : IElementWithID
 {
-    public class Series : IElementWithID
+    public string ID { get; private set; }
+    public string Name { get; private set; }
+    public string JapaneseName { get; private set; }
+    public string Abbreviation { get; private set; }
+    public Uri WebLink { get; private set; }
+    public DateTime? CreationDate { get; private set; }
+    public Assets Assets { get; private set; }
+
+    #region Embeds
+
+    private Lazy<ReadOnlyCollection<User>> moderatorUsers;
+
+    /// <summary>
+    /// null when embedded
+    /// </summary>
+    public ReadOnlyCollection<Moderator> Moderators { get; private set; }
+
+    public ReadOnlyCollection<User> ModeratorUsers => moderatorUsers.Value;
+
+    #endregion
+
+    #region Links
+
+    public IEnumerable<Game> Games { get; private set; }
+
+    #endregion
+
+    private Series() { }
+
+    public static Series Parse(SpeedrunComClient client, dynamic seriesElement)
     {
-        public string ID { get; private set; }
-        public string Name { get; private set; }
-        public string JapaneseName { get; private set; }
-        public string Abbreviation { get; private set; }
-        public Uri WebLink { get; private set; }
-        public DateTime? CreationDate { get; private set; }
-        public Assets Assets { get; private set; }
-
-        #region Embeds
-
-        private Lazy<ReadOnlyCollection<User>> moderatorUsers;
-
-        /// <summary>
-        /// null when embedded
-        /// </summary>
-        public ReadOnlyCollection<Moderator> Moderators { get; private set; }
-
-        public ReadOnlyCollection<User> ModeratorUsers { get { return moderatorUsers.Value; } }
-
-        #endregion
-
-        #region Links
-
-        public IEnumerable<Game> Games { get; private set; }
-
-        #endregion
-
-        private Series() { }
-
-        public static Series Parse(SpeedrunComClient client, dynamic seriesElement)
+        var series = new Series
         {
-            var series = new Series();
-
             //Parse Attributes
 
-            series.ID = seriesElement.id as string;
-            series.Name = seriesElement.names.international as string;
-            series.JapaneseName = seriesElement.names.japanese as string;
-            series.WebLink = new Uri(seriesElement.weblink as string);
-            series.Abbreviation = seriesElement.abbreviation as string;
+            ID = seriesElement.id as string,
+            Name = seriesElement.names.international as string,
+            JapaneseName = seriesElement.names.japanese as string,
+            WebLink = new Uri(seriesElement.weblink as string),
+            Abbreviation = seriesElement.abbreviation as string
+        };
 
-            var created = seriesElement.created as string;
-            if (!string.IsNullOrEmpty(created))
-                series.CreationDate = DateTime.Parse(created, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+        string created = seriesElement.created as string;
+        if (!string.IsNullOrEmpty(created))
+        {
+            series.CreationDate = DateTime.Parse(created, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+        }
 
-            series.Assets = Assets.Parse(client, seriesElement.assets);
+        series.Assets = Assets.Parse(client, seriesElement.assets);
 
-            //Parse Embeds
+        //Parse Embeds
 
-            if (seriesElement.moderators is DynamicJsonObject && seriesElement.moderators.Properties.ContainsKey("data"))
+        if (seriesElement.moderators is DynamicJsonObject && seriesElement.moderators.Properties.ContainsKey("data"))
+        {
+            User userParser(dynamic x)
             {
-                Func<dynamic, User> userParser = x => User.Parse(client, x) as User;
-                ReadOnlyCollection<User> users = client.ParseCollection(seriesElement.moderators.data, userParser);
-                series.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(() => users);
+                return User.Parse(client, x) as User;
             }
-            else if (seriesElement.moderators is DynamicJsonObject)
-            {
-                var moderatorsProperties = seriesElement.moderators.Properties as IDictionary<string, dynamic>;
-                series.Moderators = moderatorsProperties.Select(x => Moderator.Parse(client, x)).ToList().AsReadOnly();
 
-                series.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(
-                    () =>
+            ReadOnlyCollection<User> users = client.ParseCollection(seriesElement.moderators.data, (Func<dynamic, User>)userParser);
+            series.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(() => users);
+        }
+        else if (seriesElement.moderators is DynamicJsonObject)
+        {
+            var moderatorsProperties = seriesElement.moderators.Properties as IDictionary<string, dynamic>;
+            series.Moderators = moderatorsProperties.Select(x => Moderator.Parse(client, x)).ToList().AsReadOnly();
+
+            series.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(
+                () =>
+                {
+                    ReadOnlyCollection<User> users;
+
+                    if (series.Moderators.Count(x => !x.user.IsValueCreated) > 1)
                     {
-                        ReadOnlyCollection<User> users;
+                        users = client.Games.GetGame(series.ID, embeds: new GameEmbeds(embedModerators: true)).ModeratorUsers;
 
-                        if (series.Moderators.Count(x => !x.user.IsValueCreated) > 1)
+                        foreach (User user in users)
                         {
-                            users = client.Games.GetGame(series.ID, embeds: new GameEmbeds(embedModerators: true)).ModeratorUsers;
-
-                            foreach (var user in users)
+                            Moderator moderator = series.Moderators.FirstOrDefault(x => x.UserID == user.ID);
+                            if (moderator != null)
                             {
-                                var moderator = series.Moderators.FirstOrDefault(x => x.UserID == user.ID);
-                                if (moderator != null)
-                                {
-                                    moderator.user = new Lazy<User>(() => user);
-                                }
+                                moderator.user = new Lazy<User>(() => user);
                             }
                         }
-                        else
-                        {
-                            users = series.Moderators.Select(x => x.User).ToList().AsReadOnly();
-                        }
+                    }
+                    else
+                    {
+                        users = series.Moderators.Select(x => x.User).ToList().AsReadOnly();
+                    }
 
-                        return users;
-                    });
-            }
-            else
+                    return users;
+                });
+        }
+        else
+        {
+            series.Moderators = new ReadOnlyCollection<Moderator>(new Moderator[0]);
+            series.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(() => new List<User>().AsReadOnly());
+        }
+
+        //Parse Links
+
+        series.Games = client.Series.GetGames(series.ID).Select(game =>
             {
-                series.Moderators = new ReadOnlyCollection<Moderator>(new Moderator[0]);
-                series.moderatorUsers = new Lazy<ReadOnlyCollection<User>>(() => new List<User>().AsReadOnly());
-            }
+                game.series = new Lazy<Series>(() => series);
+                return game;
+            }).Cache();
 
-            //Parse Links
+        return series;
+    }
 
-            series.Games = client.Series.GetGames(series.ID).Select(game =>
-                {
-                    game.series = new Lazy<Series>(() => series);
-                    return game;
-                }).Cache();
+    public override int GetHashCode()
+    {
+        return (ID ?? string.Empty).GetHashCode();
+    }
 
-            return series;
-        }
-
-        public override int GetHashCode()
+    public override bool Equals(object obj)
+    {
+        if (obj is not Series other)
         {
-            return (ID ?? string.Empty).GetHashCode();
+            return false;
         }
 
-        public override bool Equals(object obj)
-        {
-            var other = obj as Series;
+        return ID == other.ID;
+    }
 
-            if (other == null)
-                return false;
-
-            return ID == other.ID;
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
+    public override string ToString()
+    {
+        return Name;
     }
 }

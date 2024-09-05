@@ -1,7 +1,6 @@
-﻿namespace SpeedrunComSharp
+﻿namespace SpeedrunComSharp;
+
+public interface IElementWithID
 {
-    public interface IElementWithID
-    {
-        string ID { get; }
-    }
+    string ID { get; }
 }

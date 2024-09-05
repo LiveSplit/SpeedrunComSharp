@@ -1,8 +1,7 @@
 ﻿using System;
 
-namespace SpeedrunComSharp
+namespace SpeedrunComSharp;
+
+public class NotAuthorizedException : Exception
 {
-    public class NotAuthorizedException : Exception
-    {
-    }
 }

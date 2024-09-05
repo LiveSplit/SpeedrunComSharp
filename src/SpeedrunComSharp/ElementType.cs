@@ -1,17 +1,16 @@
-﻿namespace SpeedrunComSharp
+﻿namespace SpeedrunComSharp;
+
+public enum ElementType
 {
-    public enum ElementType
-    {
-        Category,
-        Game,
-        Guest,
-        Level,
-        Notification,
-        Platform,
-        Region,
-        Run,
-        Series,
-        User,
-        Variable
-    }
+    Category,
+    Game,
+    Guest,
+    Level,
+    Notification,
+    Platform,
+    Region,
+    Run,
+    Series,
+    User,
+    Variable
 }

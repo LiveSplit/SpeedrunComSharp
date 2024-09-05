@@ -1,7 +1,6 @@
-﻿namespace SpeedrunComSharp
+﻿namespace SpeedrunComSharp;
+
+public enum RunStatusType
 {
-    public enum RunStatusType
-    {
-        New, Verified, Rejected
-    }
+    New, Verified, Rejected
 }

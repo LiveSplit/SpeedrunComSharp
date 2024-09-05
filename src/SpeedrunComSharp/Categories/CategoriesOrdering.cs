@@ -1,46 +1,52 @@
 ﻿using System.Collections.Generic;
 
-namespace SpeedrunComSharp
+namespace SpeedrunComSharp;
+
+/// <summary>
+/// Options for ordering Categories in responses.
+/// </summary>
+public enum CategoriesOrdering : int
 {
-    /// <summary>
-    /// Options for ordering Categories in responses.
-    /// </summary>
-    public enum CategoriesOrdering : int
-    {
-        Position = 0,
-        PositionDescending,
-        Name,
-        NameDescending,
-        Miscellaneous,
-        MiscellaneousDescending
-    }
+    Position = 0,
+    PositionDescending,
+    Name,
+    NameDescending,
+    Miscellaneous,
+    MiscellaneousDescending
+}
 
-    internal static class CategoriesOrderingHelpers
+internal static class CategoriesOrderingHelpers
+{
+    internal static IEnumerable<string> ToParameters(this CategoriesOrdering ordering)
     {
-        internal static IEnumerable<string> ToParameters(this CategoriesOrdering ordering)
+        bool isDescending = ((int)ordering & 1) == 1;
+        if (isDescending)
         {
-            var isDescending = ((int)ordering & 1) == 1;
-            if (isDescending)
-                ordering = (CategoriesOrdering)((int)ordering - 1);
-
-            var str = "";
-
-            switch (ordering)
-            {
-                case CategoriesOrdering.Name:
-                    str = "name"; break;
-                case CategoriesOrdering.Miscellaneous:
-                    str = "miscellaneous"; break;
-            }
-
-            var list = new List<string>();
-
-            if (!string.IsNullOrEmpty(str))
-                list.Add(string.Format("orderby={0}", str));
-            if (isDescending)
-                list.Add("direction=desc");
-
-            return list;
+            ordering = (CategoriesOrdering)((int)ordering - 1);
         }
+
+        string str = "";
+
+        switch (ordering)
+        {
+            case CategoriesOrdering.Name:
+                str = "name"; break;
+            case CategoriesOrdering.Miscellaneous:
+                str = "miscellaneous"; break;
+        }
+
+        var list = new List<string>();
+
+        if (!string.IsNullOrEmpty(str))
+        {
+            list.Add(string.Format("orderby={0}", str));
+        }
+
+        if (isDescending)
+        {
+            list.Add("direction=desc");
+        }
+
+        return list;
     }
 }

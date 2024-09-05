@@ -1,35 +1,26 @@
 ﻿using System;
 
-namespace SpeedrunComSharp
+namespace SpeedrunComSharp;
+
+public enum NotificationType
 {
-    public enum NotificationType
-    {
-        Post, Run, Game, Guide, Thread, Resource, Moderator
-    }
+    Post, Run, Game, Guide, Thread, Resource, Moderator
+}
 
-    public static class NotificationTypeHelpers
+public static class NotificationTypeHelpers
+{
+    public static NotificationType Parse(string type)
     {
-        public static NotificationType Parse(string type)
+        return type switch
         {
-            switch (type)
-            {
-                case "post":
-                    return NotificationType.Post;
-                case "run":
-                    return NotificationType.Run;
-                case "game":
-                    return NotificationType.Game;
-                case "guide":
-                    return NotificationType.Guide;
-                case "thread":
-                    return NotificationType.Thread;
-                case "resource":
-                    return NotificationType.Resource;
-                case "moderator":
-                    return NotificationType.Moderator;
-            }
-
-            throw new ArgumentException("type");
-        }
+            "post" => NotificationType.Post,
+            "run" => NotificationType.Run,
+            "game" => NotificationType.Game,
+            "guide" => NotificationType.Guide,
+            "thread" => NotificationType.Thread,
+            "resource" => NotificationType.Resource,
+            "moderator" => NotificationType.Moderator,
+            _ => throw new ArgumentException("type"),
+        };
     }
 }

@@ -1,25 +1,21 @@
 ﻿using System;
 
-namespace SpeedrunComSharp
+namespace SpeedrunComSharp;
+
+public enum NotificationStatus
 {
-    public enum NotificationStatus
-    {
-        Unread, Read
-    }
+    Unread, Read
+}
 
-    public static class NotificationStatusHelpers
+public static class NotificationStatusHelpers
+{
+    public static NotificationStatus Parse(string status)
     {
-        public static NotificationStatus Parse(string status)
+        return status switch
         {
-            switch (status)
-            {
-                case "read":
-                    return NotificationStatus.Read;
-                case "unread":
-                    return NotificationStatus.Unread;
-            }
-
-            throw new ArgumentException("status");
-        }
+            "read" => NotificationStatus.Read,
+            "unread" => NotificationStatus.Unread,
+            _ => throw new ArgumentException("status"),
+        };
     }
 }
