@@ -192,7 +192,6 @@ public class RunsClient
     /// <param name="emulated">Optional. If included, dictates whether the run was performed on emulator.</param>
     /// <param name="videoUri">Optional. If included, dictates the URI of the video.</param>
     /// <param name="comment">Optional. If included, dictates the comment of the run.</param>
-    /// <param name="splitsIOUri">Optional. If included, dictates the URI of the Splits.IO page for the run.</param>
     /// <param name="variables">Optional. If included, dictates the variable values for the run.</param>
     /// <param name="verify">Optional. If included, dictates whether the run is verified automatically upon submitting.</param>
     /// <param name="simulateSubmitting">Optional. If included, dictates whether the run submission process is simulated.</param>
@@ -208,7 +207,6 @@ public class RunsClient
         bool? emulated = null,
         Uri videoUri = null,
         string comment = null,
-        Uri splitsIOUri = null,
         IEnumerable<VariableValue> variables = null,
         bool? verify = null,
         bool simulateSubmitting = false)
@@ -287,11 +285,6 @@ public class RunsClient
         if (!string.IsNullOrEmpty(comment))
         {
             runElement.comment = comment;
-        }
-
-        if (splitsIOUri != null)
-        {
-            runElement.splitsio = splitsIOUri.PathAndQuery[(splitsIOUri.PathAndQuery.LastIndexOf('/') + 1)..];
         }
 
         if (variables != null)
