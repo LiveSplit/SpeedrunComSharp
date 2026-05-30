@@ -1,5 +1,17 @@
 <Project>
 
-  <Import Project="$(MSBuildThisFileDirectory)props\*.props" />
+  <PropertyGroup>
+    <RootPath>$(MSBuildThisFileDirectory)</RootPath>
+
+    <SrcPath>$(RootPath)/src</SrcPath>
+    <TestPath>$(RootPath)/test</TestPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <LangVersion>14</LangVersion>
+
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
 
 </Project>
