@@ -127,10 +127,7 @@ public class Game : IElementWithID
                         foreach (User user in users)
                         {
                             Moderator moderator = game.Moderators.FirstOrDefault(x => x.UserID == user.ID);
-                            if (moderator != null)
-                            {
-                                moderator.user = new Lazy<User>(() => user);
-                            }
+                            moderator?.user = new Lazy<User>(() => user);
                         }
                     }
                     else
@@ -151,16 +148,11 @@ public class Game : IElementWithID
         {
             game.PlatformIDs = client.ParseCollection<string>(gameElement.platforms);
 
-            if (game.PlatformIDs.Count > 1)
-            {
-                game.platforms = new Lazy<ReadOnlyCollection<Platform>>(
-                    () => client.Games.GetGame(game.ID, embeds: new GameEmbeds(embedPlatforms: true)).Platforms);
-            }
-            else
-            {
-                game.platforms = new Lazy<ReadOnlyCollection<Platform>>(
+            game.platforms = game.PlatformIDs.Count > 1
+                ? new Lazy<ReadOnlyCollection<Platform>>(
+                    () => client.Games.GetGame(game.ID, embeds: new GameEmbeds(embedPlatforms: true)).Platforms)
+                : new Lazy<ReadOnlyCollection<Platform>>(
                     () => game.PlatformIDs.Select(x => client.Platforms.GetPlatform(x)).ToList().AsReadOnly());
-            }
         }
         else
         {
@@ -178,16 +170,11 @@ public class Game : IElementWithID
         {
             game.RegionIDs = client.ParseCollection<string>(gameElement.regions);
 
-            if (game.RegionIDs.Count > 1)
-            {
-                game.regions = new Lazy<ReadOnlyCollection<Region>>(
-                    () => client.Games.GetGame(game.ID, embeds: new GameEmbeds(embedRegions: true)).Regions);
-            }
-            else
-            {
-                game.regions = new Lazy<ReadOnlyCollection<Region>>(
+            game.regions = game.RegionIDs.Count > 1
+                ? new Lazy<ReadOnlyCollection<Region>>(
+                    () => client.Games.GetGame(game.ID, embeds: new GameEmbeds(embedRegions: true)).Regions)
+                : new Lazy<ReadOnlyCollection<Region>>(
                     () => game.RegionIDs.Select(x => client.Regions.GetRegion(x)).ToList().AsReadOnly());
-            }
         }
         else
         {

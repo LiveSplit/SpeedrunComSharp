@@ -69,7 +69,7 @@ public class User : IElementWithID
         string pronounsTemp = userElement.pronouns as string;
         if (!string.IsNullOrWhiteSpace(pronounsTemp))
         {
-            user.Pronouns = pronounsTemp.Split(new string[] { ", " }, StringSplitOptions.None);
+            user.Pronouns = pronounsTemp.Split([", "], StringSplitOptions.None);
         }
 
         user.WebLink = new Uri(userElement.weblink as string);
@@ -138,10 +138,7 @@ public class User : IElementWithID
                 foreach (Record record in records)
                 {
                     Player player = record.Players.FirstOrDefault(x => x.UserID == user.ID);
-                    if (player != null)
-                    {
-                        player.user = lazy;
-                    }
+                    player?.user = lazy;
                 }
 
                 return records;

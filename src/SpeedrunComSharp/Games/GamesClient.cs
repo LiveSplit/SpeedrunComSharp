@@ -229,8 +229,9 @@ public class GamesClient
             Uri.EscapeDataString(gameId),
             parameters.ToParameters()));
 
-        return baseClient.DoDataCollectionRequest(uri,
-             x => Level.Parse(baseClient, x) as Level);
+        return baseClient.DoDataCollectionRequest(
+            uri,
+            x => Level.Parse(baseClient, x) as Level);
     }
 
     /// <summary>
@@ -242,7 +243,7 @@ public class GamesClient
     public ReadOnlyCollection<Variable> GetVariables(string gameId,
         VariablesOrdering orderBy = default)
     {
-        var parameters = new List<string>(orderBy.ToParameters());
+        List<string> parameters = [.. orderBy.ToParameters()];
 
         Uri uri = GetGamesUri(string.Format("/{0}/variables{1}",
             Uri.EscapeDataString(gameId),

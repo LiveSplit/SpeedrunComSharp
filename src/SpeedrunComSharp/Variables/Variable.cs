@@ -99,23 +99,13 @@ public class Variable : IElementWithID
         }
 
         variable.CategoryID = variableElement.category as string;
-        if (!string.IsNullOrEmpty(variable.CategoryID))
-        {
-            variable.category = new Lazy<Category>(() => client.Categories.GetCategory(variable.CategoryID));
-        }
-        else
-        {
-            variable.category = new Lazy<Category>(() => null);
-        }
+        variable.category = !string.IsNullOrEmpty(variable.CategoryID)
+            ? new Lazy<Category>(() => client.Categories.GetCategory(variable.CategoryID))
+            : new Lazy<Category>(() => null);
 
-        if (!string.IsNullOrEmpty(variable.Scope.LevelID))
-        {
-            variable.level = new Lazy<Level>(() => client.Levels.GetLevel(variable.Scope.LevelID));
-        }
-        else
-        {
-            variable.level = new Lazy<Level>(() => null);
-        }
+        variable.level = !string.IsNullOrEmpty(variable.Scope.LevelID)
+            ? new Lazy<Level>(() => client.Levels.GetLevel(variable.Scope.LevelID))
+            : new Lazy<Level>(() => null);
 
         return variable;
     }

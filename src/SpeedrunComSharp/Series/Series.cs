@@ -87,10 +87,7 @@ public class Series : IElementWithID
                         foreach (User user in users)
                         {
                             Moderator moderator = series.Moderators.FirstOrDefault(x => x.UserID == user.ID);
-                            if (moderator != null)
-                            {
-                                moderator.user = new Lazy<User>(() => user);
-                            }
+                            moderator?.user = new Lazy<User>(() => user);
                         }
                     }
                     else

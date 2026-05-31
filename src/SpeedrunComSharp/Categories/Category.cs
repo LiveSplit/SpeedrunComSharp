@@ -94,42 +94,42 @@ public class Category : IElementWithID
         {
 
             category.leaderboard = new Lazy<Leaderboard>(() =>
+            {
+                Leaderboard leaderboard = client.Leaderboards
+                    .GetLeaderboardForFullGameCategory(category.GameID, category.ID);
+
+                leaderboard.game = new Lazy<Game>(() => category.Game);
+                leaderboard.category = new Lazy<Category>(() => category);
+
+                foreach (Record record in leaderboard.Records)
                 {
-                    Leaderboard leaderboard = client.Leaderboards
-                                    .GetLeaderboardForFullGameCategory(category.GameID, category.ID);
+                    record.game = leaderboard.game;
+                    record.category = leaderboard.category;
+                }
 
-                    leaderboard.game = new Lazy<Game>(() => category.Game);
-                    leaderboard.category = new Lazy<Category>(() => category);
-
-                    foreach (Record record in leaderboard.Records)
-                    {
-                        record.game = leaderboard.game;
-                        record.category = leaderboard.category;
-                    }
-
-                    return leaderboard;
-                });
+                return leaderboard;
+            });
             category.worldRecord = new Lazy<Record>(() =>
+            {
+                if (category.leaderboard.IsValueCreated)
                 {
-                    if (category.leaderboard.IsValueCreated)
-                    {
-                        return category.Leaderboard.Records.FirstOrDefault();
-                    }
+                    return category.Leaderboard.Records.FirstOrDefault();
+                }
 
-                    Leaderboard leaderboard = client.Leaderboards
-                                    .GetLeaderboardForFullGameCategory(category.GameID, category.ID, top: 1);
+                Leaderboard leaderboard = client.Leaderboards
+                    .GetLeaderboardForFullGameCategory(category.GameID, category.ID, top: 1);
 
-                    leaderboard.game = new Lazy<Game>(() => category.Game);
-                    leaderboard.category = new Lazy<Category>(() => category);
+                leaderboard.game = new Lazy<Game>(() => category.Game);
+                leaderboard.category = new Lazy<Category>(() => category);
 
-                    foreach (Record record in leaderboard.Records)
-                    {
-                        record.game = leaderboard.game;
-                        record.category = leaderboard.category;
-                    }
+                foreach (Record record in leaderboard.Records)
+                {
+                    record.game = leaderboard.game;
+                    record.category = leaderboard.category;
+                }
 
-                    return leaderboard.Records.FirstOrDefault();
-                });
+                return leaderboard.Records.FirstOrDefault();
+            });
         }
         else
         {
