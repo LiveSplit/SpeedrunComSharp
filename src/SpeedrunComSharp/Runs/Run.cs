@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -59,18 +60,12 @@ public class Run : IElementWithID
             return Player.Parse(client, x) as Player;
         }
 
-        if (runElement.players is IEnumerable<dynamic>)
+        run.Players = runElement.players switch
         {
-            run.Players = client.ParseCollection(runElement.players, (Func<dynamic, Player>)parsePlayer);
-        }
-        else if (runElement.players is System.Collections.ArrayList && runElement.players.Count == 0)
-        {
-            run.Players = new List<Player>().AsReadOnly();
-        }
-        else
-        {
-            run.Players = client.ParseCollection(runElement.players.data, (Func<dynamic, Player>)parsePlayer);
-        }
+            IEnumerable<dynamic> players => client.ParseCollection(players, parsePlayer),
+            ArrayList { Count: 0 } arrayList => new List<Player>().AsReadOnly(),
+            _ => client.ParseCollection(runElement.players.data, (Func<dynamic, Player>)parsePlayer)
+        };
 
         dynamic runDate = runElement.date;
         if (!string.IsNullOrEmpty(runDate))
@@ -169,14 +164,9 @@ public class Run : IElementWithID
             run.System.region = new Lazy<Region>(() => region);
         }
 
-        if (!string.IsNullOrEmpty(run.Status.ExaminerUserID))
-        {
-            run.examiner = new Lazy<User>(() => client.Users.GetUser(run.Status.ExaminerUserID));
-        }
-        else
-        {
-            run.examiner = new Lazy<User>(() => null);
-        }
+        run.examiner = !string.IsNullOrEmpty(run.Status.ExaminerUserID)
+            ? new Lazy<User>(() => client.Users.GetUser(run.Status.ExaminerUserID))
+            : new Lazy<User>(() => null);
     }
 
     public static Run Parse(SpeedrunComClient client, dynamic runElement)

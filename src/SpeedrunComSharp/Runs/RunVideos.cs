@@ -40,7 +40,7 @@ public class RunVideos
         {
             Text = videosElement.text as string,
 
-            Links = client.ParseCollection(videosElement.links, new Func<dynamic, Uri>(parseVideoLink))
+            Links = client.ParseCollection(videosElement.links, (Func<dynamic, Uri>)parseVideoLink)
         };
 
         return videos;

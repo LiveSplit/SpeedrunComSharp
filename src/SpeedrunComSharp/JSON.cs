@@ -41,7 +41,7 @@ internal static class JSON
         {
             MaxJsonLength = int.MaxValue
         };
-        serializer.RegisterConverters(new[] { new DynamicJsonConverter() });
+        serializer.RegisterConverters([new DynamicJsonConverter()]);
 
         return serializer.Deserialize<object>(value);
     }
@@ -78,10 +78,8 @@ internal static class JSON
 
         request.ContentType = "application/json";
 
-        using (var writer = new StreamWriter(request.GetRequestStream()))
-        {
-            writer.Write(postBody);
-        }
+        using var writer = new StreamWriter(request.GetRequestStream());
+        writer.Write(postBody);
 
         WebResponse response = request.GetResponse();
 
@@ -106,7 +104,7 @@ public sealed class DynamicJsonConverter : JavaScriptConverter
         throw new NotImplementedException();
     }
 
-    public override IEnumerable<Type> SupportedTypes => new ReadOnlyCollection<Type>(new List<Type>(new[] { typeof(object) }));
+    public override IEnumerable<Type> SupportedTypes => new ReadOnlyCollection<Type>([typeof(object)]);
 }
 
 public sealed class DynamicJsonObject : DynamicObject
@@ -287,17 +285,17 @@ public sealed class DynamicJsonObject : DynamicObject
     public static string JavaScriptStringDecode(string source)
     {
         // Replace some chars.
-        string decoded = source.Replace(@"\'", "'")
-                    .Replace(@"\""", @"""")
-                    .Replace(@"\/", "/")
-                    .Replace(@"\t", "\t")
-                    .Replace(@"\n", "\n");
+        string decoded = source
+            .Replace(@"\'", "'")
+            .Replace(@"\""", @"""")
+            .Replace(@"\/", "/")
+            .Replace(@"\t", "\t")
+            .Replace(@"\n", "\n");
 
         // Replace unicode escaped text.
         var rx = new Regex(@"\\[uU]([0-9A-F]{4})");
 
-        decoded = rx.Replace(decoded, match => ((char)int.Parse(match.Value[2..], NumberStyles.HexNumber))
-                                                .ToString(CultureInfo.InvariantCulture));
+        decoded = rx.Replace(decoded, match => ((char)int.Parse(match.Value[2..], NumberStyles.HexNumber)).ToString(CultureInfo.InvariantCulture));
 
         return decoded;
     }
@@ -327,11 +325,11 @@ public sealed class DynamicJsonObject : DynamicObject
             return new DynamicJsonObject(dictionary);
         }
 
-        if (result is ArrayList arrayList && arrayList.Count > 0)
+        if (result is ArrayList { Count: > 0 } arrayList)
         {
             return arrayList[0] is IDictionary<string, object>
-                ? new List<object>(arrayList.Cast<IDictionary<string, object>>().Select(x => new DynamicJsonObject(x)))
-                : new List<object>(arrayList.Cast<object>());
+                ? arrayList.Cast<IDictionary<string, object>>().Select(x => new DynamicJsonObject(x)).ToList()
+                : arrayList.Cast<object>().ToList();
         }
 
         return result;

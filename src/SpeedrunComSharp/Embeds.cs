@@ -52,10 +52,9 @@ internal struct Embeds
             return "";
         }
 
-        return "embed=" +
+        return "embed=" + string.Join(",",
             embedDictionary
-            .Where(x => x.Value)
-            .Select(x => Uri.EscapeDataString(x.Key))
-            .Aggregate(",");
+                .Where(x => x.Value)
+                .Select(x => Uri.EscapeDataString(x.Key)));
     }
 }

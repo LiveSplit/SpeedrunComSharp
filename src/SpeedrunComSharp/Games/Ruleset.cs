@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace SpeedrunComSharp;
 
@@ -62,11 +61,11 @@ public class Ruleset
             list.Add("Emulators Allowed");
         }
 
-        if (!list.Any())
+        if (list.Count == 0)
         {
             list.Add("No Rules");
         }
 
-        return list.Aggregate(", ");
+        return string.Join(", ", list);
     }
 }

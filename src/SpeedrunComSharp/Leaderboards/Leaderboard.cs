@@ -62,19 +62,12 @@ public class Leaderboard
 
         leaderboard.WebLink = new Uri(leaderboardElement.weblink as string);
 
-        string emulators = leaderboardElement.emulators as string;
-        if (emulators == "true")
+        leaderboard.EmulatorFilter = leaderboardElement.emulators switch
         {
-            leaderboard.EmulatorFilter = EmulatorsFilter.OnlyEmulators;
-        }
-        else if (emulators == "false")
-        {
-            leaderboard.EmulatorFilter = EmulatorsFilter.NoEmulators;
-        }
-        else
-        {
-            leaderboard.EmulatorFilter = EmulatorsFilter.NotSet;
-        }
+            "true" => EmulatorsFilter.OnlyEmulators,
+            "false" => EmulatorsFilter.NoEmulators,
+            _ => EmulatorsFilter.NotSet
+        };
 
         leaderboard.AreRunsWithoutVideoFilteredOut = properties["video-only"];
 
@@ -276,22 +269,20 @@ public class Leaderboard
 
             leaderboard.applicableVariables = new Lazy<ReadOnlyCollection<Variable>>(() => variables);
         }
-        else if (string.IsNullOrEmpty(leaderboard.LevelID))
+        else
         {
-            leaderboard.applicableVariables = new Lazy<ReadOnlyCollection<Variable>>(() =>
+            leaderboard.applicableVariables = string.IsNullOrEmpty(leaderboard.LevelID)
+                ? new Lazy<ReadOnlyCollection<Variable>>(() =>
                 {
                     ReadOnlyCollection<Variable> variables = leaderboard.Category.Variables;
 
                     patchVariablesOfRecords(variables);
 
                     return variables;
-                });
-        }
-        else
-        {
-            leaderboard.applicableVariables = new Lazy<ReadOnlyCollection<Variable>>(() =>
+                })
+                : new Lazy<ReadOnlyCollection<Variable>>(() =>
                 {
-                    ReadOnlyCollection<Variable> variables = leaderboard.Category.Variables.Concat(leaderboard.Level.Variables).ToList().Distinct().ToList().AsReadOnly();
+                    ReadOnlyCollection<Variable> variables = leaderboard.Category.Variables.Concat(leaderboard.Level.Variables).Distinct().ToList().AsReadOnly();
 
                     patchVariablesOfRecords(variables);
 

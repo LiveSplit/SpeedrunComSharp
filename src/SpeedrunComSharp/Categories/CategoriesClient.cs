@@ -79,7 +79,7 @@ public class CategoriesClient
     public ReadOnlyCollection<Variable> GetVariables(string categoryId,
         VariablesOrdering orderBy = default)
     {
-        var parameters = new List<string>(orderBy.ToParameters());
+        List<string> parameters = [.. orderBy.ToParameters()];
 
         Uri uri = GetCategoriesUri(string.Format("/{0}/variables{1}",
             Uri.EscapeDataString(categoryId),

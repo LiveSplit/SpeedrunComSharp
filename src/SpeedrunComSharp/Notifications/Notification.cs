@@ -67,23 +67,13 @@ public class Notification : IElementWithID
             }
         }
 
-        if (!string.IsNullOrEmpty(notification.RunID))
-        {
-            notification.run = new Lazy<Run>(() => client.Runs.GetRun(notification.RunID));
-        }
-        else
-        {
-            notification.run = new Lazy<Run>(() => null);
-        }
+        notification.run = !string.IsNullOrEmpty(notification.RunID)
+            ? new Lazy<Run>(() => client.Runs.GetRun(notification.RunID))
+            : new Lazy<Run>(() => null);
 
-        if (!string.IsNullOrEmpty(notification.GameID))
-        {
-            notification.game = new Lazy<Game>(() => client.Games.GetGame(notification.GameID));
-        }
-        else
-        {
-            notification.game = new Lazy<Game>(() => null);
-        }
+        notification.game = !string.IsNullOrEmpty(notification.GameID)
+            ? new Lazy<Game>(() => client.Games.GetGame(notification.GameID))
+            : new Lazy<Game>(() => null);
 
         return notification;
     }

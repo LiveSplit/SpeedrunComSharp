@@ -115,7 +115,7 @@ public class LevelsClient
     public ReadOnlyCollection<Variable> GetVariables(string levelId,
         VariablesOrdering orderBy = default)
     {
-        var parameters = new List<string>(orderBy.ToParameters());
+        List<string> parameters = [.. orderBy.ToParameters()];
 
         Uri uri = GetLevelsUri(string.Format("/{0}/variables{1}",
             Uri.EscapeDataString(levelId),

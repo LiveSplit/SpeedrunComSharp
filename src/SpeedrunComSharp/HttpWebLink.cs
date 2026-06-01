@@ -21,7 +21,7 @@ internal class HttpWebLink
     public static ReadOnlyCollection<HttpWebLink> ParseLinks(string linksString)
     {
         return (linksString ?? string.Empty)
-            .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+            .Split([','], StringSplitOptions.RemoveEmptyEntries)
             .Select(x => ParseLink(x.Trim(' ')))
             .ToList()
             .AsReadOnly();
@@ -40,7 +40,7 @@ internal class HttpWebLink
         }
 
         linkString = linkString[(rightAngledParenthesis + 1)..];
-        string[] parameters = linkString.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
+        string[] parameters = linkString.Split(["; "], StringSplitOptions.RemoveEmptyEntries);
 
         foreach (string parameter in parameters)
         {

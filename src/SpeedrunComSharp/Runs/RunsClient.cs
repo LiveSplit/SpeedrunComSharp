@@ -291,7 +291,7 @@ public class RunsClient
         {
             var variablesList = variables.ToList();
 
-            if (variablesList.Any())
+            if (variablesList.Count > 0)
             {
                 var variablesElement = new Dictionary<string, dynamic>();
 

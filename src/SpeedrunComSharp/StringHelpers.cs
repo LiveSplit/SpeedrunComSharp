@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SpeedrunComSharp;
 
@@ -21,28 +20,13 @@ internal static class StringHelpers
     internal static string ToParameters(this IEnumerable<string> parameters)
     {
         var list = parameters.Where(x => !string.IsNullOrEmpty(x)).ToList();
-        if (list.Any())
+        if (list.Count > 0)
         {
-            return "?" + list.Aggregate("&");
+            return "?" + string.Join("&", list);
         }
         else
         {
             return "";
         }
-    }
-
-    internal static string Aggregate(this IEnumerable<string> list, string combiner)
-    {
-        var builder = new StringBuilder();
-
-        foreach (string element in list)
-        {
-            builder.Append(element);
-            builder.Append(combiner);
-        }
-
-        builder.Length -= combiner.Length;
-
-        return builder.ToString();
     }
 }
